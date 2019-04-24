@@ -15,7 +15,10 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
 
         File file = new File("C:\\JavaFXProjects\\ApplicationUtility\\SampleData\\samplecensus.csv");
-        System.out.println(Arrays.toString(Import.getHeaders(file)));
+
+        Census census = new Census(new File("C:\\JavaFXProjects\\ApplicationUtility\\SampleData\\samplecensus.csv"));
+
+        String[] headers = census.getHeaders();
 
         Parent root = FXMLLoader.load(getClass().getResource("dashboard.fxml"));
         primaryStage.setTitle("Hello World");

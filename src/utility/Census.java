@@ -42,7 +42,6 @@ public class Census {
         }
 
         return headers;
-
     }
 
 }

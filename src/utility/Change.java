@@ -53,4 +53,9 @@ public class Change {
     public void setSsn(String ssn) {
         this.ssn = ssn;
     }
+
+    @Override
+    public String toString() {
+        return ssn + " Old: " + oldValue + " New: " + newValue + " Type: " + changeType;
+    }
 }

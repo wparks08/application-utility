@@ -80,7 +80,7 @@ public class OEChanges {
     }
 
     public List<Change> getChanges(ChangeType changeType) {
-        List<Change> planChanges = new ArrayList<>();
+        List<Change> changes = new ArrayList<>();
 
         HSSFSheet worksheet = oeChangeWorkbook.getSheetAt(0);
 
@@ -89,7 +89,7 @@ public class OEChanges {
                 for (int i = 0; i < worksheet.getLastRowNum(); i++) {
                     Row row = worksheet.getRow(i);
                     if (row.getCell(changeTypeColumnIndex).getStringCellValue().equals("Plan")) {
-                        planChanges.add(new Change(
+                        changes.add(new Change(
                                 row.getCell(ssnColumnIndex).getStringCellValue(),
                                 row.getCell(oldValueColumnIndex).getStringCellValue(),
                                 row.getCell(newValueColumnIndex).getStringCellValue(),
@@ -103,46 +103,49 @@ public class OEChanges {
                 for (int i = 0; i < worksheet.getLastRowNum(); i++) {
                     Row row = worksheet.getRow(i);
                     if (row.getCell(changeTypeColumnIndex).getStringCellValue().equals("Membership: Added Coverage")) {
-                        planChanges.add(new Change(
+                        changes.add(new Change(
                                 row.getCell(ssnColumnIndex).getStringCellValue(),
-                                row.getCell(oldValueColumnIndex).getStringCellValue(),
+                                /*row.getCell(oldValueColumnIndex).getStringCellValue()*/"",
                                 row.getCell(newValueColumnIndex).getStringCellValue(),
                                 ChangeType.ADD_COVERAGE
                         ));
                     }
                 }
+                break;
 
             case DROP_COVERAGE:
                 for (int i = 0; i < worksheet.getLastRowNum(); i++) {
                     Row row = worksheet.getRow(i);
                     if (row.getCell(changeTypeColumnIndex).getStringCellValue().equals("Membership: Dropped Coverage")) {
-                        planChanges.add(new Change(
+                        changes.add(new Change(
                                 row.getCell(ssnColumnIndex).getStringCellValue(),
                                 row.getCell(oldValueColumnIndex).getStringCellValue(),
-                                row.getCell(newValueColumnIndex).getStringCellValue(),
+                                /*row.getCell(newValueColumnIndex).getStringCellValue()*/"",
                                 ChangeType.DROP_COVERAGE
                         ));
                     }
                 }
+                break;
 
             case ADD_DEPENDENT:
                 for (int i = 0; i < worksheet.getLastRowNum(); i++) {
                     Row row = worksheet.getRow(i);
                     if (row.getCell(changeTypeColumnIndex).getStringCellValue().equals("Membership: Added Dependent")) {
-                        planChanges.add(new Change(
+                        changes.add(new Change(
                                 row.getCell(ssnColumnIndex).getStringCellValue(),
-                                row.getCell(oldValueColumnIndex).getStringCellValue(),
+                                /*row.getCell(oldValueColumnIndex).getStringCellValue()*/"",
                                 row.getCell(newValueColumnIndex).getStringCellValue(),
                                 ChangeType.ADD_DEPENDENT
                         ));
                     }
                 }
+                break;
 
             case DROP_DEPENDENT:
                 for (int i = 0; i < worksheet.getLastRowNum(); i++) {
                     Row row = worksheet.getRow(i);
                     if (row.getCell(changeTypeColumnIndex).getStringCellValue().equals("Membership: Dropped Dependent")) {
-                        planChanges.add(new Change(
+                        changes.add(new Change(
                                 row.getCell(ssnColumnIndex).getStringCellValue(),
                                 row.getCell(oldValueColumnIndex).getStringCellValue(),
                                 row.getCell(newValueColumnIndex).getStringCellValue(),
@@ -150,11 +153,12 @@ public class OEChanges {
                         ));
                     }
                 }
+                break;
 
             default:
                 break; //do nothing
         }
 
-        return planChanges;
+        return changes;
     }
 }

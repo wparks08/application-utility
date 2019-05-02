@@ -8,8 +8,11 @@ import javafx.scene.control.Label;
 
 import javafx.event.ActionEvent;
 import javafx.scene.layout.AnchorPane;
+import utility.db.Carrier;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 
 public class DashboardController {
     @FXML private Label lblStatus = new Label();
@@ -21,6 +24,31 @@ public class DashboardController {
     public void initialize() {
         btnMapping.setText("Form Mapping");
         btnGenerating.setText("Form Generation");
+
+        Database db = new Database();
+        db.connect();
+
+//        Carrier carrier = new Carrier();
+//        try {
+//            carrier = carrier.get(1);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//
+//        System.out.println(carrier.toString());
+//        try {
+//            List<Carrier> carrierList = carrier.list();
+//            System.out.println("Carrier List Size: " + carrierList.size());
+//            for (Carrier carrier1 : carrierList) {
+//                System.out.println(carrier1.toString());
+//            }
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+
+        Carrier carrier2 = new Carrier();
+        carrier2.save();
     }
 
 //    @FXML
@@ -58,3 +86,5 @@ public class DashboardController {
         }
     }
 }
+
+

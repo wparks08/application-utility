@@ -11,7 +11,7 @@ import java.util.List;
 
 public abstract class DBObject<T> {
 
-    public T get(long id) throws SQLException {
+    public T get(long id) {
         Database db = new Database();
         db.connect();
 
@@ -34,7 +34,13 @@ public abstract class DBObject<T> {
         ResultSet resultSet = db.getById(tableName, id);
         Field fields[] = t.getClass().getDeclaredFields();
 
-        setObjectFields((T) t, resultSet, fields);
+        try {
+            setObjectFields((T) t, resultSet, fields);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
 
         return t;
     }
@@ -88,17 +94,49 @@ public abstract class DBObject<T> {
 
             ResultSet resultSet = db.getById(tableName, id);
             if (!resultSet.next()) {
-                System.out.println("No result");
-                //get sql names from java names
-                //pass to method in Database for insert
-                //with table name, and array of sql column names
-                //ignore tableName field
-                HashMap<String, String> tester = new HashMap<>();
-                tester.put("name","New Carrier");
-                db.insert(tableName, tester);
+                System.out.println("No result. Saving new " + tableName);
+
+                db.close();
+                db.connect();
+
+                HashMap<String, String> parameterMap = new HashMap<>();
+                Field fields[] = this.getClass().getDeclaredFields();
+
+                for (Field field : fields) {
+                    if (field.getName().equals("id") || field.getName().equals("tableName")) {  //ignore tableName and id fields
+                        continue;
+                    }
+                    field.setAccessible(true); //Get around private access
+                    if (field.get(this) == null) {  //ignore null fields
+                        continue;
+                    }
+                    String key = getSqlNameFromJavaName(field.getName());
+                    String value = String.valueOf(field.get(this));
+                    parameterMap.put(key, value);
+                }
+                db.insert(tableName, parameterMap);
             } else {
-                System.out.println("Result found");
+                System.out.println("Result found. Updating " + tableName + ":" + id);
+
+                db.close();
+                db.connect();
+
+                HashMap<String, String> parameterMap = new HashMap<>();
+                Field fields[] = this.getClass().getDeclaredFields();
                 //Implement update method in Database
+                for (Field field : fields) {
+                    if (field.getName().equals("tableName")) {
+                        continue;
+                    }
+                    field.setAccessible(true);
+                    if (field.get(this) == null) {
+                        continue;
+                    }
+                    String key = getSqlNameFromJavaName(field.getName());
+                    String value = String.valueOf(field.get(this));
+                    parameterMap.put(key, value);
+                }
+                db.update(tableName, parameterMap);
             }
         } catch (NoSuchFieldException | IllegalAccessException | SQLException e) {
             e.printStackTrace();

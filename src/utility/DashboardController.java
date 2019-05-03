@@ -48,7 +48,15 @@ public class DashboardController {
 //        }
 
         Carrier carrier2 = new Carrier();
+        carrier2.setName("Aetna");
+        carrier2.get(1);
+        carrier2.setName("Cal Choice");
+        carrier2 = carrier2.get(1);
+        carrier2.setName("An updated carrier name");
         carrier2.save();
+        Carrier carrier3 = new Carrier();
+        carrier3.setName("A brand new carrier");
+        carrier3.save();
     }
 
 //    @FXML

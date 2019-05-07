@@ -8,8 +8,12 @@ import javafx.scene.control.Label;
 
 import javafx.event.ActionEvent;
 import javafx.scene.layout.AnchorPane;
-import utility.db.Carrier;
+import javafx.scene.layout.VBox;
+import utility.db.*;
 
+import java.awt.*;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -18,45 +22,29 @@ public class DashboardController {
     @FXML private Label lblStatus = new Label();
     @FXML private Button btnMapping;
     @FXML private Button btnGenerating;
-    @FXML private AnchorPane mainWindow;
+    @FXML private VBox mainWindow;
 
     @FXML
     public void initialize() {
         btnMapping.setText("Form Mapping");
         btnGenerating.setText("Form Generation");
 
-        Database db = new Database();
-        db.connect();
-
-//        Carrier carrier = new Carrier();
-//        try {
-//            carrier = carrier.get(1);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+//        Form form = new Form().get(2);
+//        System.out.println("Got it");
 //
-//        System.out.println(carrier.toString());
-//        try {
-//            List<Carrier> carrierList = carrier.list();
-//            System.out.println("Carrier List Size: " + carrierList.size());
-//            for (Carrier carrier1 : carrierList) {
-//                System.out.println(carrier1.toString());
-//            }
-//
-//        } catch (SQLException e) {
+//        try (FileOutputStream fos = new FileOutputStream("./SampleData/sample form.pdf")) {
+//            fos.write(form.getFormBytes());
+//        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
 
-        Carrier carrier2 = new Carrier();
-        carrier2.setName("Aetna");
-        carrier2.get(1);
-        carrier2.setName("Cal Choice");
-        carrier2 = carrier2.get(1);
-        carrier2.setName("An updated carrier name");
-        carrier2.save();
-        Carrier carrier3 = new Carrier();
-        carrier3.setName("A brand new carrier");
-        carrier3.save();
+//        Carrier carrier = new Carrier().get(1);
+//
+//        Form form = new Form();
+//        form.setName("Cal Choice Enrollment Form Q1 2019");
+//        form.setCarrierId(1);
+//        form.loadFormFile(new File("C:\\JavaFXProjects\\ApplicationUtility\\SampleData\\Cal Choice Enrollment form 1-1-19.pdf"));
+//        form.save();
     }
 
 //    @FXML

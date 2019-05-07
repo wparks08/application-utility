@@ -214,6 +214,31 @@ public class Database {
         }
     }
 
+    public void delete(String tableName, long id) {
+        try {
+            if (!conn.isValid(0)) {
+                connect();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        //language=SQLite
+        String sql = "DELETE FROM " + tableName + " WHERE id = ?";
+
+        PreparedStatement preparedStatement = null;
+
+        try {
+            preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            close(preparedStatement);
+            close();
+        }
+    }
+
     private ResultSet getResultSet(String sql) {
         connect();
         ResultSet resultSet = null;

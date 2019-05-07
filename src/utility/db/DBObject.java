@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 
@@ -24,12 +25,7 @@ public abstract class DBObject<T> {
             e.printStackTrace();
         }
 
-        String tableName = null;
-        try {
-            tableName = (String)t.getClass().getDeclaredField("tableName").get(this);
-        } catch (IllegalAccessException | NoSuchFieldException e) {
-            e.printStackTrace();
-        }
+        String tableName = getSqlNameFromJavaName(t.getClass().getSimpleName());
 
         ResultSet resultSet = db.getById(tableName, id);
         Field fields[] = t.getClass().getDeclaredFields();
@@ -52,11 +48,7 @@ public abstract class DBObject<T> {
         Class clazz = this.getClass();
 
         ResultSet resultSet = null;
-        try {
-            resultSet = db.list((String) clazz.getDeclaredField("tableName").get(this));
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        resultSet = db.list(clazz.getSimpleName());
         List<T> objectArrayList = new ArrayList<>();
 
         if(resultSet != null) {
@@ -90,7 +82,7 @@ public abstract class DBObject<T> {
             idField = clazz.getDeclaredField("id");
             idField.setAccessible(true);
             long id = idField.getLong(this);
-            String tableName = (String) clazz.getDeclaredField("tableName").get(this);
+            String tableName = getSqlNameFromJavaName(clazz.getSimpleName());
 
             ResultSet resultSet = db.getById(tableName, id);
             if (!resultSet.next()) {
@@ -111,8 +103,14 @@ public abstract class DBObject<T> {
                         continue;
                     }
                     String key = getSqlNameFromJavaName(field.getName());
-                    String value = String.valueOf(field.get(this));
-                    parameterMap.put(key, value);
+
+                    if (field.getType().toString().equals("class [B")) {
+                        String value = Base64.getEncoder().encodeToString((byte[])field.get(this));
+                        parameterMap.put(key, value);
+                    } else {
+                        String value = String.valueOf(field.get(this));
+                        parameterMap.put(key, value);
+                    }
                 }
                 db.insert(tableName, parameterMap);
             } else {
@@ -143,11 +141,39 @@ public abstract class DBObject<T> {
         }
     }
 
+    public void delete() {
+        Database db = new Database();
+        db.connect();
+        Class clazz = this.getClass();
+
+        try {
+            Field idField = clazz.getDeclaredField("id");
+            idField.setAccessible(true);
+
+            long id = idField.getLong(this);
+
+            if (id == 0) {
+                return; //no op if it doesn't exist in database
+            }
+
+            String tableName = clazz.getSimpleName();
+
+            System.out.println("Deleting " + tableName + ":" + id);
+
+            db.delete(tableName, id);
+
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
     private String getSqlNameFromJavaName(String javaName) {
         String[] splitString = javaName.split("[A-Z]");
         String sqlName = "";
         for (int i = 0; i < splitString.length; i++) {
-            if (i != splitString.length - 1) {
+            if (i == 0 && Character.isUpperCase(javaName.charAt(0))) {
+                sqlName = javaName.charAt(0) + splitString[0];
+            } else if (i != splitString.length - 1) {
                 sqlName = sqlName + splitString[i] + "_";
                 sqlName = sqlName + javaName.charAt(sqlName.length() - (1 + i));
             } else {
@@ -182,6 +208,8 @@ public abstract class DBObject<T> {
                     case "long": field.set(t, resultSet.getLong(getSqlNameFromJavaName(field.getName())));
                         break;
                     case "class java.lang.String": field.set(t, resultSet.getString(getSqlNameFromJavaName(field.getName())));
+                        break;
+                    case "class [B": field.set(t, Base64.getDecoder().decode(resultSet.getString(getSqlNameFromJavaName(field.getName()))));
                         break;
                     default:
                         System.out.println(field.getName());

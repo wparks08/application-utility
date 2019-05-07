@@ -1,7 +1,7 @@
 package utility.db;
 
 
-public class FormFields {
+public class FormFields extends DBObject<FormFields> {
 
   private long id;
   private String fieldName;

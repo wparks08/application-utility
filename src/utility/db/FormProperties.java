@@ -1,7 +1,7 @@
 package utility.db;
 
 
-public class FormProperties {
+public class FormProperties extends DBObject<FormProperties> {
 
   private long id;
   private String property;

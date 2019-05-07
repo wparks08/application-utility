@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Carrier extends DBObject<Carrier> {
 
-    public static final String tableName = "carrier";
+//    public static final String tableName = "carrier";
 
     private long id;
     private String name;

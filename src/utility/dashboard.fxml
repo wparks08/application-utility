@@ -13,7 +13,6 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="utility.DashboardController">
    <children>
-      <AnchorPane fx:id="mainWindow" layoutX="224.0" prefHeight="768.0" prefWidth="800.0" style="-fx-background-color: #303030;" />
       <AnchorPane prefHeight="768.0" prefWidth="224.0" style="-fx-background-color: #212121;" AnchorPane.leftAnchor="0.0">
          <effect>
             <DropShadow />
@@ -31,5 +30,6 @@
             </JFXButton>
          </children>
       </AnchorPane>
+      <VBox fx:id="mainWindow" layoutX="226.0" prefHeight="768.0" prefWidth="803.0" />
    </children>
 </AnchorPane>

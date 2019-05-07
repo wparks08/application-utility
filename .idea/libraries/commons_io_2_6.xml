@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="commons-io-2.6">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/commons-io-2.6.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="https://commons.apache.org/proper/commons-io/javadocs/api-release/index.html" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>

@@ -1,7 +1,7 @@
 package utility.db;
 
 
-public class Mapping {
+public class Mapping extends DBObject<Mapping> {
 
   private long id;
   private long censusHeadersId;

@@ -1,7 +1,7 @@
 package utility.db;
 
 
-public class CensusHeaders {
+public class CensusHeaders extends DBObject<CensusHeaders> {
 
   private long id;
   private String header;

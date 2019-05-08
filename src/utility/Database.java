@@ -68,7 +68,7 @@ public class Database {
                 "  FOREIGN KEY (carrier_id) REFERENCES carrier(id)\n" +
                 ");\n";
         //language=SQLite
-        String formProperties = "CREATE TABLE IF NOT EXISTS form_properties (\n" +
+        String formProperties = "CREATE TABLE IF NOT EXISTS form_property (\n" +
                 "  id       integer PRIMARY KEY,\n" +
                 "  property text NOT NULL,\n" +
                 "  value    text NOT NULL,\n" +
@@ -76,14 +76,14 @@ public class Database {
                 "  FOREIGN KEY (form_id) REFERENCES form(id)\n" +
                 ");\n";
         //language=SQLite
-        String censusHeaders = "CREATE TABLE IF NOT EXISTS census_headers (\n" +
+        String censusHeaders = "CREATE TABLE IF NOT EXISTS census_header (\n" +
                 "  id      integer PRIMARY KEY,\n" +
                 "  header  text NOT NULL,\n" +
                 "  form_id integer,\n" +
                 "  FOREIGN KEY (form_id) REFERENCES form(id)\n" +
                 ");\n";
         //language=SQLite
-        String formFields = "CREATE TABLE IF NOT EXISTS form_fields (\n" +
+        String formFields = "CREATE TABLE IF NOT EXISTS form_field (\n" +
                 "  id         integer PRIMARY KEY,\n" +
                 "  field_name text NOT NULL,\n" +
                 "  form_id    integer,\n" +
@@ -95,8 +95,8 @@ public class Database {
                 "  census_headers_id integer,\n" +
                 "  form_fields_id    integer,\n" +
                 "  form_id           integer,\n" +
-                "  FOREIGN KEY (census_headers_id) REFERENCES census_headers (id),\n" +
-                "  FOREIGN KEY (form_fields_id) REFERENCES form_fields (id),\n" +
+                "  FOREIGN KEY (census_headers_id) REFERENCES census_header (id),\n" +
+                "  FOREIGN KEY (form_fields_id) REFERENCES form_field (id),\n" +
                 "  FOREIGN KEY (form_id) REFERENCES form (id)\n" +
                 ");";
 
@@ -120,6 +120,15 @@ public class Database {
     public ResultSet getById(String table, long id) {
         //language=SQLite
         String sql = "SELECT * FROM " + table + " WHERE id = " + String.valueOf(id);
+
+        return getResultSet(sql);
+    }
+
+    public ResultSet getByParentId(String childTable, String parentName, long id) {
+        String parentIdField = parentName + "_id";
+
+        //language=SQLite
+        String sql = "SELECT * FROM " + childTable + " WHERE " + parentIdField + " = " + String.valueOf(id);
 
         return getResultSet(sql);
     }

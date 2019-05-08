@@ -5,6 +5,7 @@ import utility.Database;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Carrier extends DBObject<Carrier> {
@@ -13,8 +14,6 @@ public class Carrier extends DBObject<Carrier> {
 
     private long id;
     private String name;
-
-    private List<Form> forms;
 
     public long getId() {
         return id;
@@ -34,7 +33,20 @@ public class Carrier extends DBObject<Carrier> {
     }
 
     public void addForm(Form form) {
-        //TODO
+        form.setCarrierId(this.id);
+    }
+
+    public List<Form> getForms() {
+        List<Form> formList = new Form().list();
+        List<Form> returnList = new ArrayList<>();
+
+        for (Form form : formList) {
+            if (form.getCarrierId() == this.id) {
+                returnList.add(form);
+            }
+        }
+
+        return returnList;
     }
 
     @Override

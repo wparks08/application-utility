@@ -41,7 +41,7 @@ public abstract class DBObject<T> {
         return t;
     }
 
-    public List<T> list() throws SQLException {
+    public List<T> list() {
         Database db = new Database();
         db.connect();
 
@@ -51,19 +51,23 @@ public abstract class DBObject<T> {
         resultSet = db.list(clazz.getSimpleName());
         List<T> objectArrayList = new ArrayList<>();
 
-        if(resultSet != null) {
-            while(resultSet.next()) {
-                T t = null;
-                try {
-                    t = (T) clazz.newInstance();
-                } catch (InstantiationException | IllegalAccessException e) {
-                    e.printStackTrace();
+        if (resultSet != null) {
+            try {
+                while (resultSet.next()) {
+                    T t = null;
+                    try {
+                        t = (T) clazz.newInstance();
+                    } catch (InstantiationException | IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+
+                    Field fields[] = t.getClass().getDeclaredFields();
+
+                    setObjectFields((T) t, resultSet, fields);
+                    objectArrayList.add(t);
                 }
-
-                Field fields[] = t.getClass().getDeclaredFields();
-
-                setObjectFields((T) t, resultSet, fields);
-                objectArrayList.add(t);
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
         return objectArrayList;
@@ -105,7 +109,7 @@ public abstract class DBObject<T> {
                     String key = getSqlNameFromJavaName(field.getName());
 
                     if (field.getType().toString().equals("class [B")) {
-                        String value = Base64.getEncoder().encodeToString((byte[])field.get(this));
+                        String value = Base64.getEncoder().encodeToString((byte[]) field.get(this));
                         parameterMap.put(key, value);
                     } else {
                         String value = String.valueOf(field.get(this));
@@ -167,6 +171,48 @@ public abstract class DBObject<T> {
         }
     }
 
+    public List<?> getChildren(Class childClass) {
+        String childTable = getSqlNameFromJavaName(childClass.getSimpleName());
+
+        Database db = new Database();
+        db.connect();
+        Class clazz = this.getClass();
+
+        Field idField = null;
+
+        long id = 0;
+        try {
+            idField = clazz.getDeclaredField("id");
+            idField.setAccessible(true);
+
+            id = idField.getLong(this);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        String parentClassName = clazz.getSimpleName();
+
+        List<Object> toReturn = new ArrayList<>();
+
+        ResultSet resultSet = db.getByParentId(childTable, parentClassName, id);
+
+        if (resultSet != null) {
+            try {
+                while (resultSet.next()) {
+                    Object child = childClass.newInstance();
+                    Field[] fields = childClass.getDeclaredFields();
+
+                    setObjectFields(child, resultSet, fields);
+                    toReturn.add(child);
+                }
+            } catch (SQLException | InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return toReturn;
+    }
+
     private String getSqlNameFromJavaName(String javaName) {
         String[] splitString = javaName.split("[A-Z]");
         String sqlName = "";
@@ -175,7 +221,12 @@ public abstract class DBObject<T> {
                 sqlName = javaName.charAt(0) + splitString[0];
             } else if (i != splitString.length - 1) {
                 sqlName = sqlName + splitString[i] + "_";
-                sqlName = sqlName + javaName.charAt(sqlName.length() - (1 + i));
+//                sqlName = sqlName + javaName.charAt(sqlName.length() - (1 + i));
+                if (i > 0) {
+                    sqlName = sqlName + javaName.charAt(javaName.indexOf(splitString[i]) + splitString[i].length());
+                } else {
+                    sqlName = sqlName + javaName.charAt(sqlName.length() - 1);
+                }
             } else {
                 sqlName = sqlName + splitString[i];
             }
@@ -197,7 +248,7 @@ public abstract class DBObject<T> {
         return javaName;
     }
 
-    private void setObjectFields(T t, ResultSet resultSet, Field[] fields) throws SQLException {
+    private void setObjectFields(Object object, ResultSet resultSet, Field[] fields) throws SQLException {
         for (Field field : fields) {
             field.setAccessible(true);
             if (field.getName().equals("tableName")) {
@@ -205,11 +256,14 @@ public abstract class DBObject<T> {
             }
             try {
                 switch (field.getType().toString()) {
-                    case "long": field.set(t, resultSet.getLong(getSqlNameFromJavaName(field.getName())));
+                    case "long":
+                        field.set(object, resultSet.getLong(getSqlNameFromJavaName(field.getName())));
                         break;
-                    case "class java.lang.String": field.set(t, resultSet.getString(getSqlNameFromJavaName(field.getName())));
+                    case "class java.lang.String":
+                        field.set(object, resultSet.getString(getSqlNameFromJavaName(field.getName())));
                         break;
-                    case "class [B": field.set(t, Base64.getDecoder().decode(resultSet.getString(getSqlNameFromJavaName(field.getName()))));
+                    case "class [B":
+                        field.set(object, Base64.getDecoder().decode(resultSet.getString(getSqlNameFromJavaName(field.getName()))));
                         break;
                     default:
                         System.out.println(field.getName());

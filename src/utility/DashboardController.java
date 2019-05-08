@@ -7,18 +7,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 import javafx.event.ActionEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import utility.db.*;
 
-import java.awt.*;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 
 public class DashboardController {
+    private DataModel dataModel;
+
     @FXML private Label lblStatus = new Label();
     @FXML private Button btnMapping;
     @FXML private Button btnGenerating;
@@ -42,9 +39,22 @@ public class DashboardController {
 //
 //        Form form = new Form();
 //        form.setName("Cal Choice Enrollment Form Q1 2019");
-//        form.setCarrierId(1);
+////        form.setCarrierId(1);
+//
+//        Carrier carrier = new Carrier().get(1);
+//        carrier.addForm(form);
+//
+////        System.out.println(carrier.getForms().size());
+//
 //        form.loadFormFile(new File("C:\\JavaFXProjects\\ApplicationUtility\\SampleData\\Cal Choice Enrollment form 1-1-19.pdf"));
 //        form.save();
+
+        Form form = new Form().get(1);
+        List<CensusHeader> censusHeaderList = form.getCensusHeaders();
+
+        for (CensusHeader censusHeader : censusHeaderList) {
+            System.out.println(censusHeader.getId() + " : " + censusHeader.getHeader());
+        }
     }
 
 //    @FXML

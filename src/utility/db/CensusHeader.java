@@ -1,12 +1,20 @@
 package utility.db;
 
 
-public class CensusHeaders extends DBObject<CensusHeaders> {
+public class CensusHeader extends DBObject<CensusHeader> {
 
   private long id;
   private String header;
   private long formId;
 
+  public CensusHeader() {
+    //Default constructor
+  }
+
+  public CensusHeader(String header, long formId) {
+    this.header = header;
+    this.formId = formId;
+  }
 
   public long getId() {
     return id;

@@ -1,11 +1,11 @@
 package utility.db;
 
 
-import org.apache.commons.io.IOUtils;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.apache.commons.io.FilenameUtils.getExtension;
 
@@ -69,5 +69,46 @@ public class Form extends DBObject<Form> {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<FormProperty> getFormProperties() {
+        List<?> formPropertyList = getChildren(FormProperty.class);
+        List<FormProperty> toReturn = new ArrayList<>();
+
+        for (Object object : formPropertyList) {
+            if (object instanceof FormProperty) {
+                toReturn.add((FormProperty) object);
+            }
+        }
+        return toReturn;
+    }
+
+    public void addFormProperty(String property, String value) {
+        FormProperty formProperty = new FormProperty(property, value, this.id);
+        formProperty.save();
+    }
+
+    //Add & get methods for CensusHeader, FormField, Mapping
+
+    public List<CensusHeader> getCensusHeaders() {
+        List<?> headersList = getChildren(CensusHeader.class);
+        List<CensusHeader> toReturn = new ArrayList<>();
+
+        for (Object object : headersList) {
+            if (object instanceof CensusHeader) {
+                toReturn.add((CensusHeader) object);
+            }
+        }
+        return toReturn;
+    }
+
+    public void addCensusHeader(String header) {
+        CensusHeader censusHeader = new CensusHeader(header, this.id);
+        censusHeader.save();
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
     }
 }

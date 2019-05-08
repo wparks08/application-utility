@@ -1,13 +1,22 @@
 package utility.db;
 
 
-public class FormProperties extends DBObject<FormProperties> {
+public class FormProperty extends DBObject<FormProperty> {
 
   private long id;
   private String property;
   private String value;
   private long formId;
 
+  public FormProperty() {
+    //Default constructor
+  }
+
+  public FormProperty(String property, String value, long formId) {
+    this.property = property;
+    this.value = value;
+    this.formId = formId;
+  }
 
   public long getId() {
     return id;

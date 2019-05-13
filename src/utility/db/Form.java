@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import static org.apache.commons.io.FilenameUtils.getExtension;
@@ -88,7 +90,10 @@ public class Form extends DBObject<Form> {
         formProperty.save();
     }
 
-    //Add & get methods for CensusHeader, FormField, Mapping
+    public void addFormProperty(FormProperty formProperty) {
+        formProperty.setFormId(this.id);
+        formProperty.save();
+    }
 
     public List<CensusHeader> getCensusHeaders() {
         List<?> headersList = getChildren(CensusHeader.class);
@@ -105,6 +110,68 @@ public class Form extends DBObject<Form> {
     public void addCensusHeader(String header) {
         CensusHeader censusHeader = new CensusHeader(header, this.id);
         censusHeader.save();
+    }
+
+    public void addCensusHeader(CensusHeader censusHeader) {
+        censusHeader.setFormId(this.id);
+        censusHeader.save();
+    }
+
+    public List<FormField> getFormFields() {
+        List<?> formFieldsList = getChildren(FormField.class);
+        List<FormField> toReturn = new ArrayList<>();
+
+        for (Object object : formFieldsList) {
+            if (object instanceof FormField) {
+                toReturn.add((FormField) object);
+            }
+        }
+        return toReturn;
+    }
+
+    public void addFormField(String fieldName) {
+        FormField formField = new FormField(fieldName, this.id);
+        formField.save();
+    }
+
+    public void addFormField(FormField formField) {
+        formField.setFormId(this.id);
+        formField.save();
+    }
+
+    public List<Mapping> getMappings() {
+        List<?> mappingList = getChildren(Mapping.class);
+        List<Mapping> toReturn = new ArrayList<>();
+
+        for (Object object : mappingList) {
+            if (object instanceof Mapping) {
+                toReturn.add((Mapping) object);
+            }
+        }
+        return toReturn;
+    }
+
+    public HashMap<String, String> getMappingsAsMap() {
+        List<Mapping> mappings = getMappings();
+        HashMap<String, String> map = new LinkedHashMap<>();
+
+        for (Mapping mapping : mappings) {
+            map.put(
+                new FormField().get(mapping.getFormFieldId()).getFieldName(),
+                new CensusHeader().get(mapping.getCensusHeaderId()).getHeader()
+            );
+        }
+        return map;
+    }
+
+    public void addMapping(long censusHeaderId, long formFieldId) {
+        Mapping mapping = new Mapping(censusHeaderId, formFieldId, this.id);
+        mapping.save();
+    }
+
+    public void addMapping(Mapping mapping) {
+        mapping.setFormId(this.id);
+        mapping.save();
     }
 
     @Override

@@ -92,11 +92,11 @@ public class Database {
         //language=SQLite
         String mapping = "CREATE TABLE IF NOT EXISTS mapping (\n" +
                 "  id                integer PRIMARY KEY,\n" +
-                "  census_headers_id integer,\n" +
-                "  form_fields_id    integer,\n" +
+                "  census_header_id integer,\n" +
+                "  form_field_id    integer,\n" +
                 "  form_id           integer,\n" +
-                "  FOREIGN KEY (census_headers_id) REFERENCES census_header (id),\n" +
-                "  FOREIGN KEY (form_fields_id) REFERENCES form_field (id),\n" +
+                "  FOREIGN KEY (census_header_id) REFERENCES census_header (id),\n" +
+                "  FOREIGN KEY (form_field_id) REFERENCES form_field (id),\n" +
                 "  FOREIGN KEY (form_id) REFERENCES form (id)\n" +
                 ");";
 
@@ -140,7 +140,7 @@ public class Database {
         return getResultSet(sql);
     }
 
-    public void insert(String table, HashMap<String, String> parameterMap) {
+    public long insert(String table, HashMap<String, String> parameterMap) {
         try {
             if (!conn.isValid(0)) {
                 connect();
@@ -168,12 +168,15 @@ public class Database {
 
         PreparedStatement preparedStatement = null;
 
+        long generatedId = 0;
+
         try {
-            preparedStatement = conn.prepareStatement(sql);
+            preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             for (int i = 0; i < keySet.size(); i++) {
                 preparedStatement.setString(i+1, parameterMap.get(keySet.get(i)));
             }
             preparedStatement.executeUpdate();
+            generatedId = preparedStatement.getGeneratedKeys().getLong(1);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -182,6 +185,7 @@ public class Database {
         }
 
         System.out.println(sql);
+        return generatedId;
     }
 
     public void update(String tableName, HashMap<String, String> parameterMap) {

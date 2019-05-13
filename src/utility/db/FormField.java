@@ -3,35 +3,43 @@ package utility.db;
 
 public class FormField extends DBObject<FormField> {
 
-  private long id;
-  private String fieldName;
-  private long formId;
+    private long id;
+    private String fieldName;
+    private long formId;
+
+    public FormField() {
+        //Default constructor
+    }
+
+    public FormField(String fieldName, long formId) {
+        this.fieldName = fieldName;
+        this.formId = formId;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
 
-  public long getId() {
-    return id;
-  }
+    public String getFieldName() {
+        return fieldName;
+    }
 
-  public void setId(long id) {
-    this.id = id;
-  }
-
-
-  public String getFieldName() {
-    return fieldName;
-  }
-
-  public void setFieldName(String fieldName) {
-    this.fieldName = fieldName;
-  }
+    public void setFieldName(String fieldName) {
+        this.fieldName = fieldName;
+    }
 
 
-  public long getFormId() {
-    return formId;
-  }
+    public long getFormId() {
+        return formId;
+    }
 
-  public void setFormId(long formId) {
-    this.formId = formId;
-  }
+    public void setFormId(long formId) {
+        this.formId = formId;
+    }
 
 }

@@ -28,7 +28,7 @@ public abstract class DBObject<T> {
         String tableName = getSqlNameFromJavaName(t.getClass().getSimpleName());
 
         ResultSet resultSet = db.getById(tableName, id);
-        Field fields[] = t.getClass().getDeclaredFields();
+        Field[] fields = t.getClass().getDeclaredFields();
 
         try {
             setObjectFields((T) t, resultSet, fields);
@@ -47,7 +47,7 @@ public abstract class DBObject<T> {
 
         Class clazz = this.getClass();
 
-        ResultSet resultSet = null;
+        ResultSet resultSet;
         resultSet = db.list(clazz.getSimpleName());
         List<T> objectArrayList = new ArrayList<>();
 
@@ -61,7 +61,8 @@ public abstract class DBObject<T> {
                         e.printStackTrace();
                     }
 
-                    Field fields[] = t.getClass().getDeclaredFields();
+                    assert t != null;
+                    Field[] fields = t.getClass().getDeclaredFields();
 
                     setObjectFields((T) t, resultSet, fields);
                     objectArrayList.add(t);
@@ -81,7 +82,7 @@ public abstract class DBObject<T> {
 
         //try get by id
         //if no result, persist new
-        Field idField = null;
+        Field idField;
         try {
             idField = clazz.getDeclaredField("id");
             idField.setAccessible(true);
@@ -96,7 +97,7 @@ public abstract class DBObject<T> {
                 db.connect();
 
                 HashMap<String, String> parameterMap = new HashMap<>();
-                Field fields[] = this.getClass().getDeclaredFields();
+                Field[] fields = this.getClass().getDeclaredFields();
 
                 for (Field field : fields) {
                     if (field.getName().equals("id") || field.getName().equals("tableName")) {  //ignore tableName and id fields
@@ -116,7 +117,8 @@ public abstract class DBObject<T> {
                         parameterMap.put(key, value);
                     }
                 }
-                db.insert(tableName, parameterMap);
+                long generatedId = db.insert(tableName, parameterMap);
+                idField.setLong(this, generatedId);
             } else {
                 System.out.println("Result found. Updating " + tableName + ":" + id);
 
@@ -124,7 +126,7 @@ public abstract class DBObject<T> {
                 db.connect();
 
                 HashMap<String, String> parameterMap = new HashMap<>();
-                Field fields[] = this.getClass().getDeclaredFields();
+                Field[] fields = this.getClass().getDeclaredFields();
                 //Implement update method in Database
                 for (Field field : fields) {
                     if (field.getName().equals("tableName")) {
@@ -178,7 +180,7 @@ public abstract class DBObject<T> {
         db.connect();
         Class clazz = this.getClass();
 
-        Field idField = null;
+        Field idField;
 
         long id = 0;
         try {
@@ -241,7 +243,7 @@ public abstract class DBObject<T> {
             if (i > 0) {
                 splitString[i] = Character.toUpperCase(splitString[i].charAt(0)) + splitString[i].substring(1);
                 javaName = javaName + splitString[i];
-            } else if (i == 0) {
+            } else {
                 javaName = splitString[i];
             }
         }

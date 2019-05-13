@@ -47,15 +47,25 @@ public class Census {
         return employees;
     }
 
-    private String[] getHeaders() throws FileNotFoundException {
+    public String[] getHeaders() {
 
         if (censusFile == null) {
-            throw new FileNotFoundException();
+            try {
+                throw new FileNotFoundException();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
 
-        String headers[];
+        String[] headers;
 
-        Scanner scanner = new Scanner(censusFile);
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(censusFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        assert scanner != null;
         String firstLine = scanner.nextLine();
         headers = firstLine.split(",");
 

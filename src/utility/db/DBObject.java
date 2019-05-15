@@ -162,7 +162,7 @@ public abstract class DBObject<T> {
                 return; //no op if it doesn't exist in database
             }
 
-            String tableName = clazz.getSimpleName();
+            String tableName = getSqlNameFromJavaName(clazz.getSimpleName());
 
             System.out.println("Deleting " + tableName + ":" + id);
 

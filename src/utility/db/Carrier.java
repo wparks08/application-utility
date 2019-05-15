@@ -15,6 +15,14 @@ public class Carrier extends DBObject<Carrier> {
     private long id;
     private String name;
 
+    public Carrier() {
+        //Default constructor
+    }
+
+    public Carrier(String name) {
+        this.name = name;
+    }
+
     public long getId() {
         return id;
     }
@@ -51,6 +59,9 @@ public class Carrier extends DBObject<Carrier> {
 
     @Override
     public String toString() {
-        return "Id: " + this.id + "\nName: " + this.name;
+
+        int formCount = this.getChildren(Form.class).size();
+
+        return this.name + " (" + formCount + ")";
     }
 }

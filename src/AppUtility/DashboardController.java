@@ -1,4 +1,4 @@
-package utility;
+package AppUtility;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -79,10 +79,12 @@ public class DashboardController {
 
     public void handleBtnClickAction(ActionEvent event) {
         Button current = (Button)event.getSource();
-        btnMapping.setStyle("-fx-background-color: #424242");
-        btnGenerating.setStyle("-fx-background-color: #424242");
+        btnMapping.setStyle("-fx-background-color: #424242;");
+//        btnMapping.setStyle("-fx-text-fill: #EEEEEE;");
+        btnGenerating.setStyle("-fx-background-color: #424242;");
+//        btnGenerating.setStyle("-fx-text-fill: #EEEEEE;");
 
-        current.setStyle("-fx-background-color: #111111");
+        current.setStyle("-fx-background-color: #111111;");
 
         switch(current.getText()) {
             case "Form Mapping":
@@ -104,6 +106,11 @@ public class DashboardController {
             default:
                 //do nothing
         }
+    }
+
+    @FXML
+    public void setMainWindow(Node node) {
+        mainWindow.getChildren().setAll(node);
     }
 }
 

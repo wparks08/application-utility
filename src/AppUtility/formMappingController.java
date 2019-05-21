@@ -1,20 +1,32 @@
-package utility;
+package AppUtility;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
+import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.InvalidationListener;
 import javafx.collections.ListChangeListener;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
-import utility.db.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import AppUtility.db.*;
+import javafx.stage.StageStyle;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 public class formMappingController {
     public DataModel model;
+    @FXML public AnchorPane wrapper;
 
     @FXML JFXListView<Form> listViewForms = new JFXListView<>();
     @FXML JFXListView<Carrier> listViewCarriers = new JFXListView<>();
@@ -23,6 +35,7 @@ public class formMappingController {
     @FXML JFXButton btnDelete;
     @FXML JFXButton btnAddCarrier;
     @FXML JFXButton btnEditCarrier;
+    @FXML JFXButton btnDeleteCarrier;
 
     public void initModel(DataModel model) {
         this.model = model;
@@ -34,9 +47,11 @@ public class formMappingController {
     @FXML
     public void initialize() {
 
+        btnNew.setDisable(true);
         btnEdit.setDisable(true);
         btnDelete.setDisable(true);
         btnEditCarrier.setDisable(true);
+        btnDeleteCarrier.setDisable(true);
 
         listViewForms.getSelectionModel().getSelectedItems().addListener((ListChangeListener<Form>) c -> {
             if (listViewForms.getSelectionModel().getSelectedItems().isEmpty()) {
@@ -51,13 +66,20 @@ public class formMappingController {
         listViewCarriers.getSelectionModel().getSelectedItems().addListener((ListChangeListener<Carrier>) c -> {
             listViewForms.getItems().clear();
             Carrier selectedCarrier = listViewCarriers.getSelectionModel().getSelectedItem();
-            model.refreshForms(selectedCarrier);
-            listViewForms.getItems().addAll(model.getForms());
+            if (selectedCarrier != null) {
+                model.refreshForms(selectedCarrier);
+                listViewForms.getItems().addAll(model.getForms());
+                btnNew.setDisable(false);
+            } else {
+                btnNew.setDisable(true);
+            }
         });
 
         listViewCarriers.getSelectionModel().getSelectedItems().addListener((InvalidationListener) observable -> {
             if (!listViewCarriers.getSelectionModel().getSelectedItems().isEmpty()) {
                 btnEditCarrier.setDisable(false);
+                btnDeleteCarrier.setDisable(false);
+                model.setSelectedCarrier(listViewCarriers.getSelectionModel().getSelectedItem());
             }
         });
     }
@@ -75,6 +97,7 @@ public class formMappingController {
                 Carrier carrier = new Carrier(carrierName);
                 carrier.save();
                 listViewCarriers.getItems().add(carrier);
+                model.refreshCarriers();
             }
         });
     }
@@ -93,6 +116,7 @@ public class formMappingController {
                 selected.setName(carrierName);
                 selected.save();
                 listViewCarriers.refresh();
+                model.refreshCarriers();
             }
         });
     }
@@ -134,5 +158,28 @@ public class formMappingController {
             selected.delete();
             listViewCarriers.getItems().remove(selected);
         }
+    }
+
+    @FXML
+    public void handleBtnNewClick(ActionEvent e) {
+        FXMLLoader newFormLoader = new FXMLLoader(getClass().getResource("newForm.fxml"));
+        Parent root = null;
+        try {
+            root = newFormLoader.load();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.UNDECORATED);
+
+        NewFormController newFormController = newFormLoader.getController();
+        newFormController.initModel(model);
+
+        stage.setTitle("New Form");
+
+        stage.showAndWait();
     }
 }

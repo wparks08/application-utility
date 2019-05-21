@@ -1,17 +1,11 @@
-package utility;
+package AppUtility;
 
+import com.sun.deploy.association.utility.AppUtility;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.apache.pdfbox.pdmodel.interactive.form.PDField;
-import utility.db.Carrier;
-
-import java.io.File;
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
 
 public class Main extends Application {
 
@@ -26,8 +20,12 @@ public class Main extends Application {
 
         docController.initModel(model);
 
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root));
+        Scene scene = new Scene(root);
+//        scene.getStylesheets().add(AppUtility.class.getResource("AppUtility/ApplicationStyles.css").toExternalForm());
+
+        primaryStage.setTitle("VANTREO Application Utility");
+//        primaryStage.setResizable(false);
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 

@@ -1,10 +1,6 @@
-package utility.db;
+package AppUtility.db;
 
 
-import utility.Database;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 

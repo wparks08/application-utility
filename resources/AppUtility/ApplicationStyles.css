@@ -1,0 +1,61 @@
+* {
+    /*-fx-text-fill: #EEEEEE;*/
+    -fx-font-family: Roboto;
+    /*-fx-font-size: 14px;*/
+}
+
+.btn-default {
+    -fx-text-fill: #111111;
+    -fx-background-color: #EEEEEE;
+    -fx-font-size: 14px;
+}
+
+.btn-success {
+    -fx-text-fill: #EEEEEE;
+    -fx-background-color: darkgreen;
+    -fx-font-size: 14px;
+}
+
+JFXListView {
+    -fx-text-fill: #111111;
+}
+
+.jfx-list-cell {
+    -fx-text-fill: #111111;
+}
+
+.dashboard-menu-button {
+    -fx-text-fill: #EEEEEE !important;
+    -fx-font-size: 18px !important;
+}
+
+.footer {
+    -fx-background-color: #222222;
+}
+
+.text-input {
+    -fx-font-size: 14px;
+    -fx-font-fill: #EEEEEE;
+}
+
+.jfx-date-picker .text-field {
+    -jfx-default-color: #222e4b;
+    -jfx-unfocus-color: #DDDDDD;
+    -fx-text-fill: #EEEEEE;
+}
+
+.jfx-snackbar-content {
+    -fx-text-alignment: center;
+    -fx-pref-width: 200px;
+    -fx-pref-height: 50px;
+    -fx-background-color: #222e4b;
+    -fx-text-fill: #EEEEEE;
+}
+
+.jfx-snackbar-toast {
+    -fx-text-fill: #EEEEEE;
+}
+
+.jfx-snackbar {
+    -fx-text-fill: #EEEEEE;
+}

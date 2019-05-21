@@ -1,4 +1,4 @@
-package utility.db;
+package AppUtility.db;
 
 
 import java.io.File;

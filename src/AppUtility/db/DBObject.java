@@ -1,6 +1,6 @@
-package utility.db;
+package AppUtility.db;
 
-import utility.Database;
+import AppUtility.Database;
 
 import java.lang.reflect.Field;
 import java.sql.ResultSet;

@@ -1,4 +1,4 @@
-package utility.db;
+package AppUtility.db;
 
 
 public class CensusHeader extends DBObject<CensusHeader> {

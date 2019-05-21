@@ -1,4 +1,4 @@
-package utility;
+package AppUtility;
 
 public enum ChangeType {
     PLAN,

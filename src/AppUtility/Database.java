@@ -1,10 +1,9 @@
-package utility;
+package AppUtility;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 public class Database {
 

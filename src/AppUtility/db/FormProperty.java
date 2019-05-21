@@ -1,4 +1,4 @@
-package utility.db;
+package AppUtility.db;
 
 
 public class FormProperty extends DBObject<FormProperty> {

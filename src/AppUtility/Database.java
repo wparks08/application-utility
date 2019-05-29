@@ -1,5 +1,6 @@
 package AppUtility;
 
+import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,6 +13,7 @@ public class Database {
 
     public void connect() {
         try {
+            new File("./db/").mkdir();
             conn = DriverManager.getConnection(path);
             verifyTables();
         } catch (SQLException e) {
@@ -123,6 +125,20 @@ public class Database {
         return getResultSet(sql);
     }
 
+    /**
+     *
+     * @param table - The database table to search
+     * @param column - The column to find the value on
+     * @param value - The value
+     * @return
+     */
+    public ResultSet getByColumnValue(String table, String column, String value) {
+        //language=SQLite
+        String sql = "SELECT * FROM " + table + " WHERE " + column + " = " + value;
+
+        return getResultSet(sql);
+    }
+
     public ResultSet getByParentId(String childTable, String parentName, long id) {
         String parentIdField = parentName + "_id";
 
@@ -183,7 +199,7 @@ public class Database {
             close();
         }
 
-        System.out.println(sql);
+        System.out.println(sql + parameterMap.values().toString());
         return generatedId;
     }
 

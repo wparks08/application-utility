@@ -10,6 +10,7 @@ public class DataModel {
     private List<Carrier> carriers;
     private List<Form> forms;
     private Carrier selectedCarrier;
+    private Form selectedForm;
 
     private String lastAccessedFilePath = System.getProperty("user.home");
 
@@ -47,5 +48,13 @@ public class DataModel {
 
     public void setLastAccessedFilePath(String lastAccessedFilePath) {
         this.lastAccessedFilePath = lastAccessedFilePath;
+    }
+
+    public Form getSelectedForm() {
+        return selectedForm;
+    }
+
+    public void setSelectedForm(Form selectedForm) {
+        this.selectedForm = selectedForm;
     }
 }

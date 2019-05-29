@@ -63,7 +63,7 @@ public class NewFormController {
 
     @FXML
     public void importFormAction(ActionEvent e) {
-        ExtensionHelper extensionHelper = new ExtensionHelper("PDF File", ".pdf");
+        ExtensionHelper extensionHelper = new ExtensionHelper("PDF File", "*.pdf");
 
         File form = showFileChooser(extensionHelper);
 
@@ -77,7 +77,7 @@ public class NewFormController {
 
     @FXML
     public void importCensusAction(ActionEvent e) {
-        ExtensionHelper extensionHelper = new ExtensionHelper("CSV File", ".csv");
+        ExtensionHelper extensionHelper = new ExtensionHelper("CSV File", "*.csv");
 
         File censusFile = showFileChooser(extensionHelper);
 

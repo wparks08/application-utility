@@ -6,9 +6,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1280.0" stylesheets="@ApplicationStyles.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AppUtility.DashboardController">
+<AnchorPane maxHeight="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1280.0" stylesheets="@ApplicationStyles.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AppUtility.DashboardController">
    <children>
-      <AnchorPane prefHeight="768.0" prefWidth="256.0" style="-fx-background-color: #212121;" AnchorPane.leftAnchor="0.0">
+      <AnchorPane prefHeight="768.0" prefWidth="256.0" style="-fx-background-color: #212121;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <effect>
             <DropShadow />
          </effect>
@@ -25,6 +25,6 @@
             </JFXButton>
          </children>
       </AnchorPane>
-      <VBox fx:id="mainWindow" layoutX="256.0" prefHeight="768.0" prefWidth="1024.0" style="-fx-background-color: #111111;" AnchorPane.rightAnchor="0.0" />
+      <VBox fx:id="mainWindow" layoutX="256.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="768.0" prefWidth="1024.0" style="-fx-background-color: #111111;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="256.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
    </children>
 </AnchorPane>

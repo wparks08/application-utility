@@ -43,7 +43,7 @@
                             <Font name="Roboto" size="14.0" />
                         </font>
                   </JFXButton>
-                    <JFXButton fx:id="btnEdit" buttonType="RAISED" prefHeight="50.0" prefWidth="150.0" style="-fx-background-color: #EEEEEE;" styleClass="btn-default" text="Edit">
+                    <JFXButton fx:id="btnEditMapping" buttonType="RAISED" onAction="#handleBtnEditMappingClick" prefHeight="50.0" prefWidth="150.0" style="-fx-background-color: #EEEEEE;" styleClass="btn-default" text="Edit Mapping">
                         <font>
                             <Font name="Roboto" size="14.0" />
                         </font>

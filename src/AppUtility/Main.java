@@ -7,6 +7,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
+
 public class Main extends Application {
 
     @Override
@@ -31,6 +34,33 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
+
+        /*Credit: https://www.dev2qa.com/how-to-write-console-output-to-text-file-in-java/ */
+//        // Save original out stream.
+//        PrintStream originalOut = System.out;
+//        // Save original err stream.
+//        PrintStream originalErr = System.err;
+//
+//        // Create a new file output stream.
+//        PrintStream fileOut = null;
+//        try {
+//            fileOut = new PrintStream("./out.txt");
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        // Create a new file error stream.
+//        PrintStream fileErr = null;
+//        try {
+//            fileErr = new PrintStream("./err.txt");
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//
+//        // Redirect standard out to file.
+//        System.setOut(fileOut);
+//        // Redirect standard err to file.
+//        System.setErr(fileErr);
+
         launch(args);
     }
 }

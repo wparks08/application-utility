@@ -42,4 +42,8 @@ public class FormField extends DBObject<FormField> {
         this.formId = formId;
     }
 
+    @Override
+    public String toString() {
+        return this.fieldName;
+    }
 }

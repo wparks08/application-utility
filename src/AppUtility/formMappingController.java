@@ -2,8 +2,6 @@ package AppUtility;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIcon;
-import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.beans.InvalidationListener;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
@@ -18,7 +16,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import AppUtility.db.*;
-import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.util.List;
@@ -31,7 +28,7 @@ public class formMappingController {
     @FXML JFXListView<Form> listViewForms = new JFXListView<>();
     @FXML JFXListView<Carrier> listViewCarriers = new JFXListView<>();
     @FXML JFXButton btnNew;
-    @FXML JFXButton btnEdit;
+    @FXML JFXButton btnEditMapping;
     @FXML JFXButton btnDelete;
     @FXML JFXButton btnAddCarrier;
     @FXML JFXButton btnEditCarrier;
@@ -48,18 +45,19 @@ public class formMappingController {
     public void initialize() {
 
         btnNew.setDisable(true);
-        btnEdit.setDisable(true);
+        btnEditMapping.setDisable(true);
         btnDelete.setDisable(true);
         btnEditCarrier.setDisable(true);
         btnDeleteCarrier.setDisable(true);
 
         listViewForms.getSelectionModel().getSelectedItems().addListener((ListChangeListener<Form>) c -> {
             if (listViewForms.getSelectionModel().getSelectedItems().isEmpty()) {
-                btnEdit.setDisable(true);
+                btnEditMapping.setDisable(true);
                 btnDelete.setDisable(true);
             } else {
-                btnEdit.setDisable(false);
+                btnEditMapping.setDisable(false);
                 btnDelete.setDisable(false);
+                model.setSelectedForm(listViewForms.getSelectionModel().getSelectedItem());
             }
         });
 
@@ -163,6 +161,35 @@ public class formMappingController {
     @FXML
     public void handleBtnNewClick(ActionEvent e) {
         FXMLLoader newFormLoader = new FXMLLoader(getClass().getResource("newForm.fxml"));
+        Stage stage = prepStage(newFormLoader);
+
+        NewFormController newFormController = newFormLoader.getController();
+        newFormController.initModel(model);
+
+        stage.setTitle("New Form");
+
+        stage.showAndWait();
+
+        model.refreshCarriers();
+        listViewCarriers.refresh();
+        model.refreshForms(listViewCarriers.getSelectionModel().getSelectedItem());
+        listViewForms.refresh();
+    }
+
+    @FXML
+    public void handleBtnEditMappingClick(ActionEvent e) {
+        FXMLLoader editFormLoader = new FXMLLoader((getClass().getResource("editMapping.fxml")));
+        Stage stage = prepStage(editFormLoader);
+
+        EditMappingController editMappingController = editFormLoader.getController();
+        editMappingController.initModel(model);
+
+        stage.setTitle("Edit Mapping");
+
+        stage.showAndWait();
+    }
+
+    private Stage prepStage(FXMLLoader newFormLoader) {
         Parent root = null;
         try {
             root = newFormLoader.load();
@@ -173,13 +200,7 @@ public class formMappingController {
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.initModality(Modality.APPLICATION_MODAL);
-        stage.initStyle(StageStyle.UNDECORATED);
 
-        NewFormController newFormController = newFormLoader.getController();
-        newFormController.initModel(model);
-
-        stage.setTitle("New Form");
-
-        stage.showAndWait();
+        return stage;
     }
 }

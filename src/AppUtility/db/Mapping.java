@@ -59,4 +59,8 @@ public class Mapping extends DBObject<Mapping> {
         this.formId = formId;
     }
 
+    public Mapping findByFormFieldId(long formFieldId) {
+        return this.getBy("form_field_id", String.valueOf(formFieldId));
+    }
+
 }

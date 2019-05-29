@@ -24,6 +24,15 @@ JFXListView {
     -fx-text-fill: #111111;
 }
 
+.jfx-list-cell:odd, .jfx-list-cell:even {
+    -fx-background-color: white;
+}
+
+.jfx-list-cell:selected {
+    -fx-background-color: #222e4b;
+    -fx-text-fill: #EEEEEE;
+}
+
 .dashboard-menu-button {
     -fx-text-fill: #EEEEEE !important;
     -fx-font-size: 18px !important;
@@ -57,5 +66,33 @@ JFXListView {
 }
 
 .jfx-snackbar {
+    -fx-text-fill: #EEEEEE;
+}
+
+.jfx-scroll-pane {
+    -fx-background-color: #222222;
+}
+
+.jfx-scroll-pane .main-header {
+    -fx-background-color: #222222;
+}
+
+.jfx-scroll-pane .list-view-container {
+    -fx-background-color: #222222;
+}
+
+.header-wrapper .header {
+    /*-fx-background-insets: 10px;*/
+    /*-fx-border-insets: 10px;*/
+    -fx-font-size: 32px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #eeeeee;
+}
+
+.header-wrapper {
+    -fx-background-color: #222e4b;
+}
+
+.combo-box-base > * {
     -fx-text-fill: #EEEEEE;
 }

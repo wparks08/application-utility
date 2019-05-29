@@ -7,7 +7,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 import javafx.event.ActionEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
@@ -17,7 +20,7 @@ public class DashboardController {
     @FXML private Label lblStatus = new Label();
     @FXML private Button btnMapping;
     @FXML private Button btnGenerating;
-    @FXML private VBox mainWindow;
+    @FXML private Pane mainWindow;
 
     public void initModel(DataModel model) {
         this.model = model;
@@ -89,19 +92,36 @@ public class DashboardController {
         switch(current.getText()) {
             case "Form Mapping":
                 System.out.println("Form Mapping selected");
-                Node node = null;
+                Node mapping = null;
                 try {
                     FXMLLoader docLoader = new FXMLLoader(getClass().getResource("formMapping.fxml"));
-                    node = docLoader.load();
+                    mapping = docLoader.load();
                     formMappingController docController = docLoader.getController();
                     docController.initModel(model);
                 } catch (IOException e) {
-                    e.printStackTrace();
+//                    e.printStackTrace();
+                    Logger logger = LogManager.getLogger("default");
+                    logger.debug("Caught exception");
+                    logger.debug(e.getStackTrace());
                 }
-                mainWindow.getChildren().setAll(node);
+                mainWindow.getChildren().setAll(mapping);
                 break;
+
             case "Form Generation":
                 System.out.println("Form Generation selected");
+                Node generation = null;
+                try {
+                    FXMLLoader docLoader = new FXMLLoader(getClass().getResource("formGeneration.fxml"));
+                    generation = docLoader.load();
+                    FormGenerationController docController = docLoader.getController();
+                    docController.initModel(model);
+                } catch (IOException e) {
+//                    e.printStackTrace();
+                    Logger logger = LogManager.getLogger("default");
+                    logger.debug("Caught exception");
+                    logger.debug(e.getStackTrace());
+                }
+                mainWindow.getChildren().setAll(generation);
                 break;
             default:
                 //do nothing

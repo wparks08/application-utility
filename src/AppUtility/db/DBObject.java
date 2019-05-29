@@ -41,6 +41,39 @@ public abstract class DBObject<T> {
         return t;
     }
 
+    public T getBy(String column, String value) {
+        Database db = new Database();
+        db.connect();
+
+        Class clazz = this.getClass();
+
+        T t = null;
+        try {
+            t = (T) clazz.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        String tableName = getSqlNameFromJavaName(t.getClass().getSimpleName());
+
+        ResultSet resultSet = db.getByColumnValue(tableName, column, value);
+        Field[] fields = t.getClass().getDeclaredFields();
+
+        try {
+            if (!resultSet.isClosed()) {
+                setObjectFields((T) t, resultSet, fields);
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            db.close();
+        }
+
+        return t;
+    }
+
     public List<T> list() {
         Database db = new Database();
         db.connect();
@@ -223,7 +256,6 @@ public abstract class DBObject<T> {
                 sqlName = javaName.charAt(0) + splitString[0];
             } else if (i != splitString.length - 1) {
                 sqlName = sqlName + splitString[i] + "_";
-//                sqlName = sqlName + javaName.charAt(sqlName.length() - (1 + i));
                 if (i > 0) {
                     sqlName = sqlName + javaName.charAt(javaName.indexOf(splitString[i]) + splitString[i].length());
                 } else {

@@ -1,6 +1,11 @@
 package AppUtility.db;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+
 public class Mapping extends DBObject<Mapping> {
 
     private long id;
@@ -63,4 +68,33 @@ public class Mapping extends DBObject<Mapping> {
         return this.getBy("form_field_id", String.valueOf(formFieldId));
     }
 
+    public void addMappingProperty(MappingProperty mappingProperty) {
+        mappingProperty.setMappingId(this.id);
+        mappingProperty.save();
+    }
+
+    public void addMappingProperty(String property, String value) {
+        MappingProperty mappingProperty = new MappingProperty(property, value);
+        addMappingProperty(mappingProperty);
+    }
+
+    public List<MappingProperty> getMappingProperties() {
+        List<?> mappingPropertiesList = getChildren(MappingProperty.class);
+        List<MappingProperty> mappingProperties = new ArrayList<>();
+        for (Object object : mappingPropertiesList) {
+            mappingProperties.add((MappingProperty)object);
+        }
+
+        return mappingProperties;
+    }
+
+    public HashMap<String,String> getMappingPropertiesAsMap() {
+        HashMap<String, String> mappingPropertiesMap = new LinkedHashMap<>();
+
+        for (MappingProperty mappingProperty : getMappingProperties()) {
+            mappingPropertiesMap.put(mappingProperty.getProperty(),mappingProperty.getValue());
+        }
+
+        return mappingPropertiesMap;
+    }
 }

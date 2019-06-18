@@ -16,8 +16,30 @@
     -fx-font-size: 14px;
 }
 
+.label {
+    -fx-text-fill: #EEEEEE;
+    -fx-font-size: 14px;
+}
+
+.lbl-default {
+    -fx-text-fill: #EEEEEE;
+    -fx-font-size: 14px;
+    -fx-text-alignment: center;
+}
+
+.checkbox-default {
+    -fx-text-fill: #EEEEEE;
+}
+
 JFXListView {
     -fx-text-fill: #111111;
+}
+
+.scroll-pane-default {
+    -fx-background: #222222;
+    -fx-text-fill: #EEEEEE;
+    -fx-border-color: #222222;
+    -fx-background-insets: 10px;
 }
 
 .jfx-list-cell {
@@ -28,6 +50,10 @@ JFXListView {
     -fx-background-color: white;
 }
 
+.jfx-list-cell:hover {
+    -fx-background-color: #2f456f;
+    -fx-text-fill: #EEEEEE;
+}
 .jfx-list-cell:selected {
     -fx-background-color: #222e4b;
     -fx-text-fill: #EEEEEE;
@@ -45,6 +71,7 @@ JFXListView {
 .text-input {
     -fx-font-size: 14px;
     -fx-font-fill: #EEEEEE;
+    -fx-text-fill: #EEEEEE;
 }
 
 .jfx-date-picker .text-field {

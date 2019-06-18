@@ -100,6 +100,14 @@ public class Database {
                 "  FOREIGN KEY (form_field_id) REFERENCES form_field (id),\n" +
                 "  FOREIGN KEY (form_id) REFERENCES form (id)\n" +
                 ");";
+        //language=SQLite
+        String mappingProperty = "CREATE TABLE IF NOT EXISTS mapping_property (\n" +
+                "    id integer PRIMARY KEY ,\n" +
+                "    property text,\n" +
+                "    value text,\n" +
+                "    mapping_id integer,\n" +
+                "    FOREIGN KEY (mapping_id) REFERENCES mapping (id)\n" +
+                ")";
 
         Statement statement = null;
         try {
@@ -110,6 +118,7 @@ public class Database {
             statement.execute(censusHeaders);
             statement.execute(formFields);
             statement.execute(mapping);
+            statement.execute(mappingProperty);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -134,7 +143,7 @@ public class Database {
      */
     public ResultSet getByColumnValue(String table, String column, String value) {
         //language=SQLite
-        String sql = "SELECT * FROM " + table + " WHERE " + column + " = " + value;
+        String sql = "SELECT * FROM " + table + " WHERE " + column + "='" + value + "'";
 
         return getResultSet(sql);
     }

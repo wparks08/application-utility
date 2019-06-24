@@ -311,7 +311,6 @@ public class EditMappingController {
                         addAnother.getStyleClass().add("btn-success");
                         radioButtonBar.getButtons().add(addAnother);
 
-                        //TODO if mapping exists already, populate radioConditionList with already saved conditions
                         Mapping radioMapping = getSelectedMapping();
                         if (radioMapping != null) {
                             radioConditionList.addAll(radioMapping.getRadioConditions());

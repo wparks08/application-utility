@@ -108,6 +108,15 @@ public class Database {
                 "    mapping_id integer,\n" +
                 "    FOREIGN KEY (mapping_id) REFERENCES mapping (id)\n" +
                 ")";
+        //language=SQLite
+        String radioCondition = "CREATE TABLE IF NOT EXISTS radio_condition (\n" +
+                "    id integer PRIMARY KEY,\n" +
+                "    conditional text,\n" +
+                "    census_value text,\n" +
+                "    form_value text,\n" +
+                "    mapping_id integer,\n" +
+                "    FOREIGN KEY (mapping_id) REFERENCES mapping (id)\n" +
+                ")";
 
         Statement statement = null;
         try {
@@ -119,6 +128,7 @@ public class Database {
             statement.execute(formFields);
             statement.execute(mapping);
             statement.execute(mappingProperty);
+            statement.execute(radioCondition);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -129,7 +139,7 @@ public class Database {
 
     public ResultSet getById(String table, long id) {
         //language=SQLite
-        String sql = "SELECT * FROM " + table + " WHERE id = " + String.valueOf(id);
+        String sql = "SELECT * FROM " + table + " WHERE id = " + id;
 
         return getResultSet(sql);
     }
@@ -139,7 +149,7 @@ public class Database {
      * @param table - The database table to search
      * @param column - The column to find the value on
      * @param value - The value
-     * @return
+     * @return ResultSet
      */
     public ResultSet getByColumnValue(String table, String column, String value) {
         //language=SQLite

@@ -177,6 +177,20 @@ public class formMappingController {
     }
 
     @FXML
+    public void handleBtnEditFormClick(ActionEvent e) {
+        FXMLLoader newFormLoader = new FXMLLoader(getClass().getResource("newForm.fxml"));
+        Stage stage = prepStage(newFormLoader);
+
+        NewFormController newFormController = newFormLoader.getController();
+        newFormController.initModel(model);
+        newFormController.populateFields();
+
+        stage.setTitle("Edit Form");
+
+        stage.showAndWait();
+    }
+
+    @FXML
     public void handleBtnEditMappingClick(ActionEvent e) {
         FXMLLoader editFormLoader = new FXMLLoader((getClass().getResource("editMapping.fxml")));
         Stage stage = prepStage(editFormLoader);

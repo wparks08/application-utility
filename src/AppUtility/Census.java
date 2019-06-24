@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class Census {
 
     private File censusFile;
-    private String headers[];
+    private String[] headers;
     private List<Employee> employees = new ArrayList<>();
 
     public Census() {

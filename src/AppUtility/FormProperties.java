@@ -6,5 +6,8 @@ package AppUtility;
 public enum FormProperties {
     EFFECTIVE_BEGIN,
     EFFECTIVE_END,
-    PLAN_TYPE
+    PLAN_TYPE,
+    HAS_SPOUSE,
+    HAS_CHILDREN,
+    CHILDREN_COUNT
 }

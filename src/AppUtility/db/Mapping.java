@@ -1,6 +1,8 @@
 package AppUtility.db;
 
 
+import AppUtility.mapping.Conditional;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -82,19 +84,41 @@ public class Mapping extends DBObject<Mapping> {
         List<?> mappingPropertiesList = getChildren(MappingProperty.class);
         List<MappingProperty> mappingProperties = new ArrayList<>();
         for (Object object : mappingPropertiesList) {
-            mappingProperties.add((MappingProperty)object);
+            mappingProperties.add((MappingProperty) object);
         }
 
         return mappingProperties;
     }
 
-    public HashMap<String,String> getMappingPropertiesAsMap() {
+    public HashMap<String, String> getMappingPropertiesAsMap() {
         HashMap<String, String> mappingPropertiesMap = new LinkedHashMap<>();
 
         for (MappingProperty mappingProperty : getMappingProperties()) {
-            mappingPropertiesMap.put(mappingProperty.getProperty(),mappingProperty.getValue());
+            mappingPropertiesMap.put(mappingProperty.getProperty(), mappingProperty.getValue());
         }
 
         return mappingPropertiesMap;
+    }
+
+    public List<RadioCondition> getRadioConditions() {
+        List<?> radioConditionsList = getChildren(RadioCondition.class);
+        List<RadioCondition> radioConditions = new ArrayList<>();
+        for (Object object : radioConditionsList) {
+            radioConditions.add((RadioCondition) object);
+        }
+
+        return radioConditions;
+    }
+
+    public void addRadioCondition(RadioCondition radioCondition) {
+        if (radioCondition.getConditional() != null || radioCondition.getCensusValue() != null || radioCondition.getFormValue() != null) {
+            radioCondition.setMappingId(this.id);
+            radioCondition.save();
+        }
+    }
+
+    public void addRadioCondition(Conditional conditional, String censusValue, String formValue) {
+        RadioCondition radioCondition = new RadioCondition(conditional, censusValue, formValue);
+        addRadioCondition(radioCondition);
     }
 }

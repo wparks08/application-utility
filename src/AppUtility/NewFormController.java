@@ -9,10 +9,14 @@ import com.jfoenix.validation.RequiredFieldValidator;
 import de.jensd.fx.glyphs.GlyphsBuilder;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -20,6 +24,8 @@ import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 
 import java.io.File;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class NewFormController {
     @FXML private VBox wrapper;
@@ -35,6 +41,10 @@ public class NewFormController {
     @FXML private JFXCheckBox chkImportCensus;
     @FXML private JFXTextField txtFilePath;
     @FXML private JFXTextField txtFormName;
+    @FXML private HBox childrenWrapper;
+    @FXML private JFXCheckBox chbSpouse;
+    @FXML private JFXCheckBox chbChildren;
+    @FXML private JFXComboBox<Integer> numberOfChildren;
 
     private DataModel model;
     private Application application;
@@ -47,6 +57,27 @@ public class NewFormController {
         validator.setMessage("Required");
 
         addValidatorToRequiredFields(validator);
+        addNumberOfChildrenComboBox();
+    }
+
+    private void addNumberOfChildrenComboBox() {
+        numberOfChildren = new JFXComboBox<>();
+        numberOfChildren.getItems().addAll(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
+        numberOfChildren.setPromptText("Number of Children per Form");
+        numberOfChildren.setDisable(true);
+
+        chbChildren.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (newValue) {
+                    numberOfChildren.setDisable(false);
+                } else {
+                    numberOfChildren.setDisable(true);
+                }
+            }
+        });
+
+        childrenWrapper.getChildren().add(numberOfChildren);
     }
 
     private void addValidatorToRequiredFields(RequiredFieldValidator validator) {
@@ -59,6 +90,11 @@ public class NewFormController {
 
     public void initModel(DataModel model) {
         this.model = model;
+    }
+
+    public void populateFields() {
+        Form selectedForm = model.getSelectedForm();
+        HashMap<String, String> formProperties = selectedForm.getFormPropertiesAsMap();
     }
 
     @FXML
@@ -108,11 +144,29 @@ public class NewFormController {
             createPDFields(form);
             createCensusHeaders(form);
             createEffectiveDateProperties(form);
+            createDependentProperties(form);
 
             Snackbar.show(wrapper, "New Form Saved");
         } else {
             Snackbar.show(wrapper, "Please fill in the required fields.");
         }
+    }
+
+    private void createDependentProperties(Form form) {
+        FormProperty hasSpouse = new FormProperty();
+        hasSpouse.setProperty(FormProperties.HAS_SPOUSE.toString());
+        hasSpouse.setValue(chbSpouse.selectedProperty().getValue().toString());
+        form.addFormProperty(hasSpouse);
+
+        FormProperty hasChildren = new FormProperty();
+        hasChildren.setProperty(FormProperties.HAS_CHILDREN.toString());
+        hasChildren.setValue(chbChildren.selectedProperty().getValue().toString());
+        form.addFormProperty(hasChildren);
+
+        FormProperty childCount = new FormProperty();
+        childCount.setProperty(FormProperties.CHILDREN_COUNT.toString());
+        childCount.setValue(numberOfChildren.getSelectionModel().getSelectedItem().toString());
+        form.addFormProperty(childCount);
     }
 
     @FXML

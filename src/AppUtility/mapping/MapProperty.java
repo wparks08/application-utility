@@ -5,6 +5,7 @@ import AppUtility.db.MappingProperty;
 public enum MapProperty {
     SSN_SPLIT,
     SSN_DELIMITER,
+    SSN_UNDECORATED,
     DATE_TYPE,
     DATE_SPLIT,
     DATE_SECTION,
@@ -14,5 +15,10 @@ public enum MapProperty {
     SSN_SECTION,
     DATA_TYPE,
     CONDITIONAL,
-    TEXT_VALUE;
+    TEXT_VALUE,
+    ALWAYS_CHECKED,
+    PHONE_SPLIT,
+    PHONE_SECTION,
+    HAS_DEFAULT,
+    DEFAULT_VALUE;
 }

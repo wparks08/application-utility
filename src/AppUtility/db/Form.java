@@ -85,6 +85,17 @@ public class Form extends DBObject<Form> {
         return toReturn;
     }
 
+    public HashMap<String,String> getFormPropertiesAsMap() {
+        List<FormProperty> formPropertyList = getFormProperties();
+        HashMap<String, String> formPropertyMap = new HashMap<>();
+
+        for (FormProperty formProperty : formPropertyList) {
+            formPropertyMap.put(formProperty.getProperty(), formProperty.getValue());
+        }
+
+        return formPropertyMap;
+    }
+
     public void addFormProperty(String property, String value) {
         FormProperty formProperty = new FormProperty(property, value, this.id);
         formProperty.save();

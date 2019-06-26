@@ -92,11 +92,6 @@ public class NewFormController {
         this.model = model;
     }
 
-    public void populateFields() {
-        Form selectedForm = model.getSelectedForm();
-        HashMap<String, String> formProperties = selectedForm.getFormPropertiesAsMap();
-    }
-
     @FXML
     public void importFormAction(ActionEvent e) {
         ExtensionHelper extensionHelper = new ExtensionHelper("PDF File", "*.pdf");

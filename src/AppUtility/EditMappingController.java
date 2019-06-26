@@ -111,9 +111,25 @@ public class EditMappingController {
         dataTypeComboBox.getItems().addAll(DataType.values());
         dataTypeComboBox.setPromptText("Data Type");
         settings.getChildren().add(createContainer(dataTypeComboBox));
+
+        //Dependent options
+        JFXCheckBox isDependentField = new JFXCheckBox("Dependent Field");
+        isDependentField.getStyleClass().add("checkbox-default");
+
+        JFXComboBox<String> dependent = new JFXComboBox<>();
+        addDependentSelections(dependent);
+
+        HBox dependentOptionsWrapper = new HBox();
+        dependentOptionsWrapper.setSpacing(20);
+        dependentOptionsWrapper.setAlignment(Pos.BOTTOM_CENTER);
+        dependentOptionsWrapper.getChildren().addAll(isDependentField, dependent);
+
+        settings.getChildren().add(dependentOptionsWrapper);
+
+        //Data type settings
         VBox dataTypeSettings = new VBox();
         dataTypeSettings.setFillWidth(true);
-        dataTypeSettings.setSpacing(10);
+        dataTypeSettings.setSpacing(15);
         dataTypeSettings.setAlignment(Pos.CENTER);
         settings.getChildren().add(createContainer(dataTypeSettings));
 
@@ -131,18 +147,17 @@ public class EditMappingController {
             @Override
             public void changed(ObservableValue<? extends DataType> observable, DataType oldValue, DataType newValue) {
                 dataTypeSettings.getChildren().clear();
-                Mapping mapping = getSelectedMapping();
-                if (mapping != null) {
-                    //Select dependent checkbox and dropdown
-                }
+
                 switch (newValue) {
                     case TEXT:
                         saveButton.setOnAction(event -> {
                             saveMapping(comboBox);
-//                            Mapping mapping = getSelectedMapping();
+                            Mapping mapping = getSelectedMapping();
                             if (mapping != null) {
                                 List<MappingProperty> mappingPropertyList = mapping.getMappingProperties();
                                 saveOrUpdateMappingProperty(mapping, mappingPropertyList, MapProperty.DATA_TYPE, DataType.TEXT.name());
+                                saveOrUpdateMappingProperty(mapping, mappingPropertyList, MapProperty.IS_DEPENDENT_FIELD, isDependentField.selectedProperty().getValue().toString());
+                                saveOrUpdateMappingProperty(mapping, mappingPropertyList, MapProperty.DEPENDENT, dependent.getSelectionModel().getSelectedItem());
                             }
                         });
                         break;
@@ -189,7 +204,7 @@ public class EditMappingController {
 
                         saveButton.setOnAction(event -> {
                             saveMapping(comboBox);
-//                            Mapping mapping = getSelectedMapping();
+                            Mapping mapping = getSelectedMapping();
                             if (mapping != null) {
                                 List<MappingProperty> mappingPropertyList = mapping.getMappingProperties();
 
@@ -197,6 +212,8 @@ public class EditMappingController {
                                 saveOrUpdateMappingProperty(mapping, mappingPropertyList, MapProperty.SSN_SECTION, ssnSection.getSelectionModel().getSelectedItem());
                                 saveOrUpdateMappingProperty(mapping, mappingPropertyList, MapProperty.SSN_UNDECORATED, removeDashes.selectedProperty().getValue().toString());
                                 saveOrUpdateMappingProperty(mapping, mappingPropertyList, MapProperty.DATA_TYPE, DataType.SSN.name());
+                                saveOrUpdateMappingProperty(mapping, mappingPropertyList, MapProperty.IS_DEPENDENT_FIELD, isDependentField.selectedProperty().getValue().toString());
+                                saveOrUpdateMappingProperty(mapping, mappingPropertyList, MapProperty.DEPENDENT, dependent.getSelectionModel().getSelectedItem());
                             }
                         });
                         break;
@@ -235,14 +252,15 @@ public class EditMappingController {
 
                         saveButton.setOnAction(event -> {
                             saveMapping(comboBox);
-//                            Mapping mapping = getSelectedMapping();
+                            Mapping mapping = getSelectedMapping();
                             if (mapping != null) {
                                 List<MappingProperty> mappingPropertyList = mapping.getMappingProperties();
 
                                 saveOrUpdateMappingProperty(mapping, mappingPropertyList, MapProperty.DATE_SPLIT, splitDate.selectedProperty().getValue().toString());
                                 saveOrUpdateMappingProperty(mapping, mappingPropertyList, MapProperty.DATE_SECTION, dateSection.getSelectionModel().getSelectedItem());
                                 saveOrUpdateMappingProperty(mapping, mappingPropertyList, MapProperty.DATA_TYPE, DataType.DATE.name());
-
+                                saveOrUpdateMappingProperty(mapping, mappingPropertyList, MapProperty.IS_DEPENDENT_FIELD, isDependentField.selectedProperty().getValue().toString());
+                                saveOrUpdateMappingProperty(mapping, mappingPropertyList, MapProperty.DEPENDENT, dependent.getSelectionModel().getSelectedItem());
                             }
                         });
                         break;
@@ -282,7 +300,7 @@ public class EditMappingController {
 
                         saveButton.setOnAction(event -> {
                             saveMapping(comboBox);
-//                            Mapping mapping = getSelectedMapping();
+                            Mapping mapping = getSelectedMapping();
                             if (mapping != null) {
                                 List<MappingProperty> mappingPropertyList = mapping.getMappingProperties();
 
@@ -291,6 +309,8 @@ public class EditMappingController {
                                     saveOrUpdateMappingProperty(mapping, mappingPropertyList, MapProperty.PHONE_SECTION, phonePart.getSelectionModel().getSelectedItem());
                                 }
                                 saveOrUpdateMappingProperty(mapping, mappingPropertyList, MapProperty.DATA_TYPE, DataType.PHONE.name());
+                                saveOrUpdateMappingProperty(mapping, mappingPropertyList, MapProperty.IS_DEPENDENT_FIELD, isDependentField.selectedProperty().getValue().toString());
+                                saveOrUpdateMappingProperty(mapping, mappingPropertyList, MapProperty.DEPENDENT, dependent.getSelectionModel().getSelectedItem());
                             }
                         });
 
@@ -361,7 +381,7 @@ public class EditMappingController {
 
                         saveButton.setOnAction(event -> {
                             saveMapping(comboBox);
-//                            Mapping mapping = getSelectedMapping();
+                            Mapping mapping = getSelectedMapping();
                             if (mapping != null) {
                                 for (RadioCondition radioCondition : radioConditionList) {
                                     mapping.addRadioCondition(radioCondition);
@@ -370,6 +390,8 @@ public class EditMappingController {
                                 saveOrUpdateMappingProperty(mapping, mappingPropertyList, MapProperty.HAS_DEFAULT, hasDefaultValue.selectedProperty().getValue().toString());
                                 saveOrUpdateMappingProperty(mapping, mappingPropertyList, MapProperty.DEFAULT_VALUE, defaultValue.getText());
                                 saveOrUpdateMappingProperty(mapping, mappingPropertyList, MapProperty.DATA_TYPE, DataType.RADIO.name());
+                                saveOrUpdateMappingProperty(mapping, mappingPropertyList, MapProperty.IS_DEPENDENT_FIELD, isDependentField.selectedProperty().getValue().toString());
+                                saveOrUpdateMappingProperty(mapping, mappingPropertyList, MapProperty.DEPENDENT, dependent.getSelectionModel().getSelectedItem());
                             }
                         });
 
@@ -426,13 +448,15 @@ public class EditMappingController {
 
                         saveButton.setOnAction(event -> {
                             saveMapping(comboBox);
-//                            Mapping mapping = getSelectedMapping();
+                            Mapping mapping = getSelectedMapping();
                             if (mapping != null) {
                                 List<MappingProperty> mappingPropertyList = mapping.getMappingProperties();
                                 saveOrUpdateMappingProperty(mapping, mappingPropertyList, MapProperty.CONDITIONAL, conditionals.getSelectionModel().getSelectedItem().name());
                                 saveOrUpdateMappingProperty(mapping, mappingPropertyList, MapProperty.TEXT_VALUE, value.textProperty().getValue());
                                 saveOrUpdateMappingProperty(mapping, mappingPropertyList, MapProperty.ALWAYS_CHECKED, alwaysChecked.selectedProperty().getValue().toString());
                                 saveOrUpdateMappingProperty(mapping, mappingPropertyList, MapProperty.DATA_TYPE, DataType.CHECKBOX.name());
+                                saveOrUpdateMappingProperty(mapping, mappingPropertyList, MapProperty.IS_DEPENDENT_FIELD, isDependentField.selectedProperty().getValue().toString());
+                                saveOrUpdateMappingProperty(mapping, mappingPropertyList, MapProperty.DEPENDENT, dependent.getSelectionModel().getSelectedItem());
                             }
                         });
                         break;
@@ -444,10 +468,12 @@ public class EditMappingController {
 
                         saveButton.setOnAction(event -> {
                             saveMapping(comboBox);
-//                            Mapping mapping = getSelectedMapping();
+                            Mapping mapping = getSelectedMapping();
                             if (mapping != null) {
                                 List<MappingProperty> mappingPropertyList = mapping.getMappingProperties();
                                 saveOrUpdateMappingProperty(mapping, mappingPropertyList, MapProperty.DATA_TYPE, DataType.INITIAL.name());
+                                saveOrUpdateMappingProperty(mapping, mappingPropertyList, MapProperty.IS_DEPENDENT_FIELD, isDependentField.selectedProperty().getValue().toString());
+                                saveOrUpdateMappingProperty(mapping, mappingPropertyList, MapProperty.DEPENDENT, dependent.getSelectionModel().getSelectedItem());
                             }
                         });
                         break;
@@ -458,9 +484,31 @@ public class EditMappingController {
 
         Mapping savedMapping = getSelectedMapping();
         if (savedMapping != null) {
-            String dataType = savedMapping.getMappingPropertiesAsMap().get(MapProperty.DATA_TYPE.toString());
+            HashMap<String, String> mappingPropertiesMap = savedMapping.getMappingPropertiesAsMap();
+
+            String dataType = mappingPropertiesMap.get(MapProperty.DATA_TYPE.toString());
+
+            if (Boolean.valueOf(formProperties.get(FormProperties.HAS_CHILDREN.toString())) || Boolean.valueOf(formProperties.get(FormProperties.HAS_SPOUSE.toString()))) {
+                isDependentField.setSelected(Boolean.valueOf(mappingPropertiesMap.get(MapProperty.IS_DEPENDENT_FIELD.toString())));
+                dependent.getSelectionModel().select(mappingPropertiesMap.get(MapProperty.DEPENDENT.toString()));
+            }
+
             if (dataType != null) {
                 dataTypeComboBox.getSelectionModel().select(DataType.valueOf(dataType));
+            }
+        }
+    }
+
+    private void addDependentSelections(JFXComboBox<String> dependent) {
+        if (Boolean.valueOf(formProperties.get(FormProperties.HAS_SPOUSE.toString()))) {
+            dependent.getItems().add("Spouse");
+        }
+
+        if (Boolean.valueOf(formProperties.get(FormProperties.HAS_CHILDREN.toString()))) {
+            int numberOfChildren = Integer.valueOf(formProperties.get(FormProperties.CHILDREN_COUNT.toString()));
+
+            for (int i = 1; i <= numberOfChildren; i++) {
+                dependent.getItems().add("Child " + i);
             }
         }
     }

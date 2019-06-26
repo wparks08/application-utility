@@ -20,5 +20,7 @@ public enum MapProperty {
     PHONE_SPLIT,
     PHONE_SECTION,
     HAS_DEFAULT,
-    DEFAULT_VALUE;
+    DEFAULT_VALUE,
+    IS_DEPENDENT_FIELD,
+    DEPENDENT;
 }

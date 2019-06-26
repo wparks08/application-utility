@@ -1,12 +1,16 @@
 package AppUtility;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class Employee {
-    private HashMap<String,String> info = new HashMap<>();
-    private List<Dependent> dependents = new ArrayList<>();
+    private ObservableMap<String, String> info = FXCollections.observableHashMap();
+    private ObservableList<Dependent> dependents = FXCollections.observableArrayList();
 
     public void addInfo(String key, String value) {
         info.put(key, value);
@@ -16,7 +20,7 @@ public class Employee {
         return info.get(key);
     }
 
-    public HashMap<String, String> getInfo() {
+    public ObservableMap<String, String> getInfo() {
         return info;
     }
 

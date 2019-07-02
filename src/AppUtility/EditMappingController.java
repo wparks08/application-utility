@@ -102,6 +102,7 @@ public class EditMappingController {
         }
 
         comboBox.setPromptText("Census Header Selection");
+        comboBox.setDisable(false);
 
         settings.getChildren().clear();
         settings.getChildren().add(createContainer(comboBox));
@@ -147,6 +148,7 @@ public class EditMappingController {
             @Override
             public void changed(ObservableValue<? extends DataType> observable, DataType oldValue, DataType newValue) {
                 dataTypeSettings.getChildren().clear();
+                comboBox.setDisable(false);
 
                 switch (newValue) {
                     case TEXT:
@@ -477,6 +479,32 @@ public class EditMappingController {
                             }
                         });
                         break;
+                    case GROUP_NAME:
+                        comboBox.getSelectionModel().clearSelection();
+                        comboBox.setDisable(true);
+
+                        saveButton.setOnAction(event -> {
+                            saveMapping();
+                            Mapping mapping = getSelectedMapping();
+                            if (mapping != null) {
+                                List<MappingProperty> mappingPropertyList = mapping.getMappingProperties();
+                                saveOrUpdateMappingProperty(mapping, mappingPropertyList, MapProperty.DATA_TYPE, DataType.GROUP_NAME.name());
+                            }
+                        });
+                        break;
+                    case GROUP_NUMBER:
+                        comboBox.getSelectionModel().clearSelection();
+                        comboBox.setDisable(true);
+
+                        saveButton.setOnAction(event -> {
+                            saveMapping();
+                            Mapping mapping = getSelectedMapping();
+                            if (mapping != null) {
+                                List<MappingProperty> mappingPropertyList = mapping.getMappingProperties();
+                                saveOrUpdateMappingProperty(mapping, mappingPropertyList, MapProperty.DATA_TYPE, DataType.GROUP_NUMBER.name());
+                            }
+                        });
+                        break;
                     default: //do nothing
                 }
             }
@@ -590,6 +618,22 @@ public class EditMappingController {
             mapping = new Mapping();
             mapping.setFormId(form.getId());
             mapping.setCensusHeaderId(comboBox.getSelectionModel().getSelectedItem().getId());
+            mapping.setFormFieldId(formFieldListView.getSelectionModel().getSelectedItem().getId());
+            mapping.save();
+            Snackbar.show(wrapper, "Mapping saved.");
+        }
+
+        refreshMappings();
+    }
+
+    private void saveMapping() {
+        Mapping mapping = getSelectedMapping();
+        if (mapping != null) {
+            mapping.save();
+            Snackbar.show(wrapper, "Mapping updated.");
+        } else {
+            mapping = new Mapping();
+            mapping.setFormId(form.getId());
             mapping.setFormFieldId(formFieldListView.getSelectionModel().getSelectedItem().getId());
             mapping.save();
             Snackbar.show(wrapper, "Mapping saved.");

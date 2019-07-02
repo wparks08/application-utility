@@ -13,6 +13,7 @@ public class DataModel {
     private Form selectedForm;
 
     private String lastAccessedFilePath = System.getProperty("user.home");
+    private String outputDirectory;
 
     public DataModel() {
         //Default constructor
@@ -56,5 +57,13 @@ public class DataModel {
 
     public void setSelectedForm(Form selectedForm) {
         this.selectedForm = selectedForm;
+    }
+
+    public void setOutputDirectory(String outputDirectory) {
+        this.outputDirectory = outputDirectory;
+    }
+
+    public String getOutputDirectory() {
+        return outputDirectory;
     }
 }

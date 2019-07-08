@@ -28,6 +28,7 @@ public class formMappingController {
     @FXML JFXListView<Form> listViewForms = new JFXListView<>();
     @FXML JFXListView<Carrier> listViewCarriers = new JFXListView<>();
     @FXML JFXButton btnNew;
+    @FXML JFXButton btnEditForm;
     @FXML JFXButton btnEditMapping;
     @FXML JFXButton btnDelete;
     @FXML JFXButton btnAddCarrier;
@@ -45,6 +46,7 @@ public class formMappingController {
     public void initialize() {
 
         btnNew.setDisable(true);
+        btnEditForm.setDisable(true);
         btnEditMapping.setDisable(true);
         btnDelete.setDisable(true);
         btnEditCarrier.setDisable(true);
@@ -52,9 +54,11 @@ public class formMappingController {
 
         listViewForms.getSelectionModel().getSelectedItems().addListener((ListChangeListener<Form>) c -> {
             if (listViewForms.getSelectionModel().getSelectedItems().isEmpty()) {
+                btnEditForm.setDisable(true);
                 btnEditMapping.setDisable(true);
                 btnDelete.setDisable(true);
             } else {
+                btnEditForm.setDisable(false);
                 btnEditMapping.setDisable(false);
                 btnDelete.setDisable(false);
                 model.setSelectedForm(listViewForms.getSelectionModel().getSelectedItem());
@@ -178,12 +182,11 @@ public class formMappingController {
 
     @FXML
     public void handleBtnEditFormClick(ActionEvent e) {
-        FXMLLoader newFormLoader = new FXMLLoader(getClass().getResource("newForm.fxml"));
-        Stage stage = prepStage(newFormLoader);
+        FXMLLoader editFormLoader = new FXMLLoader(getClass().getResource("editForm.fxml"));
+        Stage stage = prepStage(editFormLoader);
 
-        NewFormController newFormController = newFormLoader.getController();
-        newFormController.initModel(model);
-        newFormController.populateFields();
+        EditFormController editFormController = editFormLoader.getController();
+        editFormController.initModel(model);
 
         stage.setTitle("Edit Form");
 

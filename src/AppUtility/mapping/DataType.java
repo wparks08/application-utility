@@ -7,5 +7,7 @@ public enum DataType {
     PHONE { public String toString() { return "Phone"; }},
     RADIO { public String toString() { return "Radio"; }},
     CHECKBOX { public String toString() { return "Checkbox"; }},
-    INITIAL { public String toString() { return "Initial"; }}
+    INITIAL { public String toString() { return "Initial"; }},
+    GROUP_NAME { public String toString() { return "Group Name"; }},
+    GROUP_NUMBER { public String toString() { return "Group Number"; }}
 }

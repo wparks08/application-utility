@@ -1,9 +1,12 @@
 package AppUtility;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
+
 import java.util.HashMap;
 
 public class Dependent {
-    private HashMap<String,String> info = new HashMap<>();
+    private ObservableMap<String,String> info = FXCollections.observableHashMap();
 
     public Dependent(Employee employee) {
         info.putAll(employee.getInfo());

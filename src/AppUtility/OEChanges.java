@@ -14,6 +14,8 @@ public class OEChanges {
 
     private File oeChangeFile;
     private HSSFWorkbook oeChangeWorkbook;
+    private int carrierColumnIndex = 2;
+    private int planFieldColumnIndex = 3;
     private int changeTypeColumnIndex = 4;
     private int oldValueColumnIndex = 5;
     private int newValueColumnIndex = 6;
@@ -79,6 +81,69 @@ public class OEChanges {
         this.ssnColumnIndex = ssnColumnIndex;
     }
 
+    public List<Change> getChanges() {
+        List<Change> changes = new ArrayList<>();
+
+        HSSFSheet worksheet = oeChangeWorkbook.getSheetAt(0);
+
+        List<String> changeTypeStrings = new ArrayList<>();
+        changeTypeStrings.add("Plan");
+        changeTypeStrings.add("Membership: Added Coverage");
+        changeTypeStrings.add("Membership: Dropped Coverage");
+        changeTypeStrings.add("Membership: Added Dependent");
+        changeTypeStrings.add("Membership: Dropped Dependent");
+
+        for (int i = 0; i < worksheet.getLastRowNum(); i++) {
+            Row row = worksheet.getRow(i);
+
+            verifyRowIntegrity(row);
+
+            String changeReportChangeType = row.getCell(changeTypeColumnIndex).getStringCellValue();
+
+            if (changeTypeStrings.contains(changeReportChangeType)) {
+                Change change = new Change(
+                        row.getCell(ssnColumnIndex).getStringCellValue(),
+                        row.getCell(oldValueColumnIndex).getStringCellValue(),
+                        row.getCell(newValueColumnIndex).getStringCellValue(),
+                        row.getCell(carrierColumnIndex).getStringCellValue(),
+                        row.getCell(planFieldColumnIndex).getStringCellValue()
+                );
+
+                switch (changeReportChangeType) {
+                    case "Plan":
+                        change.setChangeType(ChangeType.PLAN);
+                        break;
+                    case "Membership: Added Coverage":
+                        change.setChangeType(ChangeType.ADD_COVERAGE);
+                        break;
+                    case "Membership: Dropped Coverage":
+                        change.setChangeType(ChangeType.DROP_COVERAGE);
+                        break;
+                    case "Membership: Added Dependent":
+                        change.setChangeType(ChangeType.ADD_DEPENDENT);
+                        break;
+                    case "Membership: Dropped Dependent":
+                        change.setChangeType(ChangeType.DROP_DEPENDENT);
+                        break;
+                    default:
+                        //Do nothing
+                }
+
+                changes.add(change);
+            }
+        }
+
+        return changes;
+    }
+
+    private void verifyRowIntegrity(Row row) {
+        for (int i = 0; i < 7; i++) {
+            if (row.getCell(i) == null) {
+                row.createCell(i).setCellValue("");
+            }
+        }
+    }
+
     public List<Change> getChanges(ChangeType changeType) {
         List<Change> changes = new ArrayList<>();
 
@@ -88,6 +153,7 @@ public class OEChanges {
             case PLAN:
                 for (int i = 0; i < worksheet.getLastRowNum(); i++) {
                     Row row = worksheet.getRow(i);
+                    verifyRowIntegrity(row);
                     if (row.getCell(changeTypeColumnIndex).getStringCellValue().equals("Plan")) {
                         changes.add(new Change(
                                 row.getCell(ssnColumnIndex).getStringCellValue(),
@@ -102,6 +168,7 @@ public class OEChanges {
             case ADD_COVERAGE:
                 for (int i = 0; i < worksheet.getLastRowNum(); i++) {
                     Row row = worksheet.getRow(i);
+                    verifyRowIntegrity(row);
                     if (row.getCell(changeTypeColumnIndex).getStringCellValue().equals("Membership: Added Coverage")) {
                         changes.add(new Change(
                                 row.getCell(ssnColumnIndex).getStringCellValue(),
@@ -116,6 +183,7 @@ public class OEChanges {
             case DROP_COVERAGE:
                 for (int i = 0; i < worksheet.getLastRowNum(); i++) {
                     Row row = worksheet.getRow(i);
+                    verifyRowIntegrity(row);
                     if (row.getCell(changeTypeColumnIndex).getStringCellValue().equals("Membership: Dropped Coverage")) {
                         changes.add(new Change(
                                 row.getCell(ssnColumnIndex).getStringCellValue(),
@@ -130,6 +198,7 @@ public class OEChanges {
             case ADD_DEPENDENT:
                 for (int i = 0; i < worksheet.getLastRowNum(); i++) {
                     Row row = worksheet.getRow(i);
+                    verifyRowIntegrity(row);
                     if (row.getCell(changeTypeColumnIndex).getStringCellValue().equals("Membership: Added Dependent")) {
                         changes.add(new Change(
                                 row.getCell(ssnColumnIndex).getStringCellValue(),
@@ -144,6 +213,7 @@ public class OEChanges {
             case DROP_DEPENDENT:
                 for (int i = 0; i < worksheet.getLastRowNum(); i++) {
                     Row row = worksheet.getRow(i);
+                    verifyRowIntegrity(row);
                     if (row.getCell(changeTypeColumnIndex).getStringCellValue().equals("Membership: Dropped Dependent")) {
                         changes.add(new Change(
                                 row.getCell(ssnColumnIndex).getStringCellValue(),

@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 
 import javafx.event.ActionEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -115,6 +116,7 @@ public class DashboardController {
                     generation = docLoader.load();
                     FormGenerationController docController = docLoader.getController();
                     docController.initModel(model);
+                    VBox.setVgrow(generation, Priority.ALWAYS);
                 } catch (IOException e) {
 //                    e.printStackTrace();
                     Logger logger = LogManager.getLogger("default");

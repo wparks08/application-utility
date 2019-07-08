@@ -1,7 +1,10 @@
 package AppUtility.db;
 
 
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -44,6 +47,21 @@ public class Form extends DBObject<Form> {
 
     public void setFormBytes(byte[] formBytes) {
         this.formBytes = formBytes;
+    }
+
+    public File getFile() {
+        File toReturn = null;
+        try {
+            toReturn = File.createTempFile("AppUtilForm", ".pdf", null);
+            FileOutputStream fileOutputStream = new FileOutputStream(toReturn);
+            fileOutputStream.write(formBytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(toReturn.length());
+
+        return toReturn;
     }
 
 

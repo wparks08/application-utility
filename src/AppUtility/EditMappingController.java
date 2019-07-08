@@ -629,11 +629,19 @@ public class EditMappingController {
     private void saveMapping() {
         Mapping mapping = getSelectedMapping();
         if (mapping != null) {
+            if (mapping.getCensusHeaderId() == 0) {
+                CensusHeader dummyHeader = new CensusHeader("No Header", form.getId());
+                dummyHeader.save();
+                mapping.setCensusHeaderId(dummyHeader.getId());
+            }
             mapping.save();
             Snackbar.show(wrapper, "Mapping updated.");
         } else {
             mapping = new Mapping();
             mapping.setFormId(form.getId());
+            CensusHeader dummyHeader = new CensusHeader("No Header", form.getId());
+            dummyHeader.save();
+            mapping.setCensusHeaderId(dummyHeader.getId());
             mapping.setFormFieldId(formFieldListView.getSelectionModel().getSelectedItem().getId());
             mapping.save();
             Snackbar.show(wrapper, "Mapping saved.");

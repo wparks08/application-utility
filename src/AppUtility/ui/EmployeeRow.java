@@ -68,9 +68,13 @@ public class EmployeeRow extends HBox {
         this.isEnrollment.setSelected(isEnrollment);
     }
 
+    public Boolean getIsEnrollment() { return this.isEnrollment.selectedProperty().get(); }
+
     public void setIsChange(Boolean isChange) {
         this.isChange.setSelected(isChange);
     }
+
+    public Boolean getIsChange() { return this.isChange.selectedProperty().get(); }
 
     public Form getSelectedForm() {
         return this.forms.getSelectionModel().getSelectedItem();

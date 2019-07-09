@@ -25,6 +25,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import org.apache.pdfbox.cos.COSName;
+import org.apache.pdfbox.pdmodel.PDResources;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDCheckBox;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
@@ -207,7 +210,7 @@ public class FormGenerationController {
     @FXML
     public void generateForms() throws IOException {
         for (EmployeeRow employeeRow : employeeRowList) {
-            if (employeeRow.getIsEnrollment()) {
+            if (employeeRow.getIsEnrollment() || employeeRow.getIsChange()) {
                 Form form = employeeRow.getSelectedForm();
                 Application application = new Application(form.getFile());
                 List<PDField> pdFields = application.getPDFields(); //FIXME this is here for debug only. Remove when done.
@@ -215,6 +218,20 @@ public class FormGenerationController {
                 List<Mapping> mappings = form.getMappings();
                 Employee employee = employeeRow.getEmployee();
                 List<Dependent> dependents = employee.getDependents();
+
+                System.out.println(acroForm.getDefaultAppearance());
+
+//                PDResources resources = acroForm.getDefaultResources();
+//                if(resources == null)
+//                {
+//                    resources = new PDResources();
+//                }
+//                resources.put(COSName.getPDFName("TiRo"), PDType1Font.TIMES_ROMAN);
+//                if(acroForm.getDefaultResources() == null)
+//                {
+//                    acroForm.setDefaultResources(resources);
+//                }
+// End Add Font
 
                 for (Mapping mapping : mappings) {
                     HashMap<String, String> mappingProperties = mapping.getMappingPropertiesAsMap();
@@ -287,6 +304,17 @@ public class FormGenerationController {
         PDAcroForm acroForm = application.getApplication().getDocumentCatalog().getAcroForm();
         List<Mapping> mappings = form.getMappings();
         Employee employee = employeeRow.getEmployee();
+
+//        PDResources resources = acroForm.getDefaultResources();
+//        if(resources == null)
+//        {
+//            resources = new PDResources();
+//        }
+//        resources.put(COSName.getPDFName("TiRo"), PDType1Font.TIMES_ROMAN);
+//        if(acroForm.getDefaultResources() == null)
+//        {
+//            acroForm.setDefaultResources(resources);
+//        }
 
         for (Mapping mapping : mappings) {
             HashMap<String, String> mappingProperties = mapping.getMappingPropertiesAsMap();

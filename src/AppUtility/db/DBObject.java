@@ -170,8 +170,13 @@ public abstract class DBObject<T> {
                         continue;
                     }
                     String key = getSqlNameFromJavaName(field.getName());
-                    String value = String.valueOf(field.get(this));
-                    parameterMap.put(key, value);
+                    if (field.getType().toString().equals("class [B")) {
+                        String value = Base64.getEncoder().encodeToString((byte[]) field.get(this));
+                        parameterMap.put(key, value);
+                    } else {
+                        String value = String.valueOf(field.get(this));
+                        parameterMap.put(key, value);
+                    }
                 }
                 db.update(tableName, parameterMap);
             }

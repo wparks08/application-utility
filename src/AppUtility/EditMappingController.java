@@ -67,7 +67,30 @@ public class EditMappingController {
         Label instructions = new Label("Match fields from the Carrier Form (left) to the proper Census Data (right).");
         instructions.getStyleClass().add("lbl-default");
 
+        JFXTextField filterField = new JFXTextField();
+        filterField.setLabelFloat(true);
+        filterField.setPromptText("Filter...");
+
+        filterField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                double height = formFieldListView.getHeight();
+                formFieldListView.getItems().clear();
+                if (newValue.equals("")) {
+                    formFieldListView.getItems().addAll(formFields);
+                } else {
+                    for (FormField field : formFields) {
+                        if (field.getFieldName().toLowerCase().contains(newValue.toLowerCase())) {
+                            formFieldListView.getItems().add(field);
+                        }
+                    }
+                }
+                formFieldListView.setPrefHeight(height);
+            }
+        });
+
         mapping.getChildren().add(instructions);
+        mapping.getChildren().add(filterField);
         mapping.getChildren().add(createContainer("list-view-container", formFieldListView));
 
         formFieldListView.getSelectionModel().getSelectedItems().addListener(new InvalidationListener() {

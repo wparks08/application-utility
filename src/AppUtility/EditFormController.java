@@ -212,11 +212,9 @@ public class EditFormController {
     }
 
     private boolean validate() {
-        txtFilePath.validate();
-        txtCensusName.validate();
         txtFormName.validate();
         dteEffectiveBegin.validate();
         dteEffectiveEnd.validate();
-        return (txtFilePath.validate() && txtCensusName.validate() && txtFormName.validate() && dteEffectiveBegin.validate() && dteEffectiveEnd.validate());
+        return (txtFormName.validate() && dteEffectiveBegin.validate() && dteEffectiveEnd.validate());
     }
 }

@@ -31,6 +31,7 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDCheckBox;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
+import org.w3c.dom.ls.LSOutput;
 
 import java.io.File;
 import java.io.IOException;
@@ -245,6 +246,9 @@ public class FormGenerationController {
                     if (!isDependentField(mappingProperties)) {
 
                         String info = employee.getInfo(censusHeader);
+                        if (info == null || info.equals("")) {
+                            continue;
+                        }
 
                         processFormFieldData(mapping, mappingProperties, dataType, field, info);
                     } else if (isDependentField(mappingProperties)) {
@@ -271,6 +275,9 @@ public class FormGenerationController {
                         //fill in the field
                         if (dependent != null) {
                             String info = dependent.getInfo(censusHeader);
+                            if (info == null || info.equals("")) {
+                                continue;
+                            }
 
                             processFormFieldData(mapping, mappingProperties, dataType, field, info);
                         }
@@ -327,6 +334,9 @@ public class FormGenerationController {
 
             if (!isDependentField(mappingProperties)) {
                 String info = employee.getInfo(censusHeader);
+                if (info == null || info.equals("")) {
+                    continue;
+                }
                 processFormFieldData(mapping, mappingProperties, dataType, field, info);
             } else if (isDependentField(mappingProperties)) {
                 String relationship = getProperty(mappingProperties, MapProperty.DEPENDENT);
@@ -341,6 +351,9 @@ public class FormGenerationController {
                 //fill in the field
                 if (dependent != null) {
                     String info = dependent.getInfo(censusHeader);
+                    if (info == null || info.equals("")) {
+                        continue;
+                    }
                     processFormFieldData(mapping, mappingProperties, dataType, field, info);
                 }
             }
@@ -354,6 +367,7 @@ public class FormGenerationController {
     }
 
     private void processFormFieldData(Mapping mapping, HashMap<String, String> mappingProperties, DataType dataType, PDField field, String info) throws IOException {
+        System.out.println(field.getFullyQualifiedName() + " : " + info);
         switch (dataType) {
             case TEXT:
                 setFieldValue(field, info);
@@ -435,6 +449,10 @@ public class FormGenerationController {
         if (Boolean.valueOf(getProperty(mappingProperties, MapProperty.HAS_DEFAULT))) {
             setFieldValue(field, getProperty(mappingProperties, MapProperty.DEFAULT_VALUE));
         }
+//
+//        if (info == null) {
+//            return;
+//        }
         List<RadioCondition> radioConditions = mapping.getRadioConditions();
 
         for (RadioCondition radioCondition : radioConditions) {
@@ -448,6 +466,7 @@ public class FormGenerationController {
                     break;
                 case CONTAINS:
                     String[] splitConditionArray = radioCondition.getCensusValue().split(" ");
+                    System.out.println(info + " -- " + radioCondition.getCensusValue());
                     if (Stream.of(splitConditionArray).allMatch(info::contains)) {
                         setFieldValue(field, radioCondition.getFormValue());
                     }

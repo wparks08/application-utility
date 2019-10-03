@@ -45,6 +45,12 @@
                               </JFXTextField>
                      </children>
                   </VBox>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="15.0">
+                     <children>
+                        <JFXButton buttonType="RAISED" onAction="#importCensusAction" styleClass="btn-default" text="Import New Census" />
+                        <JFXTextField fx:id="txtCensusName" editable="false" labelFloat="true" promptText="File Name" HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
                   <VBox alignment="CENTER_LEFT" spacing="10.0">
                      <children>
                         <Label fx:id="lblEffectiveDateRange" style="-fx-text-fill: #4d4d4d;" text="Effective Date Range">

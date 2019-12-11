@@ -25,9 +25,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import org.apache.pdfbox.cos.COSName;
+import org.apache.pdfbox.pdmodel.PDResources;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDCheckBox;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
+import org.w3c.dom.ls.LSOutput;
 
 import java.io.File;
 import java.io.IOException;
@@ -207,7 +211,7 @@ public class FormGenerationController {
     @FXML
     public void generateForms() throws IOException {
         for (EmployeeRow employeeRow : employeeRowList) {
-            if (employeeRow.getIsEnrollment()) {
+            if (employeeRow.getIsEnrollment() || employeeRow.getIsChange()) {
                 Form form = employeeRow.getSelectedForm();
                 Application application = new Application(form.getFile());
                 List<PDField> pdFields = application.getPDFields(); //FIXME this is here for debug only. Remove when done.
@@ -215,6 +219,20 @@ public class FormGenerationController {
                 List<Mapping> mappings = form.getMappings();
                 Employee employee = employeeRow.getEmployee();
                 List<Dependent> dependents = employee.getDependents();
+
+                System.out.println(acroForm.getDefaultAppearance());
+
+//                PDResources resources = acroForm.getDefaultResources();
+//                if(resources == null)
+//                {
+//                    resources = new PDResources();
+//                }
+//                resources.put(COSName.getPDFName("TiRo"), PDType1Font.TIMES_ROMAN);
+//                if(acroForm.getDefaultResources() == null)
+//                {
+//                    acroForm.setDefaultResources(resources);
+//                }
+// End Add Font
 
                 for (Mapping mapping : mappings) {
                     HashMap<String, String> mappingProperties = mapping.getMappingPropertiesAsMap();
@@ -228,6 +246,9 @@ public class FormGenerationController {
                     if (!isDependentField(mappingProperties)) {
 
                         String info = employee.getInfo(censusHeader);
+                        if (info == null || info.equals("")) {
+                            continue;
+                        }
 
                         processFormFieldData(mapping, mappingProperties, dataType, field, info);
                     } else if (isDependentField(mappingProperties)) {
@@ -254,6 +275,9 @@ public class FormGenerationController {
                         //fill in the field
                         if (dependent != null) {
                             String info = dependent.getInfo(censusHeader);
+                            if (info == null || info.equals("")) {
+                                continue;
+                            }
 
                             processFormFieldData(mapping, mappingProperties, dataType, field, info);
                         }
@@ -288,6 +312,17 @@ public class FormGenerationController {
         List<Mapping> mappings = form.getMappings();
         Employee employee = employeeRow.getEmployee();
 
+//        PDResources resources = acroForm.getDefaultResources();
+//        if(resources == null)
+//        {
+//            resources = new PDResources();
+//        }
+//        resources.put(COSName.getPDFName("TiRo"), PDType1Font.TIMES_ROMAN);
+//        if(acroForm.getDefaultResources() == null)
+//        {
+//            acroForm.setDefaultResources(resources);
+//        }
+
         for (Mapping mapping : mappings) {
             HashMap<String, String> mappingProperties = mapping.getMappingPropertiesAsMap();
             DataType dataType = getDataType(mappingProperties);
@@ -299,6 +334,9 @@ public class FormGenerationController {
 
             if (!isDependentField(mappingProperties)) {
                 String info = employee.getInfo(censusHeader);
+                if (info == null || info.equals("")) {
+                    continue;
+                }
                 processFormFieldData(mapping, mappingProperties, dataType, field, info);
             } else if (isDependentField(mappingProperties)) {
                 String relationship = getProperty(mappingProperties, MapProperty.DEPENDENT);
@@ -313,6 +351,9 @@ public class FormGenerationController {
                 //fill in the field
                 if (dependent != null) {
                     String info = dependent.getInfo(censusHeader);
+                    if (info == null || info.equals("")) {
+                        continue;
+                    }
                     processFormFieldData(mapping, mappingProperties, dataType, field, info);
                 }
             }
@@ -326,6 +367,7 @@ public class FormGenerationController {
     }
 
     private void processFormFieldData(Mapping mapping, HashMap<String, String> mappingProperties, DataType dataType, PDField field, String info) throws IOException {
+        System.out.println(field.getFullyQualifiedName() + " : " + info);
         switch (dataType) {
             case TEXT:
                 setFieldValue(field, info);
@@ -407,6 +449,10 @@ public class FormGenerationController {
         if (Boolean.valueOf(getProperty(mappingProperties, MapProperty.HAS_DEFAULT))) {
             setFieldValue(field, getProperty(mappingProperties, MapProperty.DEFAULT_VALUE));
         }
+//
+//        if (info == null) {
+//            return;
+//        }
         List<RadioCondition> radioConditions = mapping.getRadioConditions();
 
         for (RadioCondition radioCondition : radioConditions) {
@@ -420,6 +466,7 @@ public class FormGenerationController {
                     break;
                 case CONTAINS:
                     String[] splitConditionArray = radioCondition.getCensusValue().split(" ");
+                    System.out.println(info + " -- " + radioCondition.getCensusValue());
                     if (Stream.of(splitConditionArray).allMatch(info::contains)) {
                         setFieldValue(field, radioCondition.getFormValue());
                     }

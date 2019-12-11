@@ -1,15 +1,16 @@
 package AppUtility;
 
-import AppUtility.db.CensusHeader;
-import AppUtility.db.Form;
-import AppUtility.db.FormField;
-import AppUtility.db.FormProperty;
+import AppUtility.controls.ChildrenComboBox;
+import AppUtility.db.*;
 import com.jfoenix.controls.*;
+import com.jfoenix.controls.base.IFXValidatableControl;
 import com.jfoenix.validation.RequiredFieldValidator;
+import com.jfoenix.validation.base.ValidatorBase;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
@@ -21,6 +22,8 @@ import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -41,11 +44,12 @@ public class EditFormController {
     @FXML private HBox childrenWrapper;
     @FXML private JFXCheckBox chbSpouse;
     @FXML private JFXCheckBox chbChildren;
-    @FXML private JFXComboBox<Integer> numberOfChildren;
+    @FXML private ChildrenComboBox numberOfChildren;
 
     private DataModel model;
     private Application application;
     private Census census;
+    private IFXValidatableControl[] requiredFields;
 
     @FXML
     public void initialize() {
@@ -53,34 +57,27 @@ public class EditFormController {
         RequiredFieldValidator validator = new RequiredFieldValidator();
         validator.setMessage("Required");
 
+        requiredFields = new IFXValidatableControl[]{txtFormName, dteEffectiveBegin, dteEffectiveEnd};
+
         addValidatorToRequiredFields(validator);
         addNumberOfChildrenComboBox();
     }
 
     private void addNumberOfChildrenComboBox() {
-        numberOfChildren = new JFXComboBox<>();
-        numberOfChildren.getItems().addAll(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
-        numberOfChildren.setPromptText("Number of Children per Form");
-        numberOfChildren.setDisable(true);
-
-        chbChildren.selectedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (newValue) {
-                    numberOfChildren.setDisable(false);
-                } else {
-                    numberOfChildren.setDisable(true);
-                }
-            }
-        });
+        numberOfChildren = new ChildrenComboBox();
+        numberOfChildren.bindCheckboxToDisableProperty(chbChildren);
 
         childrenWrapper.getChildren().add(numberOfChildren);
     }
 
-    private void addValidatorToRequiredFields(RequiredFieldValidator validator) {
-        txtFormName.getValidators().add(validator);
-        dteEffectiveBegin.getValidators().add(validator);
-        dteEffectiveEnd.getValidators().add(validator);
+    private void addValidatorToRequiredFields(ValidatorBase validator) {
+        for (IFXValidatableControl requiredField : requiredFields) {
+            addValidatorToControl(validator, requiredField);
+        }
+    }
+
+    private void addValidatorToControl(ValidatorBase validator, IFXValidatableControl control) {
+        control.getValidators().add(validator);
     }
 
     public void initModel(DataModel model) {
@@ -92,8 +89,8 @@ public class EditFormController {
         HashMap<String, String> formPropertiesMap = selectedForm.getFormPropertiesAsMap();
         dteEffectiveBegin.setValue(LocalDate.parse(formPropertiesMap.get(FormProperties.EFFECTIVE_BEGIN.toString()), DateTimeFormatter.ofPattern("MM-dd-yyyy")));
         dteEffectiveEnd.setValue(LocalDate.parse(formPropertiesMap.get(FormProperties.EFFECTIVE_END.toString()), DateTimeFormatter.ofPattern("MM-dd-yyyy")));
-        chbSpouse.setSelected(Boolean.valueOf(formPropertiesMap.get(FormProperties.HAS_SPOUSE.toString())));
-        chbChildren.setSelected(Boolean.valueOf(formPropertiesMap.get(FormProperties.HAS_CHILDREN.toString())));
+        chbSpouse.setSelected(Boolean.parseBoolean(formPropertiesMap.get(FormProperties.HAS_SPOUSE.toString())));
+        chbChildren.setSelected(Boolean.parseBoolean(formPropertiesMap.get(FormProperties.HAS_CHILDREN.toString())));
         numberOfChildren.getSelectionModel().select(Integer.valueOf(formPropertiesMap.get(FormProperties.CHILDREN_COUNT.toString())));
     }
 
@@ -119,9 +116,56 @@ public class EditFormController {
 
         if (censusFile != null) {
             census = new Census(censusFile);
-            chkImportCensus.setSelected(true);
+//            chkImportCensus.setSelected(true);
             model.setLastAccessedFilePath(censusFile.getParent());
             txtCensusName.setText(censusFile.getName());
+        }
+    }
+
+    private void updateCensusHeaders() {
+        if (census == null) {
+            return;
+        }
+
+        //Get all census headers that already exist
+        Form selectedForm = model.getSelectedForm();
+        List<CensusHeader> currentHeaders = selectedForm.getCensusHeaders();
+
+        //Remove all from existing list that don't exist in new file
+        List<CensusHeader> toRemove = new ArrayList<>();
+        List<String> newHeaders = Arrays.asList(census.getHeaders());
+
+        //Gather censusHeaders that don't exist in new census
+        for (CensusHeader censusHeader : currentHeaders) {
+            if (!newHeaders.contains(censusHeader.getHeader())) {
+                toRemove.add(censusHeader);
+            }
+        }
+        //Remove them
+        currentHeaders.removeAll(toRemove);
+        //And delete them
+        for (CensusHeader censusHeader : toRemove) {
+            Mapping mapping = new Mapping().getBy("census_header_id", String.valueOf(censusHeader.getId()));
+            if (mapping != null) {
+                mapping.delete();
+            }
+            censusHeader.delete();
+        }
+
+        //Add ones from new file that don't exist
+        for (String newHeader : newHeaders) {
+            boolean existsInCurrent = false;
+            for (CensusHeader censusHeader : currentHeaders) {
+                if (censusHeader.getHeader().equals(newHeader)) {
+                    existsInCurrent = true;
+                    break;
+                }
+            }
+
+            if (!existsInCurrent) {
+                CensusHeader newCensusHeader = new CensusHeader(newHeader, selectedForm.getId());
+                newCensusHeader.save();
+            }
         }
     }
 
@@ -143,6 +187,7 @@ public class EditFormController {
             updateForm(selectedForm);
             updateEffectiveDateProperties(selectedForm);
             updateDependentProperties(selectedForm);
+            updateCensusHeaders();
 
             Snackbar.show(wrapper, "Form Updated");
         } else {
@@ -212,11 +257,9 @@ public class EditFormController {
     }
 
     private boolean validate() {
-        txtFilePath.validate();
-        txtCensusName.validate();
         txtFormName.validate();
         dteEffectiveBegin.validate();
         dteEffectiveEnd.validate();
-        return (txtFilePath.validate() && txtCensusName.validate() && txtFormName.validate() && dteEffectiveBegin.validate() && dteEffectiveEnd.validate());
+        return (txtFormName.validate() && dteEffectiveBegin.validate() && dteEffectiveEnd.validate());
     }
 }

@@ -137,7 +137,7 @@
             <Insets bottom="30.0" right="40.0" />
          </padding>
          <buttons>
-            <JFXButton fx:id="btnCancel" onAction="#cancel" styleClass="btn-default" text="Cancel" />
+            <JFXButton fx:id="btnCancel" onAction="#cancel" styleClass="btn-default" text="Close" />
             <JFXButton fx:id="btnSave" buttonType="RAISED" onAction="#saveForm" styleClass="btn-success" text="Save" />
          </buttons>
       </ButtonBar>

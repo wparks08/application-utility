@@ -194,6 +194,40 @@ public class formMappingController {
     }
 
     @FXML
+    public void handleBtnDeleteFormClick(ActionEvent e) {
+        Form form = model.getSelectedForm();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Are you sure?");
+        alert.setHeaderText("Delete Form");
+        alert.setContentText("This form, and all Mappings associated with it, will be PERMANENTLY deleted. Do you wish to proceed?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+                List<FormField> formFieldList = (List<FormField>) form.getChildren(FormField.class);
+                for (FormField formField : formFieldList) {
+                    formField.delete();
+                }
+
+                List<FormProperty> formPropertyList = (List<FormProperty>) form.getChildren(FormProperty.class);
+                for (FormProperty formProperty : formPropertyList) {
+                    formProperty.delete();
+                }
+
+                List<CensusHeader> censusHeaderList = (List<CensusHeader>) form.getChildren(CensusHeader.class);
+                for (CensusHeader censusHeader : censusHeaderList) {
+                    censusHeader.delete();
+                }
+
+                List<Mapping> mappingList = (List<Mapping>) form.getChildren(Mapping.class);
+                for (Mapping mapping : mappingList) {
+                    mapping.delete();
+                }
+
+                form.delete();
+        }
+    }
+
+    @FXML
     public void handleBtnEditMappingClick(ActionEvent e) {
         FXMLLoader editFormLoader = new FXMLLoader((getClass().getResource("editMapping.fxml")));
         Stage stage = prepStage(editFormLoader);

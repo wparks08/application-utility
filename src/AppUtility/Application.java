@@ -1,6 +1,9 @@
 package AppUtility;
 
+import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDResources;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.interactive.form.PDAcroForm;
 import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 import org.apache.pdfbox.pdmodel.interactive.form.PDNonTerminalField;
@@ -22,6 +25,17 @@ public class Application {
         try {
             application = PDDocument.load(this.pdfFile);
             form = application.getDocumentCatalog().getAcroForm();
+
+            PDResources resources = form.getDefaultResources();
+            if(resources == null)
+            {
+                resources = new PDResources();
+            }
+            resources.put(COSName.getPDFName("TiRo"), PDType1Font.TIMES_ROMAN);
+            if(form.getDefaultResources() == null)
+            {
+                form.setDefaultResources(resources);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

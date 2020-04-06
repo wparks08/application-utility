@@ -116,7 +116,6 @@ public class EditFormController {
 
         if (censusFile != null) {
             census = new Census(censusFile);
-//            chkImportCensus.setSelected(true);
             model.setLastAccessedFilePath(censusFile.getParent());
             txtCensusName.setText(censusFile.getName());
         }

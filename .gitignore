@@ -1,0 +1,16 @@
+# Created by .ignore support plugin (hsz.mobi)
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+
+SampleData
+err.txt
+out.txt
+ApplicationUtility.jar
+db
+AppUtility
+target
+classes

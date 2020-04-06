@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.PrintStream;
 
 public class Main extends Application {
@@ -43,21 +44,21 @@ public class Main extends Application {
         // Create a new file output stream.
         PrintStream fileOut = null;
         try {
-            fileOut = new PrintStream("./out.txt");
+            fileOut = new PrintStream(new FileOutputStream("./out.txt", true));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         // Create a new file error stream.
         PrintStream fileErr = null;
         try {
-            fileErr = new PrintStream("./err.txt");
+            fileErr = new PrintStream(new FileOutputStream("./err.txt", true));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
-        // Redirect standard out to file.
+//         Redirect standard out to file.
         System.setOut(fileOut);
-        // Redirect standard err to file.
+//         Redirect standard err to file.
         System.setErr(fileErr);
 
         launch(args);

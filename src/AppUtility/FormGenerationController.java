@@ -295,11 +295,19 @@ public class FormGenerationController {
 
                 String lastName = employee.getInfo("Last Name");
                 String firstName = employee.getInfo("First Name");
-                String fileNameText = lastName + ", " + firstName + " - Enrollment Form.pdf";
+                String fileNameText = lastName + ", " + firstName;
+
+                if (employeeRow.getIsEnrollment()) {
+                    fileNameText += " - Enrollment Form.pdf";
+                } else {
+                    fileNameText += " - Change Form.pdf";
+                }
+
                 application.getApplication().save(outputDirectory + "\\" + fileNameText);
                 application.getApplication().close();
             }
         }
+        Snackbar.show(wrapper, "Form Generation Complete!");
     }
 
     private void processAdditionalDependents(List<Dependent> dependents, int maximumChildrenPerForm, EmployeeRow employeeRow, int count) throws IOException {

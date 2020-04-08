@@ -3,9 +3,6 @@
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/poi-4.1.0.jar!/" />
     </CLASSES>
-    <JAVADOC>
-      <root url="https://poi.apache.org/apidocs/4.1/" />
-    </JAVADOC>
     <SOURCES />
   </library>
 </component>

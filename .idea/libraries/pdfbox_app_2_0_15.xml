@@ -3,9 +3,6 @@
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/pdfbox-app-2.0.15.jar!/" />
     </CLASSES>
-    <JAVADOC>
-      <root url="https://pdfbox.apache.org/docs/2.0.13/javadocs/" />
-    </JAVADOC>
     <SOURCES />
   </library>
 </component>

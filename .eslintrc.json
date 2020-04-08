@@ -1,0 +1,52 @@
+{
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "node": true,
+    "es6": true
+  },
+  "extends": [
+    "prettier",
+    "plugin:react/recommended"
+  ],
+  "plugins": [
+    "prettier",
+    "react"
+  ],
+  "rules": {
+    "no-duplicate-case": "error",
+    "no-empty": "error",
+    "no-extra-semi": "error",
+    "no-func-assign": "error",
+    "no-irregular-whitespace": "error",
+    "no-unreachable": "error",
+    "curly": "error",
+    "dot-notation": "error",
+    "eqeqeq": "error",
+    "no-empty-function": "error",
+    "no-multi-spaces": "error",
+    "no-unused-vars": "error",
+    "camelcase": "error",
+    "quotes": [
+      "error",
+      "double"
+    ],
+    "semi": [
+      "error",
+      "always"
+    ],
+    "prettier/prettier": "error"
+  },
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "parser": "babel-eslint",
+  "settings": {
+    "react": {
+      "version": "16.13"
+    }
+  }
+}

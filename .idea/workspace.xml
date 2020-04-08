@@ -2,36 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="628ee85f-d3d3-4693-bb18-3405587dfcd5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../../.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../.idea/ApplicationUtility.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../.idea/codeStyles/Project.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../.idea/jsLibraryMappings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../README.cra.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../../.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../.idea/compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../.idea/dataSources.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../.idea/description.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../.idea/dictionaries/Will_Parks.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../.idea/libraries/commons_io_2_6.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../.idea/libraries/fontawesomefx_8_9.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../.idea/libraries/jfoenix_8_0_8.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../.idea/libraries/log4j_api_2_11_2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../.idea/libraries/log4j_core_2_11_2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../.idea/libraries/pdfbox_app_2_0_15.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../.idea/libraries/poi_4_1_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../.idea/libraries/sqlite_jdbc_3_27_2_1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../.idea/modules/Application Utility.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../.idea/modules/Application_Utility.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../.idea/modules/Application_Utility_main.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../.idea/modules/Application_Utility_test.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -135,12 +107,24 @@
       <option name="presentableId" value="Default" />
       <updated>1586327364505</updated>
       <workItem from="1586327368312" duration="1842000" />
-      <workItem from="1586330003679" duration="2834000" />
+      <workItem from="1586330003679" duration="3035000" />
     </task>
+    <task id="LOCAL-00001" summary="feat: add electron and react&#10;&#10;electron and react added, and all old java/javaFX files removed.">
+      <created>1586332981372</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1586332981372</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="feat: add electron and react&#10;&#10;electron and react added, and all old java/javaFX files removed." />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: add electron and react&#10;&#10;electron and react added, and all old java/javaFX files removed." />
   </component>
   <component name="WindowStateProjectService">
     <state x="552" y="178" key="#Usage_Scope" timestamp="1586327415356">
@@ -155,6 +139,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="674" y="214" key="#electron-dev/-1920.0.1920.1040/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1586330568941" />
+    <state x="262" y="28" width="1439" height="984" key="CommitChangelistDialog2" timestamp="1586332980552">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="262" y="28" width="1439" height="984" key="CommitChangelistDialog2/-1920.0.1920.1040/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1586332980552" />
     <state x="740" y="274" key="FileChooserDialogImpl" timestamp="1586332319544">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

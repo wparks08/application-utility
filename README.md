@@ -9,6 +9,8 @@ their client's Open Enrollments.
 
 ## Roadmap
 
+- **Update 4/8/20** - Electron rewrite has started! Take a look at the [electron](https://github.com/wparks08/application-utility/tree/electron) branch to check it out.
+
 JavaFX was used to build this application. While the application is functional and effective, there are a lot of changes that need to happen - it can be much better.
 
 The current intent is to rewrite the entire application under the [Electron](https://www.electronjs.org/) framework.

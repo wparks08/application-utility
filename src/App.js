@@ -1,14 +1,28 @@
 import React from "react";
 import "./App.css";
-import Container from "@material-ui/core/Container";
-import Typography from "@material-ui/core/Typography";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Layout from "./components/Layout";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 function App() {
     return (
         <div className="App">
-            <Container>
-                <Typography variant="h1">Application Utility</Typography>
-            </Container>
+            <Router>
+                <CssBaseline />
+                <Layout>
+                    <Switch>
+                        <Route path="/mapping">
+                            <h1>Mapping</h1>
+                        </Route>
+                        <Route path="/generate">
+                            <h1>Generate</h1>
+                        </Route>
+                        <Route path="/">
+                            <h1>Home</h1>
+                        </Route>
+                    </Switch>
+                </Layout>
+            </Router>
         </div>
     );
 }

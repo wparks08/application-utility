@@ -12,9 +12,11 @@
       <entry name="!?*.clj" />
       <entry name="!?*.yml" />
     </wildcardResourcePatterns>
-    <bytecodeTargetLevel>
+    <bytecodeTargetLevel target="14">
       <module name="Application_Utility_main" target="1.8" />
       <module name="Application_Utility_test" target="1.8" />
+      <module name="AppUtility.main" target="1.8" />
+      <module name="AppUtility.test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

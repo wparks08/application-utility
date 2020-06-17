@@ -9,6 +9,7 @@ their client's Open Enrollments.
 
 ## Roadmap
 
+- **Update 6/17/20** - The original JavaFX application has been restructured, with Gradle added. This is, indeed, coming *after* the Electron rewrite started. The `master` branch was an eyesore to look at, and something needed to be done in the interim before the rewrite is complete. (Plus, it was good practice on adding Gradle to an existing project! :) )
 - **Update 4/8/20** - Electron rewrite has started! Take a look at the [electron](https://github.com/wparks08/application-utility/tree/electron) branch to check it out.
 
 JavaFX was used to build this application. While the application is functional and effective, there are a lot of changes that need to happen - it can be much better.
@@ -28,19 +29,21 @@ To start, clone this repository to your local machine.
 git clone https://github.com/wparks08/ApplicationUtility
 ```
 
-Open the project with the Java IDE of your choice. Build, and run the application from the `main` method of the `Main` class.
 
-### Installing
+### Running
 
-The best way to get the application up and running is to open it in a Java IDE of your choice.
-Build and run the project, where the main class is `AppUtility.Main`.
+To run the application, execute the `:build` then `:run` tasks from the command line or IDE of your choice.
 
-In a future build, Gradle will be implemented for dependency management (before the application is rewritten in Electron).
+```shell script
+./gradlew build
+# Then
+./gradlew run
+``` 
 
 ## Built With
 
 * [Java](https://www.java.com/en/)
-* [JavaFX 8](https://docs.oracle.com/javase/8/javafx/get-started-tutorial/jfx-overview.htm) - Graphics and media packages for Java-based cross-platform applications.
+* [JavaFX](https://openjfx.io/index.html) - Graphics and media packages for Java-based cross-platform applications.
 * [JFoenix](https://github.com/jfoenixadmin/JFoenix) - JavaFX Material Design library
 * [Apache PDFBox](https://pdfbox.apache.org/) - For interacting with fillable .pdf forms
 * [Apache POI](https://poi.apache.org/) - Java API for Microsoft Documents

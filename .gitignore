@@ -2,6 +2,7 @@
 
 # IntelliJ project files
 /.idea
+.idea/*
 *.iml
 out
 gen
@@ -18,3 +19,21 @@ classes
 /build
 /dist
 /node_modules
+
+.idea.new
+.idea.bak2
+todelete
+
+idea/compiler.xml
+.idea/dataSources.xml
+.idea/description.html
+.idea/dictionaries/Will_Parks.xml
+.idea/encodings.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/modules/Application Utility.iml
+.idea/modules/Application_Utility.iml
+.idea/modules/Application_Utility_main.iml
+.idea/modules/Application_Utility_test.iml
+.idea/uiDesigner.xml
+.idea/vcs.xml

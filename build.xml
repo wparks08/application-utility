@@ -79,14 +79,14 @@
         </javac>
 
         <copy todir="${build.classes.dir}">
-            <fileset file="commons-io-2.6.jar"/>
-            <fileset file="fontawesomefx-8.9.jar"/>
-            <fileset file="log4j-api-2.11.2.jar"/>
-            <fileset file="log4j-core-2.11.2.jar"/>
-            <fileset file="pdfbox-app-2.0.15.jar"/>
-            <fileset file="poi-4.1.0.jar"/>
-            <fileset file="sqlite-jdbc-3.27.2.1.jar"/>
-            <fileset file="jfoenix-8.08"/>
+            <fileset file="lib/commons-io-2.6.jar"/>
+            <fileset file="lib/fontawesomefx-8.9.jar"/>
+            <fileset file="lib/log4j-api-2.11.2.jar"/>
+            <fileset file="lib/log4j-core-2.11.2.jar"/>
+            <fileset file="lib/pdfbox-app-2.0.15.jar"/>
+            <fileset file="lib/poi-4.1.0.jar"/>
+            <fileset file="lib/sqlite-jdbc-3.27.2.1.jar"/>
+            <fileset file="lib/jfoenix-8.08"/>
             <fileset dir="resources"/>
         </copy>
     </target>

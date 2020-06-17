@@ -24,10 +24,8 @@ public class Main extends Application {
         docController.initModel(model);
 
         Scene scene = new Scene(root);
-//        scene.getStylesheets().add(AppUtility.class.getResource("AppUtility/ApplicationStyles.css").toExternalForm());
 
         primaryStage.setTitle("VANTREO Application Utility");
-//        primaryStage.setResizable(false);
         primaryStage.setScene(scene);
         primaryStage.show();
     }

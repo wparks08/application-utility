@@ -37,3 +37,6 @@ idea/compiler.xml
 .idea/modules/Application_Utility_test.iml
 .idea/uiDesigner.xml
 .idea/vcs.xml
+
+.gradle
+/.gradle/

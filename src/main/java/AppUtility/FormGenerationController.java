@@ -63,7 +63,7 @@ public class FormGenerationController {
     @FXML
     private JFXTextField groupNumber;
 
-    private DataModel model;
+//    private DataModel model;
     private ObservableList<Employee> employees = FXCollections.observableArrayList();
     private String outputDirectory;
     private OEChanges changes;
@@ -98,9 +98,6 @@ public class FormGenerationController {
 
         List<Carrier> carrierList = new Carrier().list();
 
-        final JFXSpinner workingIndicator = new JFXSpinner();
-        employeeListView.getChildren().add(workingIndicator);
-
         Task importWorker = new Task() {
             @Override
             protected Object call() throws Exception {
@@ -119,17 +116,6 @@ public class FormGenerationController {
                 return true;
             }
         };
-        importWorker.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-            @Override
-            public void handle(WorkerStateEvent event) {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        employeeListView.getChildren().remove(workingIndicator);
-                    }
-                });
-            }
-        });
 
         Thread importThread = new Thread(importWorker);
         importThread.setDaemon(true);
@@ -176,12 +162,12 @@ public class FormGenerationController {
 
     private File showDirectoryChooser() {
         DirectoryChooser dc = new DirectoryChooser();
-        dc.setInitialDirectory(new File(model.getLastAccessedFilePath()));
+        dc.setInitialDirectory(new File(DataModel.getLastAccessedFilePath()));
 
         File directory = dc.showDialog(null);
 
         if (directory != null) {
-            model.setLastAccessedFilePath(directory.getParent());
+            DataModel.setLastAccessedFilePath(directory.getParent());
         }
 
         return directory;
@@ -189,7 +175,7 @@ public class FormGenerationController {
 
     private File showFileChooser(ExtensionHelper... extensionHelpers) {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialDirectory(new File(model.getLastAccessedFilePath()));
+        fileChooser.setInitialDirectory(new File(DataModel.getLastAccessedFilePath()));
 
         for (ExtensionHelper extension : extensionHelpers) {
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(extension.getDescription(), extension.getFileSystemExtension()));
@@ -197,16 +183,17 @@ public class FormGenerationController {
 
         File file = fileChooser.showOpenDialog(null);
         if (file != null) {
-            model.setLastAccessedFilePath(file.getParent());
+            DataModel.setLastAccessedFilePath(file.getParent());
         }
 
         return file;
     }
 
-    @FXML
-    public void initModel(DataModel model) {
-        this.model = model;
-    }
+//    @FXML
+//    @Override
+//    public void setModel(DataModel DataModel) {
+//        this.DataModel = DataModel;
+//    }
 
     @FXML
     public void generateForms() throws IOException {

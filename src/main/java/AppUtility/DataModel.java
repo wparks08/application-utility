@@ -5,65 +5,66 @@ import AppUtility.db.Form;
 
 import java.util.List;
 
-public class DataModel {
+public final class DataModel {
 
-    private List<Carrier> carriers;
-    private List<Form> forms;
-    private Carrier selectedCarrier;
-    private Form selectedForm;
+    private static List<Carrier> carriers;
+    private static List<Form> forms;
+    private static Carrier selectedCarrier;
+    private static Form selectedForm;
 
-    private String lastAccessedFilePath = System.getProperty("user.home");
-    private String outputDirectory;
+    private static String lastAccessedFilePath = System.getProperty("user.home");
+    private static String outputDirectory;
 
     public DataModel() {
         //Default constructor
     }
 
-    public void refreshCarriers() {
+    public static void refreshCarriers() {
         carriers = new Carrier().list();
     }
 
-    public void refreshForms(Carrier carrier) {
+    public static void refreshForms(Carrier carrier) {
         forms = (List<Form>) carrier.getChildren(Form.class);
     }
 
-    public List<Carrier> getCarriers() {
+    public static List<Carrier> getCarriers() {
         return carriers;
     }
 
-    public List<Form> getForms() {
+    public static List<Form> getForms() {
         return forms;
     }
 
-    public void setSelectedCarrier(Carrier selectedItem) {
-        this.selectedCarrier = selectedItem;
+    public static void setSelectedCarrier(Carrier selectedItem) {
+        selectedCarrier = selectedItem;
+        System.out.println("Selected " + selectedCarrier.getName());
     }
 
-    public Carrier getSelectedCarrier() {
-        return this.selectedCarrier;
+    public static Carrier getSelectedCarrier() {
+        return selectedCarrier;
     }
 
-    public String getLastAccessedFilePath() {
+    public static String getLastAccessedFilePath() {
         return lastAccessedFilePath;
     }
 
-    public void setLastAccessedFilePath(String lastAccessedFilePath) {
-        this.lastAccessedFilePath = lastAccessedFilePath;
+    public static void setLastAccessedFilePath(String lastAccessedFilePath) {
+        DataModel.lastAccessedFilePath = lastAccessedFilePath;
     }
 
-    public Form getSelectedForm() {
+    public static Form getSelectedForm() {
         return selectedForm;
     }
 
-    public void setSelectedForm(Form selectedForm) {
-        this.selectedForm = selectedForm;
+    public static void setSelectedForm(Form selectedForm) {
+        DataModel.selectedForm = selectedForm;
     }
 
-    public void setOutputDirectory(String outputDirectory) {
-        this.outputDirectory = outputDirectory;
+    public static void setOutputDirectory(String outputDirectory) {
+        DataModel.outputDirectory = outputDirectory;
     }
 
-    public String getOutputDirectory() {
+    public static String getOutputDirectory() {
         return outputDirectory;
     }
 }

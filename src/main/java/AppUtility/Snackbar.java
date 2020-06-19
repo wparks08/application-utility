@@ -15,6 +15,7 @@ final class Snackbar {
         Node node = new Label(message);
         node.getStyleClass().add("jfx-snackbar-toast");
         JFXSnackbar bar = new JFXSnackbar(container);
+        node.setStyle("-fx-wrap-text: true");
         bar.enqueue(new JFXSnackbar.SnackbarEvent(node));
     }
 }

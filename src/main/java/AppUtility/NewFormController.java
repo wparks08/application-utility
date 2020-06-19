@@ -4,7 +4,10 @@ import AppUtility.db.CensusHeader;
 import AppUtility.db.Form;
 import AppUtility.db.FormField;
 import AppUtility.db.FormProperty;
-import com.jfoenix.controls.*;
+//import com.jfoenix.controls.*;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
 import de.jensd.fx.glyphs.GlyphsBuilder;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -14,6 +17,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.layout.HBox;
@@ -30,8 +35,8 @@ import java.util.HashMap;
 public class NewFormController {
     @FXML private VBox wrapper;
     @FXML private JFXTextField txtCensusName;
-    @FXML private JFXDatePicker dteEffectiveBegin;
-    @FXML private JFXDatePicker dteEffectiveEnd;
+    @FXML private DatePicker dteEffectiveBegin;
+    @FXML private DatePicker dteEffectiveEnd;
     @FXML private JFXButton btnSave;
     @FXML private JFXButton btnCancel;
     @FXML private Label lblEffectiveDateRange;
@@ -44,9 +49,8 @@ public class NewFormController {
     @FXML private HBox childrenWrapper;
     @FXML private JFXCheckBox chbSpouse;
     @FXML private JFXCheckBox chbChildren;
-    @FXML private JFXComboBox<Integer> numberOfChildren;
+    @FXML private ComboBox<Integer> numberOfChildren;
 
-    private DataModel model;
     private Application application;
     private Census census;
 
@@ -61,7 +65,7 @@ public class NewFormController {
     }
 
     private void addNumberOfChildrenComboBox() {
-        numberOfChildren = new JFXComboBox<>();
+        numberOfChildren = new ComboBox<>();
         numberOfChildren.getItems().addAll(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
         numberOfChildren.setPromptText("Number of Children per Form");
         numberOfChildren.setDisable(true);
@@ -84,12 +88,8 @@ public class NewFormController {
         txtFilePath.getValidators().add(validator);
         txtCensusName.getValidators().add(validator);
         txtFormName.getValidators().add(validator);
-        dteEffectiveBegin.getValidators().add(validator);
-        dteEffectiveEnd.getValidators().add(validator);
-    }
-
-    public void initModel(DataModel model) {
-        this.model = model;
+//        dteEffectiveBegin.getValidators().add(validator);
+//        dteEffectiveEnd.getValidators().add(validator);
     }
 
     @FXML
@@ -101,7 +101,7 @@ public class NewFormController {
         if(form != null) {
             application = new Application(form);
             chkImportForm.setSelected(true);
-            model.setLastAccessedFilePath(form.getParent());
+            DataModel.setLastAccessedFilePath(form.getParent());
             txtFilePath.setText(form.getName());
         }
     }
@@ -115,14 +115,14 @@ public class NewFormController {
         if (censusFile != null) {
             census = new Census(censusFile);
             chkImportCensus.setSelected(true);
-            model.setLastAccessedFilePath(censusFile.getParent());
+            DataModel.setLastAccessedFilePath(censusFile.getParent());
             txtCensusName.setText(censusFile.getName());
         }
     }
 
     private File showFileChooser(ExtensionHelper... extensionHelpers) {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialDirectory(new File(model.getLastAccessedFilePath()));
+        fileChooser.setInitialDirectory(new File(DataModel.getLastAccessedFilePath()));
 
         for (ExtensionHelper extension : extensionHelpers) {
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(extension.getDescription(), extension.getFileSystemExtension()));
@@ -199,7 +199,7 @@ public class NewFormController {
     private Form createForm() {
         Form form = new Form();
         form.setName(txtFormName.getText());
-        form.setCarrierId(model.getSelectedCarrier().getId());
+        form.setCarrierId(DataModel.getSelectedCarrier().getId());
         form.loadFormFile(application.getPdfFile());
         return form;
     }
@@ -208,8 +208,8 @@ public class NewFormController {
         txtFilePath.validate();
         txtCensusName.validate();
         txtFormName.validate();
-        dteEffectiveBegin.validate();
-        dteEffectiveEnd.validate();
-        return (txtFilePath.validate() && txtCensusName.validate() && txtFormName.validate() && dteEffectiveBegin.validate() && dteEffectiveEnd.validate());
+//        dteEffectiveBegin.validate();
+//        dteEffectiveEnd.validate();
+        return (txtFilePath.validate() && txtCensusName.validate() && txtFormName.validate() /*&& dteEffectiveBegin.validate() && dteEffectiveEnd.validate()*/);
     }
 }

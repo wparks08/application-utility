@@ -35,9 +35,8 @@ public class EditMappingController {
     @FXML
     private VBox settings;
     @FXML
-    private JFXListView<FormField> formFieldListView;
+    private final JFXListView<FormField> formFieldListView = new JFXListView<>();
 
-    private DataModel model;
     private Form form;
     private List<FormField> formFields = new ArrayList<>();
     private List<CensusHeader> censusHeaders = new ArrayList<>();
@@ -46,19 +45,18 @@ public class EditMappingController {
 
     @FXML
     public void initialize() {
-        formFieldListView = new JFXListView<>();
-    }
-
-    @FXML
-    public void initModel(DataModel model) {
-        this.model = model;
-        this.form = model.getSelectedForm();
+        this.form = DataModel.getSelectedForm();
         this.formFields = form.getFormFields();
         this.censusHeaders = form.getCensusHeaders();
         this.mappings = form.getMappingsAsMap();
         this.formProperties = form.getFormPropertiesAsMap();
 
         setupScene();
+    }
+
+    @FXML
+    public void initModel() {
+
     }
 
     private void setupScene() {

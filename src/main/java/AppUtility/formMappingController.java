@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class formMappingController {
-    public DataModel model;
     @FXML public AnchorPane wrapper;
 
     @FXML JFXListView<Form> listViewForms = new JFXListView<>();
@@ -35,15 +34,10 @@ public class formMappingController {
     @FXML JFXButton btnEditCarrier;
     @FXML JFXButton btnDeleteCarrier;
 
-    public void initModel(DataModel model) {
-        this.model = model;
-
-        model.refreshCarriers();
-        listViewCarriers.getItems().addAll(model.getCarriers());
-    }
-
     @FXML
     public void initialize() {
+        DataModel.refreshCarriers();
+        listViewCarriers.getItems().addAll(DataModel.getCarriers());
 
         btnNew.setDisable(true);
         btnEditForm.setDisable(true);
@@ -61,7 +55,7 @@ public class formMappingController {
                 btnEditForm.setDisable(false);
                 btnEditMapping.setDisable(false);
                 btnDelete.setDisable(false);
-                model.setSelectedForm(listViewForms.getSelectionModel().getSelectedItem());
+                DataModel.setSelectedForm(listViewForms.getSelectionModel().getSelectedItem());
             }
         });
 
@@ -69,8 +63,8 @@ public class formMappingController {
             listViewForms.getItems().clear();
             Carrier selectedCarrier = listViewCarriers.getSelectionModel().getSelectedItem();
             if (selectedCarrier != null) {
-                model.refreshForms(selectedCarrier);
-                listViewForms.getItems().addAll(model.getForms());
+                DataModel.refreshForms(selectedCarrier);
+                listViewForms.getItems().addAll(DataModel.getForms());
                 btnNew.setDisable(false);
             } else {
                 btnNew.setDisable(true);
@@ -81,7 +75,7 @@ public class formMappingController {
             if (!listViewCarriers.getSelectionModel().getSelectedItems().isEmpty()) {
                 btnEditCarrier.setDisable(false);
                 btnDeleteCarrier.setDisable(false);
-                model.setSelectedCarrier(listViewCarriers.getSelectionModel().getSelectedItem());
+                DataModel.setSelectedCarrier(listViewCarriers.getSelectionModel().getSelectedItem());
             }
         });
     }
@@ -99,7 +93,7 @@ public class formMappingController {
                 Carrier carrier = new Carrier(carrierName);
                 carrier.save();
                 listViewCarriers.getItems().add(carrier);
-                model.refreshCarriers();
+                DataModel.refreshCarriers();
             }
         });
     }
@@ -118,7 +112,7 @@ public class formMappingController {
                 selected.setName(carrierName);
                 selected.save();
                 listViewCarriers.refresh();
-                model.refreshCarriers();
+                DataModel.refreshCarriers();
             }
         });
     }
@@ -168,15 +162,14 @@ public class formMappingController {
         Stage stage = prepStage(newFormLoader);
 
         NewFormController newFormController = newFormLoader.getController();
-        newFormController.initModel(model);
 
         stage.setTitle("New Form");
 
         stage.showAndWait();
 
-        model.refreshCarriers();
+        DataModel.refreshCarriers();
         listViewCarriers.refresh();
-        model.refreshForms(listViewCarriers.getSelectionModel().getSelectedItem());
+        DataModel.refreshForms(listViewCarriers.getSelectionModel().getSelectedItem());
         listViewForms.refresh();
     }
 
@@ -186,7 +179,7 @@ public class formMappingController {
         Stage stage = prepStage(editFormLoader);
 
         EditFormController editFormController = editFormLoader.getController();
-        editFormController.initModel(model);
+//        editFormController.initModel(DataModel);
 
         stage.setTitle("Edit Form");
 
@@ -195,7 +188,7 @@ public class formMappingController {
 
     @FXML
     public void handleBtnDeleteFormClick(ActionEvent e) {
-        Form form = model.getSelectedForm();
+        Form form = DataModel.getSelectedForm();
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Are you sure?");
         alert.setHeaderText("Delete Form");
@@ -233,7 +226,6 @@ public class formMappingController {
         Stage stage = prepStage(editFormLoader);
 
         EditMappingController editMappingController = editFormLoader.getController();
-        editMappingController.initModel(model);
 
         stage.setTitle("Edit Mapping");
 

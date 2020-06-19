@@ -16,12 +16,9 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
 
-        DataModel model = new DataModel();
         FXMLLoader docLoader = new FXMLLoader(getClass().getResource("/dashboard.fxml"));
         Parent root = docLoader.load();
         DashboardController docController = docLoader.getController();
-
-        docController.initModel(model);
 
         Scene scene = new Scene(root);
 

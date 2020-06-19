@@ -25,7 +25,6 @@ public class Application {
         try {
             application = PDDocument.load(this.pdfFile);
             form = application.getDocumentCatalog().getAcroForm();
-
             PDResources resources = form.getDefaultResources();
             if(resources == null)
             {

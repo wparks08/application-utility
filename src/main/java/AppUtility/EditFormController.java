@@ -11,6 +11,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Control;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
@@ -30,8 +31,8 @@ import java.util.List;
 public class EditFormController {
     @FXML private VBox wrapper;
     @FXML private JFXTextField txtCensusName;
-    @FXML private JFXDatePicker dteEffectiveBegin;
-    @FXML private JFXDatePicker dteEffectiveEnd;
+    @FXML private DatePicker dteEffectiveBegin;
+    @FXML private DatePicker dteEffectiveEnd;
     @FXML private JFXButton btnSave;
     @FXML private JFXButton btnCancel;
     @FXML private Label lblEffectiveDateRange;
@@ -46,7 +47,6 @@ public class EditFormController {
     @FXML private JFXCheckBox chbChildren;
     @FXML private ChildrenComboBox numberOfChildren;
 
-    private DataModel model;
     private Application application;
     private Census census;
     private IFXValidatableControl[] requiredFields;
@@ -57,10 +57,21 @@ public class EditFormController {
         RequiredFieldValidator validator = new RequiredFieldValidator();
         validator.setMessage("Required");
 
-        requiredFields = new IFXValidatableControl[]{txtFormName, dteEffectiveBegin, dteEffectiveEnd};
+        requiredFields = new IFXValidatableControl[]{txtFormName/*, dteEffectiveBegin, dteEffectiveEnd*/};
 
         addValidatorToRequiredFields(validator);
         addNumberOfChildrenComboBox();
+
+        Form selectedForm = DataModel.getSelectedForm();
+
+        txtFormName.setText(selectedForm.getName());
+        HashMap<String, String> formPropertiesMap = selectedForm.getFormPropertiesAsMap();
+        dteEffectiveBegin.setValue(LocalDate.parse(formPropertiesMap.get(FormProperties.EFFECTIVE_BEGIN.toString()), DateTimeFormatter.ofPattern("MM-dd-yyyy")));
+        dteEffectiveEnd.setValue(LocalDate.parse(formPropertiesMap.get(FormProperties.EFFECTIVE_END.toString()), DateTimeFormatter.ofPattern("MM-dd-yyyy")));
+        chbSpouse.setSelected(Boolean.parseBoolean(formPropertiesMap.get(FormProperties.HAS_SPOUSE.toString())));
+        chbChildren.setSelected(Boolean.parseBoolean(formPropertiesMap.get(FormProperties.HAS_CHILDREN.toString())));
+        numberOfChildren.getSelectionModel().select(Integer.valueOf(formPropertiesMap.get(FormProperties.CHILDREN_COUNT.toString())));
+
     }
 
     private void addNumberOfChildrenComboBox() {
@@ -80,10 +91,8 @@ public class EditFormController {
         control.getValidators().add(validator);
     }
 
-    public void initModel(DataModel model) {
-        this.model = model;
-
-        Form selectedForm = model.getSelectedForm();
+    public void initModel() {
+        Form selectedForm = DataModel.getSelectedForm();
 
         txtFormName.setText(selectedForm.getName());
         HashMap<String, String> formPropertiesMap = selectedForm.getFormPropertiesAsMap();
@@ -103,7 +112,7 @@ public class EditFormController {
         if(form != null) {
             application = new Application(form);
             chkImportForm.setSelected(true);
-            model.setLastAccessedFilePath(form.getParent());
+            DataModel.setLastAccessedFilePath(form.getParent());
             txtFilePath.setText(form.getName());
         }
     }
@@ -116,7 +125,7 @@ public class EditFormController {
 
         if (censusFile != null) {
             census = new Census(censusFile);
-            model.setLastAccessedFilePath(censusFile.getParent());
+            DataModel.setLastAccessedFilePath(censusFile.getParent());
             txtCensusName.setText(censusFile.getName());
         }
     }
@@ -127,7 +136,7 @@ public class EditFormController {
         }
 
         //Get all census headers that already exist
-        Form selectedForm = model.getSelectedForm();
+        Form selectedForm = DataModel.getSelectedForm();
         List<CensusHeader> currentHeaders = selectedForm.getCensusHeaders();
 
         //Remove all from existing list that don't exist in new file
@@ -170,7 +179,7 @@ public class EditFormController {
 
     private File showFileChooser(ExtensionHelper... extensionHelpers) {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialDirectory(new File(model.getLastAccessedFilePath()));
+        fileChooser.setInitialDirectory(new File(DataModel.getLastAccessedFilePath()));
 
         for (ExtensionHelper extension : extensionHelpers) {
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(extension.getDescription(), extension.getFileSystemExtension()));
@@ -182,7 +191,7 @@ public class EditFormController {
     @FXML
     public void saveForm(ActionEvent e) {
         if (validate()) {
-            Form selectedForm = model.getSelectedForm();
+            Form selectedForm = DataModel.getSelectedForm();
             updateForm(selectedForm);
             updateEffectiveDateProperties(selectedForm);
             updateDependentProperties(selectedForm);
@@ -257,8 +266,8 @@ public class EditFormController {
 
     private boolean validate() {
         txtFormName.validate();
-        dteEffectiveBegin.validate();
-        dteEffectiveEnd.validate();
-        return (txtFormName.validate() && dteEffectiveBegin.validate() && dteEffectiveEnd.validate());
+//        dteEffectiveBegin.validate();
+//        dteEffectiveEnd.validate();
+        return (txtFormName.validate() /*&& dteEffectiveBegin.validate() && dteEffectiveEnd.validate()*/);
     }
 }

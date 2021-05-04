@@ -12,7 +12,6 @@ SampleData
 err.txt
 out.txt
 ApplicationUtility.jar
-db
 target
 classes
 

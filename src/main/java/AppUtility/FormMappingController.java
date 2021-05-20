@@ -1,6 +1,7 @@
 package AppUtility;
 
 import AppUtility.controls.AddCarrierDialog;
+import AppUtility.controls.CarriersListView;
 import AppUtility.controls.FormsListView;
 import AppUtility.db.*;
 import com.jfoenix.controls.JFXButton;
@@ -24,13 +25,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-public class formMappingController {
-    final FormsListView formsListView = new FormsListView();
+public class FormMappingController {
+    @FXML FormsListView formsListView;
+    @FXML CarriersListView carriersListView;
 
     @FXML public AnchorPane wrapper;
 
-//    @FXML JFXListView<Form> listViewForms = formsListView.getJFXElement();
-    @FXML JFXListView<Carrier> listViewCarriers = new JFXListView<>();
     @FXML JFXButton btnNew;
     @FXML JFXButton btnEditForm;
     @FXML JFXButton btnEditMapping;
@@ -54,7 +54,7 @@ public class formMappingController {
 
     public ListChangeListener<Carrier> carrierViewChangeListener = change -> {
         formsListView.clearList();
-        Carrier selectedCarrier = listViewCarriers.getSelectionModel().getSelectedItem();
+        Carrier selectedCarrier = carriersListView.getSelectedCarrier();
         if (selectedCarrier != null) {
             Collection<Form> allFormsCollection = DataModel.getForms();
             DataModel.refreshForms(selectedCarrier);
@@ -65,24 +65,25 @@ public class formMappingController {
         }
     };
 
+    InvalidationListener carrierListSelectionInvalidationListener = observable -> {
+        if (carriersListView.hasSelectedItem()) {
+            btnEditCarrier.setDisable(false);
+            btnDeleteCarrier.setDisable(false);
+            DataModel.setSelectedCarrier(carriersListView.getSelectedCarrier());
+        }
+    };
+
     @FXML
     public void initialize() {
         DataModel.refreshCarriers();
-        listViewCarriers.getItems().addAll(DataModel.getCarriers());
+        carriersListView.clearList();
+        carriersListView.addAllFromCollection(DataModel.getCarriers());
 
         disableAllButtons();
 
         formsListView.addChangeListener(formViewChangeListener);
-
-        listViewCarriers.getSelectionModel().getSelectedItems().addListener(carrierViewChangeListener);
-
-        listViewCarriers.getSelectionModel().getSelectedItems().addListener((InvalidationListener) observable -> {
-            if (!listViewCarriers.getSelectionModel().getSelectedItems().isEmpty()) {
-                btnEditCarrier.setDisable(false);
-                btnDeleteCarrier.setDisable(false);
-                DataModel.setSelectedCarrier(listViewCarriers.getSelectionModel().getSelectedItem());
-            }
-        });
+        carriersListView.addChangeListener(carrierViewChangeListener);
+        carriersListView.addInvalidationListener(carrierListSelectionInvalidationListener);
     }
 
     public void disableAllButtons() {
@@ -103,7 +104,7 @@ public class formMappingController {
             if (!carrierName.isEmpty()) {
                 Carrier carrier = new Carrier(carrierName);
                 carrier.save();
-                listViewCarriers.getItems().add(carrier);
+                carriersListView.add(carrier);
                 DataModel.refreshCarriers();
             }
         });
@@ -111,7 +112,7 @@ public class formMappingController {
 
     @FXML
     public void editCarrier() {
-        Carrier selected = listViewCarriers.getSelectionModel().getSelectedItem();
+        Carrier selected = carriersListView.getSelectedCarrier();
         TextInputDialog dialog = new TextInputDialog(selected.getName());
         dialog.setTitle("Edit Carrier");
         dialog.setHeaderText("Edit Carrier");
@@ -122,7 +123,7 @@ public class formMappingController {
             if (!carrierName.isEmpty() && !carrierName.equals(selected.getName())) {
                 selected.setName(carrierName);
                 selected.save();
-                listViewCarriers.refresh();
+                carriersListView.refresh();
                 DataModel.refreshCarriers();
             }
         });
@@ -130,7 +131,7 @@ public class formMappingController {
 
     @FXML
     public void deleteCarrier() {
-        Carrier selected = listViewCarriers.getSelectionModel().getSelectedItem();
+        Carrier selected = carriersListView.getSelectedCarrier();
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Are you sure?");
         alert.setHeaderText("Delete Carrier");
@@ -163,7 +164,7 @@ public class formMappingController {
                 form.delete();
             }
             selected.delete();
-            listViewCarriers.getItems().remove(selected);
+            carriersListView.remove(selected);
         }
     }
 
@@ -179,8 +180,8 @@ public class formMappingController {
         stage.showAndWait();
 
         DataModel.refreshCarriers();
-        listViewCarriers.refresh();
-        DataModel.refreshForms(listViewCarriers.getSelectionModel().getSelectedItem());
+        carriersListView.refresh();
+        DataModel.refreshForms(carriersListView.getSelectedCarrier());
         formsListView.refresh();
     }
 

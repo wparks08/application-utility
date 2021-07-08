@@ -18,7 +18,7 @@ public class Main extends Application {
 
         FXMLLoader docLoader = new FXMLLoader(getClass().getResource("/dashboard.fxml"));
         Parent root = docLoader.load();
-        DashboardController docController = docLoader.getController();
+//        DashboardController docController = docLoader.getController();
 
         Scene scene = new Scene(root);
 

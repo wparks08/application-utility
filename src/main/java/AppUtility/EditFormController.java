@@ -1,19 +1,15 @@
 package AppUtility;
 
-import AppUtility.controls.ChildrenComboBox;
-import AppUtility.db.*;
+import AppUtility.Controls.ChildrenComboBox;
+import AppUtility.Domains.Form.Form;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.base.IFXValidatableControl;
 import com.jfoenix.validation.RequiredFieldValidator;
 import com.jfoenix.validation.base.ValidatorBase;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Control;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;

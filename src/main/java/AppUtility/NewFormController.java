@@ -1,26 +1,21 @@
 package AppUtility;
 
-import AppUtility.db.CensusHeader;
-import AppUtility.db.Form;
-import AppUtility.db.FormField;
-import AppUtility.db.FormProperty;
+import AppUtility.Db.CensusHeader;
+import AppUtility.Db.Form;
+import AppUtility.Db.FormField;
+import AppUtility.Db.FormProperty;
 //import com.jfoenix.controls.*;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
-import de.jensd.fx.glyphs.GlyphsBuilder;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.Spinner;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -29,8 +24,6 @@ import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 
 import java.io.File;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class NewFormController {
     @FXML private VBox wrapper;

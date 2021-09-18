@@ -1,7 +1,11 @@
 package AppUtility;
 
-import AppUtility.db.Carrier;
-import AppUtility.db.Form;
+import AppUtility.Config.Dependencies;
+import AppUtility.Domains.Carrier;
+import AppUtility.Domains.Form.Form;
+import AppUtility.Domains.Id;
+import AppUtility.Interfaces.CarrierDatabase;
+import AppUtility.Interfaces.FormDatabase;
 
 import java.util.List;
 
@@ -20,11 +24,14 @@ public final class DataModel {
     }
 
     public static void refreshCarriers() {
-        carriers = new Carrier().list();
+        CarrierDatabase carrierDatabase = Dependencies.databaseServices.getCarrierDatabase();
+        carriers = carrierDatabase.getAllCarriers();
     }
 
     public static void refreshForms(Carrier carrier) {
-        forms = (List<Form>) carrier.getChildren(Form.class);
+        FormDatabase formDatabase = Dependencies.databaseServices.getFormDatabase();
+        Id carrierId = carrier.getId();
+        forms = formDatabase.getFormsByCarrierId(0);
     }
 
     public static List<Carrier> getCarriers() {

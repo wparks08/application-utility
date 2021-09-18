@@ -1,9 +1,15 @@
 package AppUtility;
 
-import AppUtility.controls.AddCarrierDialog;
-import AppUtility.controls.CarriersListView;
-import AppUtility.controls.FormsListView;
-import AppUtility.db.*;
+import AppUtility.Exception.NotFoundException;
+import AppUtility.Config.Dependencies;
+import AppUtility.Controls.AddCarrierDialog;
+import AppUtility.Controls.CarriersListView;
+import AppUtility.Controls.FormsListView;
+//import AppUtility.db.*;
+import AppUtility.Domains.Carrier;
+import AppUtility.Domains.Form.Form;
+import AppUtility.Interfaces.CarrierDatabase;
+import AppUtility.Interfaces.FormDatabase;
 import com.jfoenix.controls.JFXButton;
 import javafx.beans.InvalidationListener;
 import javafx.collections.ListChangeListener;
@@ -21,7 +27,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 public class FormMappingController {
@@ -102,7 +107,12 @@ public class FormMappingController {
         result.ifPresent( carrierName -> {
             if (!carrierName.isEmpty()) {
                 Carrier carrier = new Carrier(carrierName);
-                carrier.save();
+                CarrierDatabase carrierDatabase = Dependencies.databaseServices.getCarrierDatabase();
+                try {
+                    carrierDatabase.addCarrier(carrier);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 carriersListView.add(carrier);
                 DataModel.refreshCarriers();
             }
@@ -120,8 +130,13 @@ public class FormMappingController {
         Optional<String> result = dialog.showAndWait();
         result.ifPresent( carrierName -> {
             if (!carrierName.isEmpty() && !carrierName.equals(selected.getName())) {
-                selected.setName(carrierName);
-                selected.save();
+                CarrierDatabase carrierDatabase = Dependencies.databaseServices.getCarrierDatabase();
+                Carrier updatedCarrier = new Carrier(carrierName);
+                try {
+                    carrierDatabase.updateCarrier(selected.getId(), updatedCarrier);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 carriersListView.refresh();
                 DataModel.refreshCarriers();
             }
@@ -138,31 +153,37 @@ public class FormMappingController {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            List<Form> formList = (List<Form>) selected.getChildren(Form.class);
-            for (Form form : formList) {
-                List<FormField> formFieldList = (List<FormField>) form.getChildren(FormField.class);
-                for (FormField formField : formFieldList) {
-                    formField.delete();
-                }
-
-                List<FormProperty> formPropertyList = (List<FormProperty>) form.getChildren(FormProperty.class);
-                for (FormProperty formProperty : formPropertyList) {
-                    formProperty.delete();
-                }
-
-                List<CensusHeader> censusHeaderList = (List<CensusHeader>) form.getChildren(CensusHeader.class);
-                for (CensusHeader censusHeader : censusHeaderList) {
-                    censusHeader.delete();
-                }
-
-                List<Mapping> mappingList = (List<Mapping>) form.getChildren(Mapping.class);
-                for (Mapping mapping : mappingList) {
-                    mapping.delete();
-                }
-
-                form.delete();
+            CarrierDatabase carrierDatabase = Dependencies.databaseServices.getCarrierDatabase();
+            try {
+                carrierDatabase.deleteCarrier(selected.getId());
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            selected.delete();
+//            List<Form> formList = (List<Form>) selected.getChildren(Form.class);
+//            for (Form form : formList) {
+//                List<FormField> formFieldList = (List<FormField>) form.getChildren(FormField.class);
+//                for (FormField formField : formFieldList) {
+//                    formField.delete();
+//                }
+//
+//                List<FormProperty> formPropertyList = (List<FormProperty>) form.getChildren(FormProperty.class);
+//                for (FormProperty formProperty : formPropertyList) {
+//                    formProperty.delete();
+//                }
+//
+//                List<CensusHeader> censusHeaderList = (List<CensusHeader>) form.getChildren(CensusHeader.class);
+//                for (CensusHeader censusHeader : censusHeaderList) {
+//                    censusHeader.delete();
+//                }
+//
+//                List<Mapping> mappingList = (List<Mapping>) form.getChildren(Mapping.class);
+//                for (Mapping mapping : mappingList) {
+//                    mapping.delete();
+//                }
+//
+//                form.delete();
+//            }
+//            selected.delete();
             carriersListView.remove(selected);
         }
     }
@@ -207,27 +228,33 @@ public class FormMappingController {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-                List<FormField> formFieldList = (List<FormField>) form.getChildren(FormField.class);
-                for (FormField formField : formFieldList) {
-                    formField.delete();
-                }
-
-                List<FormProperty> formPropertyList = (List<FormProperty>) form.getChildren(FormProperty.class);
-                for (FormProperty formProperty : formPropertyList) {
-                    formProperty.delete();
-                }
-
-                List<CensusHeader> censusHeaderList = (List<CensusHeader>) form.getChildren(CensusHeader.class);
-                for (CensusHeader censusHeader : censusHeaderList) {
-                    censusHeader.delete();
-                }
-
-                List<Mapping> mappingList = (List<Mapping>) form.getChildren(Mapping.class);
-                for (Mapping mapping : mappingList) {
-                    mapping.delete();
-                }
-
-                form.delete();
+            FormDatabase formDatabase = Dependencies.databaseServices.getFormDatabase();
+            try {
+                formDatabase.deleteForm(form.getId());
+            } catch (NotFoundException notFoundException) {
+                notFoundException.printStackTrace();
+            }
+//                List<FormField> formFieldList = (List<FormField>) form.getChildren(FormField.class);
+//                for (FormField formField : formFieldList) {
+//                    formField.delete();
+//                }
+//
+//                List<FormProperty> formPropertyList = (List<FormProperty>) form.getChildren(FormProperty.class);
+//                for (FormProperty formProperty : formPropertyList) {
+//                    formProperty.delete();
+//                }
+//
+//                List<CensusHeader> censusHeaderList = (List<CensusHeader>) form.getChildren(CensusHeader.class);
+//                for (CensusHeader censusHeader : censusHeaderList) {
+//                    censusHeader.delete();
+//                }
+//
+//                List<Mapping> mappingList = (List<Mapping>) form.getChildren(Mapping.class);
+//                for (Mapping mapping : mappingList) {
+//                    mapping.delete();
+//                }
+//
+//                form.delete();
         }
     }
 

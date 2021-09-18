@@ -1,7 +1,7 @@
 package AppUtility;
 
 import AppUtility.Exception.NotSupportedException;
-import AppUtility.ui.Styles;
+import AppUtility.Ui.Styles;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

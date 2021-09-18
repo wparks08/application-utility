@@ -1,9 +1,9 @@
 package AppUtility;
 
-import AppUtility.db.*;
-import AppUtility.mapping.Conditional;
-import AppUtility.mapping.DataType;
-import AppUtility.mapping.MapProperty;
+import AppUtility.Db.*;
+import AppUtility.Mapping.Conditional;
+import AppUtility.Mapping.DataType;
+import AppUtility.Mapping.MapProperty;
 import com.jfoenix.controls.*;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -45,7 +45,7 @@ public class EditMappingController {
 
     @FXML
     public void initialize() {
-        this.form = DataModel.getSelectedForm();
+//        this.form = DataModel.getSelectedForm();
         this.formFields = form.getFormFields();
         this.censusHeaders = form.getCensusHeaders();
         this.mappings = form.getMappingsAsMap();

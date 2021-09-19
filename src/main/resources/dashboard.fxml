@@ -8,7 +8,7 @@
 
 <AnchorPane maxHeight="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0"
             prefWidth="1280.0" stylesheets="@ApplicationStyles.css" xmlns="http://javafx.com/javafx/8.0.171"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="AppUtility.Controllers.DashboardController">
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="AppUtility.Controllers.Dashboard.DashboardController">
     <children>
         <AnchorPane prefHeight="768.0" prefWidth="256.0" style="-fx-background-color: #212121;"
                     AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">

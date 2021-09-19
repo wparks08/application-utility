@@ -1,4 +1,4 @@
-package AppUtility.UserInterface;
+package AppUtility.ui;
 
 import com.jfoenix.controls.JFXSnackbar;
 import javafx.scene.Node;

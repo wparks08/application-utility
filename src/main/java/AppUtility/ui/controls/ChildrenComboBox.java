@@ -1,4 +1,4 @@
-package AppUtility.UserInterface.Controls;
+package AppUtility.ui.controls;
 
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;

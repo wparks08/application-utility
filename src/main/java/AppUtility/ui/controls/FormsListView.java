@@ -1,4 +1,4 @@
-package AppUtility.UserInterface.Controls;
+package AppUtility.ui.controls;
 
 import AppUtility.Domains.Form.Form;
 import com.jfoenix.controls.JFXListView;

@@ -1,8 +1,8 @@
-package AppUtility.Controllers;
+package AppUtility.Controllers.Dashboard;
 
 import AppUtility.Exception.NotSupportedException;
-import AppUtility.UserInterface.Snackbar;
-import AppUtility.UserInterface.Styles;
+import AppUtility.ui.Snackbar;
+import AppUtility.ui.Styles;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -54,6 +54,7 @@ public class DashboardController {
             return getLoader(name).load();
         } catch (IOException|IllegalStateException e) {
             Snackbar.show(mainWindow, "Error: Could not load node " + name);
+            e.printStackTrace();
         }
 
         return null;

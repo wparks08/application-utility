@@ -2,9 +2,9 @@ package AppUtility.Controllers;
 
 import AppUtility.DataModel;
 import AppUtility.Config.Dependencies;
-import AppUtility.UserInterface.Controls.AddCarrierDialog;
-import AppUtility.UserInterface.Controls.CarriersListView;
-import AppUtility.UserInterface.Controls.FormsListView;
+import AppUtility.ui.controls.AddCarrierDialog;
+import AppUtility.ui.controls.CarriersListView;
+import AppUtility.ui.controls.FormsListView;
 //import AppUtility.db.*;
 import AppUtility.Domains.Carrier;
 import AppUtility.Domains.Form.Form;

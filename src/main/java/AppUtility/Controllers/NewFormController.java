@@ -6,7 +6,7 @@ import AppUtility.Db.Form;
 import AppUtility.Db.FormField;
 import AppUtility.Db.FormProperty;
 //import com.jfoenix.controls.*;
-import AppUtility.UserInterface.Snackbar;
+import AppUtility.ui.Snackbar;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextField;

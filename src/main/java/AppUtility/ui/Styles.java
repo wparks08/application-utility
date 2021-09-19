@@ -1,4 +1,4 @@
-package AppUtility.UserInterface;
+package AppUtility.ui;
 
 public class Styles {
     public static final String ButtonDeselected = "-fx-background-color: #424242";

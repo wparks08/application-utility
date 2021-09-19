@@ -4,7 +4,7 @@ public class ExtensionHelper {
     private final String description;
     private final String fileSystemExtension;
 
-    ExtensionHelper(String description, String fileSystemExtension) {
+    public ExtensionHelper(String description, String fileSystemExtension) {
         this.description = description;
         this.fileSystemExtension = fileSystemExtension;
     }

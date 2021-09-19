@@ -1,10 +1,10 @@
-package AppUtility;
+package AppUtility.Controllers;
 
-import AppUtility.Exception.NotFoundException;
+import AppUtility.DataModel;
 import AppUtility.Config.Dependencies;
-import AppUtility.Controls.AddCarrierDialog;
-import AppUtility.Controls.CarriersListView;
-import AppUtility.Controls.FormsListView;
+import AppUtility.UserInterface.Controls.AddCarrierDialog;
+import AppUtility.UserInterface.Controls.CarriersListView;
+import AppUtility.UserInterface.Controls.FormsListView;
 //import AppUtility.db.*;
 import AppUtility.Domains.Carrier;
 import AppUtility.Domains.Form.Form;
@@ -132,11 +132,11 @@ public class FormMappingController {
             if (!carrierName.isEmpty() && !carrierName.equals(selected.getName())) {
                 CarrierDatabase carrierDatabase = Dependencies.databaseServices.getCarrierDatabase();
                 Carrier updatedCarrier = new Carrier(carrierName);
-                try {
-                    carrierDatabase.updateCarrier(selected.getId(), updatedCarrier);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    carrierDatabase.updateCarrier(selected.getId(), updatedCarrier);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
                 carriersListView.refresh();
                 DataModel.refreshCarriers();
             }
@@ -154,11 +154,11 @@ public class FormMappingController {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             CarrierDatabase carrierDatabase = Dependencies.databaseServices.getCarrierDatabase();
-            try {
-                carrierDatabase.deleteCarrier(selected.getId());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+//            try {
+//                carrierDatabase.deleteCarrier(selected.getId());
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
 //            List<Form> formList = (List<Form>) selected.getChildren(Form.class);
 //            for (Form form : formList) {
 //                List<FormField> formFieldList = (List<FormField>) form.getChildren(FormField.class);
@@ -229,11 +229,11 @@ public class FormMappingController {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             FormDatabase formDatabase = Dependencies.databaseServices.getFormDatabase();
-            try {
-                formDatabase.deleteForm(form.getId());
-            } catch (NotFoundException notFoundException) {
-                notFoundException.printStackTrace();
-            }
+//            try {
+//                formDatabase.deleteForm(form.getId());
+//            } catch (NotFoundException notFoundException) {
+//                notFoundException.printStackTrace();
+//            }
 //                List<FormField> formFieldList = (List<FormField>) form.getChildren(FormField.class);
 //                for (FormField formField : formFieldList) {
 //                    formField.delete();

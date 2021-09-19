@@ -1,4 +1,4 @@
-package AppUtility.Domains.FileLoader;
+package AppUtility.UseCases.FileLoader;
 
 import AppUtility.Exception.NotFoundException;
 

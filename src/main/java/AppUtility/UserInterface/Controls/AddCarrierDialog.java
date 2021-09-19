@@ -1,4 +1,4 @@
-package AppUtility.Controls;
+package AppUtility.UserInterface.Controls;
 
 import javafx.scene.control.TextInputDialog;
 

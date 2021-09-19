@@ -1,2 +1,7 @@
-SSN,First Name,Last Name
-555-55-5555,John,Smith
+SSN,First Name,Last Name,Date of Birth,"Name, Spy Name"
+555-55-5555,John,Smith,3/9/1988,"Smith, John Smith"
+555-55-5555,John,Smith,3/9/1988
+555-55-5555,John,Smith,3/9/1988
+555-55-5555,John,Smith,
+555-55-5555,John,,3/9/1988
+555-55-5555,,Smith,3/9/1988

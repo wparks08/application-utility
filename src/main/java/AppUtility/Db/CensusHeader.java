@@ -1,6 +1,6 @@
 package AppUtility.Db;
 
-
+@Deprecated
 public class CensusHeader extends DBObject<CensusHeader> {
 
     private long id;

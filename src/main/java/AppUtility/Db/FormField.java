@@ -1,6 +1,6 @@
 package AppUtility.Db;
 
-
+@Deprecated
 public class FormField extends DBObject<FormField> {
 
     private long id;

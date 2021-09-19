@@ -1,6 +1,6 @@
-package AppUtility.Domains.FileParser;
+package AppUtility.UseCases.FileParser;
 
-import AppUtility.Domains.DataFile.DataFile;
+import AppUtility.UseCases.DataFile.DataFile;
 
 import java.io.FileNotFoundException;
 

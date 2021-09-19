@@ -1,7 +1,8 @@
-package AppUtility;
+package AppUtility.Controllers;
 
 import AppUtility.Exception.NotSupportedException;
-import AppUtility.Ui.Styles;
+import AppUtility.UserInterface.Snackbar;
+import AppUtility.UserInterface.Styles;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

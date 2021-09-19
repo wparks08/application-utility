@@ -1,7 +1,11 @@
-package AppUtility.domains.DataValue;
+package AppUtility.Domains.DataValue;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class DataValue {
     private String value;
+    private static final Logger logger = LogManager.getLogger(DataValue.class.getName());
 
     public DataValue() {
         value = "";
@@ -16,6 +20,12 @@ public class DataValue {
     }
 
     public void setValue(String value) {
+        logger.info("Replacing " + this.value + " with " + value);
         this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return this.value;
     }
 }

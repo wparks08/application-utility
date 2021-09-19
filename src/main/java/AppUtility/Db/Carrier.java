@@ -4,6 +4,7 @@ package AppUtility.Db;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class Carrier extends DBObject<Carrier> {
 
 //    public static final String tableName = "carrier";

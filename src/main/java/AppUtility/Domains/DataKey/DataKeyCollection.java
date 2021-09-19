@@ -43,4 +43,11 @@ public class DataKeyCollection {
     public List<DataKey> toList() {
         return this.dataKeys;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        this.dataKeys.forEach(dataKey -> stringBuilder.append(dataKey.toString()).append(", "));
+        return stringBuilder.toString();
+    }
 }

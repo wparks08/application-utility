@@ -1,5 +1,6 @@
 package AppUtility.Db;
 
+@Deprecated
 public class MappingProperty extends DBObject<MappingProperty> {
     private long id;
     private String property;

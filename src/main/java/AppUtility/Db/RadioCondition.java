@@ -2,6 +2,7 @@ package AppUtility.Db;
 
 import AppUtility.Mapping.Conditional;
 
+@Deprecated
 public class RadioCondition extends DBObject<RadioCondition> {
     private long id;
     private String conditional;

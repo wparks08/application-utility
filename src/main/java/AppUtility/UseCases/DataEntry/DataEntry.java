@@ -1,4 +1,4 @@
-package AppUtility.Domains.DataEntry;
+package AppUtility.UseCases.DataEntry;
 
 import AppUtility.Domains.DataKey.DataKey;
 import AppUtility.Domains.DataValue.DataValue;
@@ -24,5 +24,10 @@ public class DataEntry {
 
     public Set<DataKey> keySet() {
         return this.entryMap.keySet();
+    }
+
+    @Override
+    public String toString() {
+        return entryMap.toString();
     }
 }

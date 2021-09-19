@@ -1,20 +1,26 @@
-package AppUtility.domains.FileParser;
+package AppUtility.UseCases.FileParser;
 
-import AppUtility.domains.DataEntry.DataEntry;
-import AppUtility.domains.DataFile.DataFile;
-import AppUtility.domains.DataKey.DataKey;
-import AppUtility.domains.DataKey.DataKeyCollection;
-import AppUtility.domains.DataValue.DataValue;
+import AppUtility.UseCases.DataEntry.DataEntry;
+import AppUtility.UseCases.DataFile.DataFile;
+import AppUtility.Domains.DataKey.DataKey;
+import AppUtility.Domains.DataKey.DataKeyCollection;
+import AppUtility.Domains.DataValue.DataValue;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 public class CsvFileParser implements FileParser {
-    private File file;
+    private final File file;
     public String VALUE_SEPARATOR = ",";
+    private static final Logger logger = LogManager.getLogger(
+            CsvFileParser.class.getName()
+    );
 
     public CsvFileParser(File file) throws UnexpectedFileTypeException {
         if (!file.getPath().endsWith(".csv")) {
@@ -22,6 +28,7 @@ public class CsvFileParser implements FileParser {
         }
 
         this.file = file;
+        logger.info(file.getPath() + " ready to parse");
     }
 
     private DataKeyCollection getDataKeysFromFile() throws FileNotFoundException {
@@ -30,22 +37,26 @@ public class CsvFileParser implements FileParser {
         for (String header : headers) {
             dataKeyCollection.add(new DataKey(header));
         }
-
+        logger.info("Data keys: " + dataKeyCollection);
         return dataKeyCollection;
     }
 
     private String[] extractHeaders() throws FileNotFoundException {
+        logger.info("Extracting headers...");
         Scanner scanner = new Scanner(this.file);
         String headerString = scanner.nextLine();
+        logger.info("Raw header string: " + headerString);
         scanner.close();
-        return headerString.split(VALUE_SEPARATOR);
+        return readLineEntries(headerString);
     }
 
     @Override
     public DataFile toDataFile() throws FileNotFoundException {
+        logger.info("Converting to data file");
         DataFile dataFile = new DataFile();
         DataKeyCollection dataKeyCollection = getDataKeysFromFile();
         DataKey[] dataKeys = dataKeyCollection.toArray();
+        logger.info("Data key array: " + Arrays.toString(dataKeys));
 
         Scanner scanner = new Scanner(this.file);
         if (scanner.hasNextLine()) {
@@ -57,7 +68,7 @@ public class CsvFileParser implements FileParser {
             String[] lineEntries = readLineEntries(currentLine);
             DataEntry dataEntry = new DataEntry();
             for (int i = 0; i < lineEntries.length; i++) {
-                dataEntry.add(dataKeys[i], new DataValue());
+                dataEntry.add(dataKeys[i], new DataValue(lineEntries[i]));
             }
             dataFile.addDataEntry(dataEntry);
         }

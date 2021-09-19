@@ -1,4 +1,4 @@
-package AppUtility.domains.FileParser;
+package AppUtility.UseCases.FileParser;
 
 public class UnexpectedFileTypeException extends Exception {
     public UnexpectedFileTypeException(String message) {

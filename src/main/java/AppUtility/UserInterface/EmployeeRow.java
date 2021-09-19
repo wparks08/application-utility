@@ -1,4 +1,4 @@
-package AppUtility.Ui;
+package AppUtility.UserInterface;
 
 import AppUtility.Dependent;
 import AppUtility.Employee;

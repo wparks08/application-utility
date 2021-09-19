@@ -1,7 +1,9 @@
-package AppUtility;
+package AppUtility.Controllers;
 
-import AppUtility.Controls.ChildrenComboBox;
+import AppUtility.*;
+import AppUtility.UserInterface.Controls.ChildrenComboBox;
 import AppUtility.Domains.Form.Form;
+import AppUtility.UserInterface.Snackbar;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.base.IFXValidatableControl;
 import com.jfoenix.validation.RequiredFieldValidator;
@@ -14,14 +16,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.apache.pdfbox.pdmodel.interactive.form.PDField;
 
 import java.io.File;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 public class EditFormController {
@@ -61,12 +58,12 @@ public class EditFormController {
         Form selectedForm = DataModel.getSelectedForm();
 
         txtFormName.setText(selectedForm.getName());
-        HashMap<String, String> formPropertiesMap = selectedForm.getFormPropertiesAsMap();
-        dteEffectiveBegin.setValue(LocalDate.parse(formPropertiesMap.get(FormProperties.EFFECTIVE_BEGIN.toString()), DateTimeFormatter.ofPattern("MM-dd-yyyy")));
-        dteEffectiveEnd.setValue(LocalDate.parse(formPropertiesMap.get(FormProperties.EFFECTIVE_END.toString()), DateTimeFormatter.ofPattern("MM-dd-yyyy")));
-        chbSpouse.setSelected(Boolean.parseBoolean(formPropertiesMap.get(FormProperties.HAS_SPOUSE.toString())));
-        chbChildren.setSelected(Boolean.parseBoolean(formPropertiesMap.get(FormProperties.HAS_CHILDREN.toString())));
-        numberOfChildren.getSelectionModel().select(Integer.valueOf(formPropertiesMap.get(FormProperties.CHILDREN_COUNT.toString())));
+//        HashMap<String, String> formPropertiesMap = selectedForm.getFormPropertiesAsMap();
+//        dteEffectiveBegin.setValue(LocalDate.parse(formPropertiesMap.get(FormProperties.EFFECTIVE_BEGIN.toString()), DateTimeFormatter.ofPattern("MM-dd-yyyy")));
+//        dteEffectiveEnd.setValue(LocalDate.parse(formPropertiesMap.get(FormProperties.EFFECTIVE_END.toString()), DateTimeFormatter.ofPattern("MM-dd-yyyy")));
+//        chbSpouse.setSelected(Boolean.parseBoolean(formPropertiesMap.get(FormProperties.HAS_SPOUSE.toString())));
+//        chbChildren.setSelected(Boolean.parseBoolean(formPropertiesMap.get(FormProperties.HAS_CHILDREN.toString())));
+//        numberOfChildren.getSelectionModel().select(Integer.valueOf(formPropertiesMap.get(FormProperties.CHILDREN_COUNT.toString())));
 
     }
 
@@ -91,12 +88,12 @@ public class EditFormController {
         Form selectedForm = DataModel.getSelectedForm();
 
         txtFormName.setText(selectedForm.getName());
-        HashMap<String, String> formPropertiesMap = selectedForm.getFormPropertiesAsMap();
-        dteEffectiveBegin.setValue(LocalDate.parse(formPropertiesMap.get(FormProperties.EFFECTIVE_BEGIN.toString()), DateTimeFormatter.ofPattern("MM-dd-yyyy")));
-        dteEffectiveEnd.setValue(LocalDate.parse(formPropertiesMap.get(FormProperties.EFFECTIVE_END.toString()), DateTimeFormatter.ofPattern("MM-dd-yyyy")));
-        chbSpouse.setSelected(Boolean.parseBoolean(formPropertiesMap.get(FormProperties.HAS_SPOUSE.toString())));
-        chbChildren.setSelected(Boolean.parseBoolean(formPropertiesMap.get(FormProperties.HAS_CHILDREN.toString())));
-        numberOfChildren.getSelectionModel().select(Integer.valueOf(formPropertiesMap.get(FormProperties.CHILDREN_COUNT.toString())));
+//        HashMap<String, String> formPropertiesMap = selectedForm.getFormPropertiesAsMap();
+//        dteEffectiveBegin.setValue(LocalDate.parse(formPropertiesMap.get(FormProperties.EFFECTIVE_BEGIN.toString()), DateTimeFormatter.ofPattern("MM-dd-yyyy")));
+//        dteEffectiveEnd.setValue(LocalDate.parse(formPropertiesMap.get(FormProperties.EFFECTIVE_END.toString()), DateTimeFormatter.ofPattern("MM-dd-yyyy")));
+//        chbSpouse.setSelected(Boolean.parseBoolean(formPropertiesMap.get(FormProperties.HAS_SPOUSE.toString())));
+//        chbChildren.setSelected(Boolean.parseBoolean(formPropertiesMap.get(FormProperties.HAS_CHILDREN.toString())));
+//        numberOfChildren.getSelectionModel().select(Integer.valueOf(formPropertiesMap.get(FormProperties.CHILDREN_COUNT.toString())));
     }
 
     @FXML
@@ -133,44 +130,44 @@ public class EditFormController {
 
         //Get all census headers that already exist
         Form selectedForm = DataModel.getSelectedForm();
-        List<CensusHeader> currentHeaders = selectedForm.getCensusHeaders();
+//        List<CensusHeader> currentHeaders = selectedForm.getCensusHeaders();
 
         //Remove all from existing list that don't exist in new file
-        List<CensusHeader> toRemove = new ArrayList<>();
+//        List<CensusHeader> toRemove = new ArrayList<>();
         List<String> newHeaders = Arrays.asList(census.getHeaders());
 
         //Gather censusHeaders that don't exist in new census
-        for (CensusHeader censusHeader : currentHeaders) {
-            if (!newHeaders.contains(censusHeader.getHeader())) {
-                toRemove.add(censusHeader);
-            }
-        }
+//        for (CensusHeader censusHeader : currentHeaders) {
+//            if (!newHeaders.contains(censusHeader.getHeader())) {
+//                toRemove.add(censusHeader);
+//            }
+//        }
         //Remove them
-        currentHeaders.removeAll(toRemove);
+//        currentHeaders.removeAll(toRemove);
         //And delete them
-        for (CensusHeader censusHeader : toRemove) {
-            Mapping mapping = new Mapping().getBy("census_header_id", String.valueOf(censusHeader.getId()));
-            if (mapping != null) {
-                mapping.delete();
-            }
-            censusHeader.delete();
-        }
+//        for (CensusHeader censusHeader : toRemove) {
+//            Mapping mapping = new Mapping().getBy("census_header_id", String.valueOf(censusHeader.getId()));
+//            if (mapping != null) {
+//                mapping.delete();
+//            }
+//            censusHeader.delete();
+//        }
 
         //Add ones from new file that don't exist
-        for (String newHeader : newHeaders) {
-            boolean existsInCurrent = false;
-            for (CensusHeader censusHeader : currentHeaders) {
-                if (censusHeader.getHeader().equals(newHeader)) {
-                    existsInCurrent = true;
-                    break;
-                }
-            }
-
-            if (!existsInCurrent) {
-                CensusHeader newCensusHeader = new CensusHeader(newHeader, selectedForm.getId());
-                newCensusHeader.save();
-            }
-        }
+//        for (String newHeader : newHeaders) {
+//            boolean existsInCurrent = false;
+//            for (CensusHeader censusHeader : currentHeaders) {
+//                if (censusHeader.getHeader().equals(newHeader)) {
+//                    existsInCurrent = true;
+//                    break;
+//                }
+//            }
+//
+//            if (!existsInCurrent) {
+//                CensusHeader newCensusHeader = new CensusHeader(newHeader, selectedForm.getId());
+//                newCensusHeader.save();
+//            }
+//        }
     }
 
     private File showFileChooser(ExtensionHelper... extensionHelpers) {
@@ -190,7 +187,7 @@ public class EditFormController {
             Form selectedForm = DataModel.getSelectedForm();
             updateForm(selectedForm);
             updateEffectiveDateProperties(selectedForm);
-            updateDependentProperties(selectedForm);
+//            updateDependentProperties(selectedForm);
             updateCensusHeaders();
 
             Snackbar.show(wrapper, "Form Updated");
@@ -199,25 +196,25 @@ public class EditFormController {
         }
     }
 
-    private void updateDependentProperties(Form form) {
-        List<FormProperty> formPropertyList = form.getFormProperties();
-
-        for (FormProperty formProperty : formPropertyList) {
-            if (formProperty.getProperty().equals(FormProperties.HAS_SPOUSE.toString())) {
-                formProperty.setValue(chbSpouse.selectedProperty().getValue().toString());
-            }
-
-            if (formProperty.getProperty().equals(FormProperties.HAS_CHILDREN.toString())) {
-                formProperty.setValue(chbChildren.selectedProperty().getValue().toString());
-            }
-
-            if (formProperty.getProperty().equals(FormProperties.CHILDREN_COUNT.toString())) {
-                formProperty.setValue(numberOfChildren.getSelectionModel().getSelectedItem().toString());
-            }
-
-            formProperty.save();
-        }
-    }
+//    private void updateDependentProperties(Form form) {
+//        List<FormProperty> formPropertyList = form.getFormProperties();
+//
+//        for (FormProperty formProperty : formPropertyList) {
+//            if (formProperty.getProperty().equals(FormProperties.HAS_SPOUSE.toString())) {
+//                formProperty.setValue(chbSpouse.selectedProperty().getValue().toString());
+//            }
+//
+//            if (formProperty.getProperty().equals(FormProperties.HAS_CHILDREN.toString())) {
+//                formProperty.setValue(chbChildren.selectedProperty().getValue().toString());
+//            }
+//
+//            if (formProperty.getProperty().equals(FormProperties.CHILDREN_COUNT.toString())) {
+//                formProperty.setValue(numberOfChildren.getSelectionModel().getSelectedItem().toString());
+//            }
+//
+//            formProperty.save();
+//        }
+//    }
 
     @FXML
     public void cancel(ActionEvent e) {
@@ -226,38 +223,38 @@ public class EditFormController {
     }
 
     private void updateEffectiveDateProperties(Form form) {
-        List<FormProperty> formPropertyList = form.getFormProperties();
-
-        for (FormProperty formProperty : formPropertyList) {
-            if (formProperty.getProperty().equals(FormProperties.EFFECTIVE_BEGIN.toString())) {
-                formProperty.setValue(dteEffectiveBegin.getValue().format(DateTimeFormatter.ofPattern("MM-dd-yyyy")));
-            }
-
-            if (formProperty.getProperty().equals(FormProperties.EFFECTIVE_END.toString())) {
-                formProperty.setValue(dteEffectiveEnd.getValue().format(DateTimeFormatter.ofPattern("MM-dd-yyyy")));
-            }
-
-            formProperty.save();
-        }
+//        List<FormProperty> formPropertyList = form.getFormProperties();
+//
+//        for (FormProperty formProperty : formPropertyList) {
+//            if (formProperty.getProperty().equals(FormProperties.EFFECTIVE_BEGIN.toString())) {
+//                formProperty.setValue(dteEffectiveBegin.getValue().format(DateTimeFormatter.ofPattern("MM-dd-yyyy")));
+//            }
+//
+//            if (formProperty.getProperty().equals(FormProperties.EFFECTIVE_END.toString())) {
+//                formProperty.setValue(dteEffectiveEnd.getValue().format(DateTimeFormatter.ofPattern("MM-dd-yyyy")));
+//            }
+//
+//            formProperty.save();
+//        }
     }
 
     private void createCensusHeaders(Form form) {
-        for (String field : census.getHeaders()) {
-            CensusHeader censusHeader = new CensusHeader(field, form.getId());
-            censusHeader.save();
-        }
+//        for (String field : census.getHeaders()) {
+//            CensusHeader censusHeader = new CensusHeader(field, form.getId());
+//            censusHeader.save();
+//        }
     }
 
     private void createPDFields(Form form) {
-        for (PDField pdField : application.getPDFields()) {
-            FormField formField = new FormField(pdField.getFullyQualifiedName(), form.getId());
-            formField.save();
-        }
+//        for (PDField pdField : application.getPDFields()) {
+//            FormField formField = new FormField(pdField.getFullyQualifiedName(), form.getId());
+//            formField.save();
+//        }
     }
 
     private void updateForm(Form form) {
         form.setName(txtFormName.getText());
-        form.save();
+//        form.save();
     }
 
     private boolean validate() {

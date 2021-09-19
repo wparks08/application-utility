@@ -1,10 +1,12 @@
-package AppUtility;
+package AppUtility.Controllers;
 
+import AppUtility.*;
 import AppUtility.Db.*;
 import AppUtility.Mapping.Conditional;
 import AppUtility.Mapping.DataType;
 import AppUtility.Mapping.MapProperty;
-import AppUtility.Ui.EmployeeRow;
+import AppUtility.UserInterface.EmployeeRow;
+import AppUtility.UserInterface.Snackbar;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;

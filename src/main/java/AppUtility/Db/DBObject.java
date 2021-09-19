@@ -3,6 +3,7 @@ package AppUtility.Db;
 import AppUtility.Database;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 
+@Deprecated
 public abstract class DBObject<T> {
 
     public T get(long id) {
@@ -20,8 +22,8 @@ public abstract class DBObject<T> {
 
         T t = null;
         try {
-            t = (T) clazz.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
+            t = (T) clazz.getDeclaredConstructor(clazz).newInstance();
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
         }
 
@@ -49,8 +51,8 @@ public abstract class DBObject<T> {
 
         T t = null;
         try {
-            t = (T) clazz.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
+            t = (T) clazz.getDeclaredConstructor(clazz).newInstance();
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
         }
 

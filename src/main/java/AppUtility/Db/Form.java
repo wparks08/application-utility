@@ -12,6 +12,7 @@ import java.util.List;
 
 import static org.apache.commons.io.FilenameUtils.getExtension;
 
+@Deprecated
 public class Form extends DBObject<Form> {
 
     private long id;

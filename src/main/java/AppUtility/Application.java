@@ -19,7 +19,7 @@ public class Application {
     private PDDocument application;
     private PDAcroForm form;
 
-    Application(File pdfFile) {
+    public Application(File pdfFile) {
         this.pdfFile = pdfFile;
 
         try {

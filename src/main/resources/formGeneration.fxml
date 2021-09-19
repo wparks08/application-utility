@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox fx:id="wrapper" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="768.0" minWidth="1024.0" style="-fx-background-color: #111111;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AppUtility.Controllers.FormGenerationController">
+<HBox fx:id="wrapper" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="768.0" minWidth="1024.0" style="-fx-background-color: #111111;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AppUtility.controllers.FormGenerationController">
    <children>
       <VBox spacing="20.0" HBox.hgrow="ALWAYS">
          <children>

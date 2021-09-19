@@ -1,6 +1,6 @@
 package AppUtility.ui.controls;
 
-import AppUtility.Domains.Form.Form;
+import AppUtility.domains.form.Form;
 import com.jfoenix.controls.JFXListView;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;

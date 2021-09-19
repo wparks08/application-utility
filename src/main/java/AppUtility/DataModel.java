@@ -1,11 +1,11 @@
 package AppUtility;
 
-import AppUtility.Config.Dependencies;
-import AppUtility.Domains.Carrier;
-import AppUtility.Domains.Form.Form;
-import AppUtility.Domains.Id;
-import AppUtility.Interfaces.CarrierDatabase;
-import AppUtility.Interfaces.FormDatabase;
+import AppUtility.config.Dependencies;
+import AppUtility.domains.Carrier;
+import AppUtility.domains.form.Form;
+import AppUtility.domains.Id;
+import AppUtility.interfaces.CarrierDatabase;
+import AppUtility.interfaces.FormDatabase;
 
 import java.util.List;
 

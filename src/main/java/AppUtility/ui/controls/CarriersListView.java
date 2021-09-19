@@ -1,6 +1,6 @@
 package AppUtility.ui.controls;
 
-import AppUtility.Domains.Carrier;
+import AppUtility.domains.Carrier;
 import com.jfoenix.controls.JFXListView;
 import javafx.beans.InvalidationListener;
 import javafx.collections.ListChangeListener;

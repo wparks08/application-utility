@@ -1,18 +1,17 @@
-package AppUtility.controllers;
+package AppUtility.client.newformpage;
 
 import AppUtility.*;
-import AppUtility.db.CensusHeader;
+import AppUtility.client.ui.controls.CensusFileChooser;
 import AppUtility.db.Form;
 import AppUtility.db.FormField;
 import AppUtility.db.FormProperty;
-//import com.jfoenix.controls.*;
-import AppUtility.ui.Snackbar;
+import AppUtility.client.ui.Snackbar;
+import AppUtility.client.ui.controls.ChildrenComboBox;
+import AppUtility.usecases.imports.CensusImportHandler;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.validation.RequiredFieldValidator;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -28,26 +27,43 @@ import java.io.File;
 import java.time.format.DateTimeFormatter;
 
 public class NewFormController {
-    @FXML private VBox wrapper;
-    @FXML private JFXTextField txtCensusName;
-    @FXML private DatePicker dteEffectiveBegin;
-    @FXML private DatePicker dteEffectiveEnd;
-    @FXML private JFXButton btnSave;
-    @FXML private JFXButton btnCancel;
-    @FXML private Label lblEffectiveDateRange;
-    @FXML private JFXButton btnImportForm;
-    @FXML private JFXCheckBox chkImportForm;
-    @FXML private JFXButton btnImportCensus;
-    @FXML private JFXCheckBox chkImportCensus;
-    @FXML private JFXTextField txtFilePath;
-    @FXML private JFXTextField txtFormName;
-    @FXML private HBox childrenWrapper;
-    @FXML private JFXCheckBox chbSpouse;
-    @FXML private JFXCheckBox chbChildren;
-    @FXML private ComboBox<Integer> numberOfChildren;
+    @FXML
+    private VBox wrapper;
+    @FXML
+    private JFXTextField txtCensusName;
+    @FXML
+    private DatePicker dteEffectiveBegin;
+    @FXML
+    private DatePicker dteEffectiveEnd;
+    @FXML
+    private JFXButton btnSave;
+    @FXML
+    private JFXButton btnCancel;
+    @FXML
+    private Label lblEffectiveDateRange;
+    @FXML
+    private JFXButton btnImportForm;
+    @FXML
+    private JFXCheckBox chkImportForm;
+    @FXML
+    private JFXButton btnImportCensus;
+    @FXML
+    private JFXCheckBox chkImportCensus;
+    @FXML
+    private JFXTextField txtFilePath;
+    @FXML
+    private JFXTextField txtFormName;
+    @FXML
+    private HBox childrenWrapper;
+    @FXML
+    private JFXCheckBox chbSpouse;
+    @FXML
+    private JFXCheckBox chbChildren;
+    @FXML
+    private ComboBox<Integer> numberOfChildren;
 
     private Application application;
-    private Census census;
+    private final NewFormService newFormService = new NewFormService();
 
     @FXML
     public void initialize() {
@@ -56,27 +72,15 @@ public class NewFormController {
         validator.setMessage("Required");
 
         addValidatorToRequiredFields(validator);
-        addNumberOfChildrenComboBox();
+        addChildrenComboBox();
+        txtCensusName.textProperty().bind(newFormService.getCensusPath());
+        chkImportCensus.selectedProperty().bind(newFormService.getCensusImported());
     }
 
-    private void addNumberOfChildrenComboBox() {
-        numberOfChildren = new ComboBox<>();
-        numberOfChildren.getItems().addAll(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
-        numberOfChildren.setPromptText("Number of Children per Form");
-        numberOfChildren.setDisable(true);
-
-        chbChildren.selectedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (newValue) {
-                    numberOfChildren.setDisable(false);
-                } else {
-                    numberOfChildren.setDisable(true);
-                }
-            }
-        });
-
-        childrenWrapper.getChildren().add(numberOfChildren);
+    private void addChildrenComboBox() {
+        ChildrenComboBox childrenComboBox = new ChildrenComboBox();
+        childrenComboBox.bindCheckboxToDisableProperty(chbChildren);
+        childrenWrapper.getChildren().add(childrenComboBox);
     }
 
     private void addValidatorToRequiredFields(RequiredFieldValidator validator) {
@@ -89,11 +93,11 @@ public class NewFormController {
 
     @FXML
     public void importFormAction(ActionEvent e) {
-        ExtensionHelper extensionHelper = new ExtensionHelper("PDF File", "*.pdf");
+        FileExtension fileExtension = new FileExtension("PDF File", "*.pdf");
 
-        File form = showFileChooser(extensionHelper);
+        File form = showFileChooser(fileExtension);
 
-        if(form != null) {
+        if (form != null) {
             application = new Application(form);
             chkImportForm.setSelected(true);
             DataModel.setLastAccessedFilePath(form.getParent());
@@ -102,24 +106,17 @@ public class NewFormController {
     }
 
     @FXML
-    public void importCensusAction(ActionEvent e) {
-        ExtensionHelper extensionHelper = new ExtensionHelper("CSV File", "*.csv");
-
-        File censusFile = showFileChooser(extensionHelper);
-
-        if (censusFile != null) {
-            census = new Census(censusFile);
-            chkImportCensus.setSelected(true);
-            DataModel.setLastAccessedFilePath(censusFile.getParent());
-            txtCensusName.setText(censusFile.getName());
-        }
+    public void importCensusAction() {
+        File censusFile = new CensusFileChooser(new File(DataModel.getLastAccessedFilePath())).showOpenDialog();
+        newFormService.importCensus(censusFile.toPath());
+        DataModel.setLastAccessedFilePath(censusFile.getParent());
     }
 
-    private File showFileChooser(ExtensionHelper... extensionHelpers) {
+    private File showFileChooser(FileExtension... fileExtensions) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File(DataModel.getLastAccessedFilePath()));
 
-        for (ExtensionHelper extension : extensionHelpers) {
+        for (FileExtension extension : fileExtensions) {
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(extension.getDescription(), extension.getFileSystemExtension()));
         }
 
@@ -178,10 +175,10 @@ public class NewFormController {
     }
 
     private void createCensusHeaders(Form form) {
-        for (String field : census.getHeaders()) {
-            CensusHeader censusHeader = new CensusHeader(field, form.getId());
-            censusHeader.save();
-        }
+//        for (String field : census.getHeaders()) {
+//            CensusHeader censusHeader = new CensusHeader(field, form.getId());
+//            censusHeader.save();
+//        }
     }
 
     private void createPDFields(Form form) {

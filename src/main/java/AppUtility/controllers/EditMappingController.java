@@ -5,7 +5,7 @@ import AppUtility.FormProperties;
 import AppUtility.mapping.Conditional;
 import AppUtility.mapping.DataType;
 import AppUtility.mapping.MapProperty;
-import AppUtility.ui.Snackbar;
+import AppUtility.client.ui.Snackbar;
 import com.jfoenix.controls.*;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;

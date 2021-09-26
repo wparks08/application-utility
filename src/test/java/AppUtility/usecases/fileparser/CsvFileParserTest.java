@@ -1,8 +1,8 @@
 package AppUtility.usecases.fileparser;
 
-import AppUtility.usecases.datafile.DataFile;
+import AppUtility.collections.Collection;
 import AppUtility.domains.datakey.DataKey;
-import AppUtility.domains.datakey.DataKeyCollection;
+import AppUtility.usecases.datafile.DataFile;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -20,7 +20,7 @@ public class CsvFileParserTest {
             CsvFileParser csvFileParser = new CsvFileParser(sampleFile);
             DataFile dataFile = csvFileParser.toDataFile();
 
-            DataKeyCollection dataKeyCollection = dataFile.getDataKeys();
+            Collection<DataKey> dataKeyCollection = dataFile.getDataKeys();
             DataKey[] dataKeys = dataKeyCollection.toArray();
 
             assert(Arrays.stream(dataKeys).anyMatch(dataKey -> dataKey.equals(new DataKey("SSN"))));

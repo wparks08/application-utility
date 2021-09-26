@@ -5,8 +5,8 @@ import AppUtility.db.*;
 import AppUtility.mapping.Conditional;
 import AppUtility.mapping.DataType;
 import AppUtility.mapping.MapProperty;
-import AppUtility.ui.EmployeeRow;
-import AppUtility.ui.Snackbar;
+import AppUtility.client.ui.EmployeeRow;
+import AppUtility.client.ui.Snackbar;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
@@ -84,8 +84,8 @@ public class FormGenerationController {
 
     @FXML
     public void importCensus(ActionEvent e) {
-        ExtensionHelper extensionHelper = new ExtensionHelper("CSV File", "*.csv");
-        File censusFile = showFileChooser(extensionHelper);
+        FileExtension fileExtension = new FileExtension("CSV File", "*.csv");
+        File censusFile = showFileChooser(fileExtension);
 
         Census census = new Census(censusFile);
         employees.setAll(census.getEmployees());
@@ -126,7 +126,7 @@ public class FormGenerationController {
             return;
         }
 
-        File changeReport = showFileChooser(new ExtensionHelper("Excel (97-2003)", "*.xls"));
+        File changeReport = showFileChooser(new FileExtension("Excel (97-2003)", "*.xls"));
         changes = new OEChanges(changeReport);
 
         List<Change> changeList = changes.getChanges();
@@ -168,11 +168,11 @@ public class FormGenerationController {
         return directory;
     }
 
-    private File showFileChooser(ExtensionHelper... extensionHelpers) {
+    private File showFileChooser(FileExtension... fileExtensions) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File(DataModel.getLastAccessedFilePath()));
 
-        for (ExtensionHelper extension : extensionHelpers) {
+        for (FileExtension extension : fileExtensions) {
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(extension.getDescription(), extension.getFileSystemExtension()));
         }
 

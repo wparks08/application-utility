@@ -1,5 +1,6 @@
 package AppUtility.databases;
 
+import AppUtility.domains.id.IdFactory;
 import AppUtility.exception.NotFoundException;
 import AppUtility.domains.Carrier;
 import AppUtility.interfaces.CarrierDatabase;
@@ -20,12 +21,13 @@ class InMemoryCarrierDatabase implements CarrierDatabase {
     public Carrier addCarrier(Carrier carrier) throws Exception {
         carrierList.add(carrier);
         int carrierId = carrierList.indexOf(carrier);
+        String carrierIdString = String.valueOf(carrierId);
 
         if (carrierId == -1) {
             throw new Exception("Carrier could not be added :: " + carrier.toString());
         }
 
-        return new Carrier(carrierId, carrier.getName());
+        return new Carrier(IdFactory.getIdObject(carrierIdString), carrier.getName());
     }
 
     public Carrier getCarrierById(int id) throws NotFoundException {

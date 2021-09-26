@@ -1,5 +1,7 @@
 package AppUtility.databases;
 
+import AppUtility.domains.id.Id;
+import AppUtility.domains.id.IdFactory;
 import AppUtility.exception.NotFoundException;
 import AppUtility.domains.form.Form;
 import AppUtility.interfaces.FormDatabase;
@@ -27,7 +29,12 @@ public class InMemoryFormDatabase implements FormDatabase {
             throw new Exception("Form could not be added :: " + form.toString());
         }
 
-        return new Form(formId, form.getName());
+        return new Form.FormBuilder(form.getName())
+                .id(IdFactory.getIdObject(String.valueOf(formId)))
+                .dataKeyCollection(form.getDataKeyCollection())
+                .propertyCollection((form.getPropertyCollection()))
+                .fieldCollection(form.getFieldCollection())
+                .build();
     }
 
     @Override
@@ -56,26 +63,26 @@ public class InMemoryFormDatabase implements FormDatabase {
     }
 
     @Override
-    public Form updateForm(int id, Form form) throws NotFoundException{
-        if (!exists(id)) {
-            throw notFound(id);
+    public Form updateForm(Form form) throws NotFoundException{
+        int idInteger = Integer.parseInt(form.getId().toString());
+        if (!exists(idInteger)) {
+            throw notFound(idInteger);
         }
 
-        Form formToUpdate = formList.get(id);
+        formList.set(idInteger, form);
 
-        formToUpdate.setName(form.getName());
-
-        return formToUpdate;
+        return form;
     }
 
     @Override
-    public Form deleteForm(int id) throws NotFoundException {
-        if (!exists(id)) {
-            throw notFound(id);
+    public Form deleteForm(Id id) throws NotFoundException {
+        int idInteger = Integer.parseInt(id.toString());
+        if (!exists(idInteger)) {
+            throw notFound(idInteger);
         }
 
-        Form formToDelete = formList.get(id);
-        formList.set(id, null);
+        Form formToDelete = formList.get(idInteger);
+        formList.set(idInteger, null);
 
         return formToDelete;
     }

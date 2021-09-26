@@ -1,9 +1,14 @@
 package AppUtility.controllers;
 
 import AppUtility.*;
-import AppUtility.ui.controls.ChildrenComboBox;
+import AppUtility.exception.NotFoundException;
+import AppUtility.client.ui.controls.ChildrenComboBox;
 import AppUtility.domains.form.Form;
-import AppUtility.ui.Snackbar;
+import AppUtility.client.ui.Snackbar;
+import AppUtility.usecases.datafile.DataFile;
+import AppUtility.usecases.fileloader.LocalFileLoader;
+import AppUtility.usecases.fileparser.CsvFileParser;
+import AppUtility.usecases.fileparser.UnexpectedFileTypeException;
 import com.jfoenix.controls.*;
 import com.jfoenix.controls.base.IFXValidatableControl;
 import com.jfoenix.validation.RequiredFieldValidator;
@@ -18,6 +23,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -98,9 +104,9 @@ public class EditFormController {
 
     @FXML
     public void importFormAction(ActionEvent e) {
-        ExtensionHelper extensionHelper = new ExtensionHelper("PDF File", "*.pdf");
+        FileExtension fileExtension = new FileExtension("PDF File", "*.pdf");
 
-        File form = showFileChooser(extensionHelper);
+        File form = showFileChooser(fileExtension);
 
         if(form != null) {
             application = new Application(form);
@@ -112,9 +118,24 @@ public class EditFormController {
 
     @FXML
     public void importCensusAction(ActionEvent e) {
-        ExtensionHelper extensionHelper = new ExtensionHelper("CSV File", "*.csv");
+        FileExtension fileExtension = new FileExtension("CSV File", "*.csv");
 
-        File censusFile = showFileChooser(extensionHelper);
+        File censusFile = showFileChooser(fileExtension);
+        LocalFileLoader localFileLoader = new LocalFileLoader(censusFile.toPath());
+
+        try {
+            localFileLoader.load();
+        } catch (NotFoundException notFoundException) {
+            notFoundException.printStackTrace();
+        }
+
+        try {
+            CsvFileParser csvFileParser = new CsvFileParser(localFileLoader.getFile());
+            DataFile dataFile = csvFileParser.toDataFile();
+            System.out.println(Arrays.toString(dataFile.getDataKeys().toArray()));
+        } catch (UnexpectedFileTypeException | FileNotFoundException exception) {
+            exception.printStackTrace();
+        }
 
         if (censusFile != null) {
             census = new Census(censusFile);
@@ -170,11 +191,11 @@ public class EditFormController {
 //        }
     }
 
-    private File showFileChooser(ExtensionHelper... extensionHelpers) {
+    private File showFileChooser(FileExtension... fileExtensions) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File(DataModel.getLastAccessedFilePath()));
 
-        for (ExtensionHelper extension : extensionHelpers) {
+        for (FileExtension extension : fileExtensions) {
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(extension.getDescription(), extension.getFileSystemExtension()));
         }
 
@@ -253,7 +274,7 @@ public class EditFormController {
     }
 
     private void updateForm(Form form) {
-        form.setName(txtFormName.getText());
+//        form.setName(txtFormName.getText());
 //        form.save();
     }
 

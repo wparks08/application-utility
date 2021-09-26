@@ -1,8 +1,9 @@
 package AppUtility.usecases.datafile;
 
-import AppUtility.usecases.dataentry.DataEntry;
+import AppUtility.collections.Collection;
+import AppUtility.collections.CollectionFactory;
 import AppUtility.domains.datakey.DataKey;
-import AppUtility.domains.datakey.DataKeyCollection;
+import AppUtility.usecases.dataentry.DataEntry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,14 +19,15 @@ public class DataFile {
         this.dataEntries = new ArrayList<>();
     }
 
-    public DataKeyCollection getDataKeys() {
-        DataKeyCollection dataKeyCollection = new DataKeyCollection();
+    public Collection<DataKey> getDataKeys() {
+        Collection<DataKey> dataKeyCollection = CollectionFactory.getDataKeyCollection();
 
         logger.info("Extracting DataKeys from DataEntries...");
         dataEntries.forEach(dataKeyDataValueMap -> {
-            Set<DataKey> dataKeys = dataKeyDataValueMap.keySet();
+            dataKeyCollection.addAll(dataKeyDataValueMap.keySet());
+            Set<DataKey> dataKeys = dataKeyCollection.toSet();
+            dataKeyCollection.clear();
             dataKeyCollection.addAll(dataKeys);
-            dataKeyCollection.removeDuplicates();
         });
 
         logger.info("Extracted keys: " + dataKeyCollection);
@@ -40,4 +42,6 @@ public class DataFile {
         DataEntry[] dataEntries = new DataEntry[this.dataEntries.size()];
         return this.dataEntries.toArray(dataEntries);
     }
+
+
 }

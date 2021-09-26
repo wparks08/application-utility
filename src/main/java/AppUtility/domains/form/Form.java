@@ -1,39 +1,79 @@
 package AppUtility.domains.form;
 
-import AppUtility.domains.form.Field.FieldCollection;
-import AppUtility.domains.Id;
+import AppUtility.collections.Collection;
+import AppUtility.domains.datakey.DataKey;
+import AppUtility.domains.form.Field.Field;
+import AppUtility.domains.form.Property.Property;
+import AppUtility.domains.id.Id;
 
 public class Form {
-    private Id id;
-    private String name;
-    private FieldCollection fields;
+    private final Id id;
+    private final String name;
+    private final Collection<Field> fieldCollection;
+    private final Collection<DataKey> dataKeyCollection;
+    private final Collection<Property> propertyCollection;
 
-    public Form(String name) {
-        this.name = name;
-    }
-
-    public Form(long id, String name) {
-        this.id = new Id(id);
-        this.name = name;
-    }
-
-    public void setId(Id id) {
-        this.id = id;
+    private Form(FormBuilder builder) {
+        this.id = builder.id;
+        this.name = builder.name;
+        this.fieldCollection = builder.fieldCollection;
+        this.dataKeyCollection = builder.dataKeyCollection;
+        this.propertyCollection = builder.propertyCollection;
     }
 
     public Id getId() {
         return this.id;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getName() {
         return name;
     }
 
-    public FieldCollection getFields() {
-        return this.fields;
+    public Collection<Field> getFieldCollection() {
+        return this.fieldCollection;
+    }
+
+    public Collection<DataKey> getDataKeyCollection() {
+        return this.dataKeyCollection;
+    }
+
+    public Collection<Property> getPropertyCollection() {
+        return this.propertyCollection;
+    }
+
+    public static class FormBuilder {
+        private final String name;
+        private Id id;
+        private Collection<Field> fieldCollection;
+        private Collection<DataKey> dataKeyCollection;
+        private Collection<Property> propertyCollection;
+
+        public FormBuilder(String name) {
+            this.name = name;
+        }
+
+        public FormBuilder id(Id id) {
+            this.id = id;
+            return this;
+        }
+
+        public FormBuilder fieldCollection(Collection<Field> fieldCollection) {
+            this.fieldCollection = fieldCollection;
+            return this;
+        }
+
+        public FormBuilder dataKeyCollection(Collection<DataKey> dataKeyCollection) {
+            this.dataKeyCollection = dataKeyCollection;
+            return this;
+        }
+
+        public FormBuilder propertyCollection(Collection<Property> propertyCollection) {
+            this.propertyCollection = propertyCollection;
+            return this;
+        }
+
+        public Form build() {
+            return new Form(this);
+        }
     }
 }

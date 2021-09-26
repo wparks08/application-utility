@@ -1,9 +1,10 @@
 package AppUtility.usecases.fileparser;
 
+import AppUtility.collections.Collection;
+import AppUtility.collections.CollectionFactory;
 import AppUtility.usecases.dataentry.DataEntry;
 import AppUtility.usecases.datafile.DataFile;
 import AppUtility.domains.datakey.DataKey;
-import AppUtility.domains.datakey.DataKeyCollection;
 import AppUtility.domains.datavalue.DataValue;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,8 +32,8 @@ public class CsvFileParser implements FileParser {
         logger.info(file.getPath() + " ready to parse");
     }
 
-    private DataKeyCollection getDataKeysFromFile() throws FileNotFoundException {
-        DataKeyCollection dataKeyCollection = new DataKeyCollection();
+    private Collection<DataKey> getDataKeysFromFile() throws FileNotFoundException {
+        Collection<DataKey> dataKeyCollection = CollectionFactory.getDataKeyCollection();
         String[] headers = extractHeaders();
         for (String header : headers) {
             dataKeyCollection.add(new DataKey(header));
@@ -54,7 +55,7 @@ public class CsvFileParser implements FileParser {
     public DataFile toDataFile() throws FileNotFoundException {
         logger.info("Converting to data file");
         DataFile dataFile = new DataFile();
-        DataKeyCollection dataKeyCollection = getDataKeysFromFile();
+        Collection<DataKey> dataKeyCollection = getDataKeysFromFile();
         DataKey[] dataKeys = dataKeyCollection.toArray();
         logger.info("Data key array: " + Arrays.toString(dataKeys));
 

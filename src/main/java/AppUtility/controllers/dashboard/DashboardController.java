@@ -1,8 +1,9 @@
 package AppUtility.controllers.dashboard;
 
 import AppUtility.exception.NotSupportedException;
-import AppUtility.ui.Snackbar;
-import AppUtility.ui.Styles;
+import AppUtility.client.ui.Snackbar;
+import AppUtility.client.ui.Styles;
+import AppUtility.client.ui.controls.menu.MenuButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,32 +15,26 @@ import java.io.IOException;
 
 public class DashboardController {
 
-    @FXML private Button btnMapping;
-    @FXML private Button btnGenerating;
+    @FXML private MenuButton btnMapping;
+    @FXML private MenuButton btnGenerating;
     @FXML private Pane mainWindow;
 
     @FXML
     public void initialize() {
-        btnMapping.setText("Form Mapping");
-        btnGenerating.setText("Form Generation");
+//        btnMapping.setText(Config.MAPPING_MENU_BUTTON_TEXT);
+//        btnGenerating.setText(Config.GENERATION_MENU_BUTTON_TEXT);
     }
 
     public void handleBtnClickAction(ActionEvent event) throws NotSupportedException {
-        Button current = (Button)event.getSource();
+        Button selected = (Button)event.getSource();
         btnMapping.setStyle(Styles.ButtonDeselected);
         btnGenerating.setStyle(Styles.ButtonDeselected);
 
-        current.setStyle(Styles.ButtonSelected);
+        selected.setStyle(Styles.ButtonSelected);
 
-        switch (current.getText()) {
-            case "Form Mapping" -> {
-                final String FORM_MAPPING = "/formMapping.fxml";
-                setMainWindow(getNode(FORM_MAPPING));
-            }
-            case "Form Generation" -> {
-                final String FORM_GENERATION = "/formGeneration.fxml";
-                setMainWindow(getNode(FORM_GENERATION));
-            }
+        switch (selected.getText()) {
+            case Config.MAPPING_MENU_BUTTON_TEXT -> setMainWindow(getNode(Config.FORM_MAPPING_FXML_PATH));
+            case Config.GENERATION_MENU_BUTTON_TEXT -> setMainWindow(getNode(Config.FORM_GENERATION_FXML_PATH));
             default -> throw new NotSupportedException("Invalid selection.");
         }
     }

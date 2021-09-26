@@ -1,6 +1,6 @@
 package AppUtility.domains.form.Property;
 
-import AppUtility.domains.Id;
+import AppUtility.domains.id.Id;
 
 public class Property {
     private Id id;

@@ -1,21 +1,22 @@
 package AppUtility.domains;
 
-import AppUtility.domains.form.FormCollection;
+import AppUtility.collections.Collection;
+import AppUtility.collections.CollectionFactory;
+import AppUtility.domains.form.Form;
+import AppUtility.domains.id.Id;
 
 public class Carrier {
     private Id id;
     private String name;
-    private FormCollection forms;
+    private Collection<Form> forms = CollectionFactory.getFormCollection();
 
     public Carrier(String name) {
         this.name = name;
-        this.forms = new FormCollection();
     }
 
-    public Carrier(int id, String name) {
-        this.id = new Id(id);
+    public Carrier(Id id, String name) {
+        this.id = id;
         this.name = name;
-        this.forms = new FormCollection();
     }
 
     public Carrier(Carrier carrier) {
@@ -40,7 +41,7 @@ public class Carrier {
         return name;
     }
 
-    public FormCollection getForms() {
+    public Collection<Form> getFormCollection() {
         return this.forms;
     }
 }

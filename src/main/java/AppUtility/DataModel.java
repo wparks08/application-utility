@@ -3,7 +3,7 @@ package AppUtility;
 import AppUtility.config.Dependencies;
 import AppUtility.domains.Carrier;
 import AppUtility.domains.form.Form;
-import AppUtility.domains.Id;
+import AppUtility.domains.id.Id;
 import AppUtility.interfaces.CarrierDatabase;
 import AppUtility.interfaces.FormDatabase;
 

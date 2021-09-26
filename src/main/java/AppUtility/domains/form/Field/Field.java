@@ -1,6 +1,6 @@
 package AppUtility.domains.form.Field;
 
-import AppUtility.domains.Id;
+import AppUtility.domains.id.Id;
 
 public class Field {
     private Id id;
@@ -10,8 +10,8 @@ public class Field {
         this.name = name;
     }
 
-    public Field(int id, String name) {
-        this.id = new Id(id);
+    public Field(Id id, String name) {
+        this.id = id;
         this.name = name;
     }
 

@@ -6,12 +6,15 @@ import AppUtility.domains.form.Field.Field;
 import AppUtility.domains.form.Property.Property;
 import AppUtility.domains.id.Id;
 
+import java.nio.file.Path;
+
 public class Form {
     private final Id id;
     private final String name;
     private final Collection<Field> fieldCollection;
     private final Collection<DataKey> dataKeyCollection;
     private final Collection<Property> propertyCollection;
+    private final Path pdfFilePath;
 
     private Form(FormBuilder builder) {
         this.id = builder.id;
@@ -19,6 +22,7 @@ public class Form {
         this.fieldCollection = builder.fieldCollection;
         this.dataKeyCollection = builder.dataKeyCollection;
         this.propertyCollection = builder.propertyCollection;
+        this.pdfFilePath = builder.pdfFilePath;
     }
 
     public Id getId() {
@@ -47,6 +51,7 @@ public class Form {
         private Collection<Field> fieldCollection;
         private Collection<DataKey> dataKeyCollection;
         private Collection<Property> propertyCollection;
+        private Path pdfFilePath;
 
         public FormBuilder(String name) {
             this.name = name;
@@ -69,6 +74,11 @@ public class Form {
 
         public FormBuilder propertyCollection(Collection<Property> propertyCollection) {
             this.propertyCollection = propertyCollection;
+            return this;
+        }
+
+        public FormBuilder pdfFilePath(Path pdfFilePath) {
+            this.pdfFilePath = pdfFilePath;
             return this;
         }
 

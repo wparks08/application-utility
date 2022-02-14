@@ -33,6 +33,18 @@
             <AppenderRef ref="STDOUT"/>
         </Logger>
 
+        <Logger name="AppUtility.client" level="debug" additivity="false">
+            <AppenderRef ref="STDOUT"/>
+        </Logger>
+
+        <Logger name="AppUtility.usecases" level="debug" additivity="false">
+            <AppenderRef ref="STDOUT"/>
+        </Logger>
+
+        <Logger name="AppUtility.AppProperties" level="debug" additivity="false">
+            <AppenderRef ref="STDOUT"/>
+        </Logger>
+
         <Logger name="AppUtility" level="debug" additivity="false">
             <AppenderRef ref="File"/>
         </Logger>

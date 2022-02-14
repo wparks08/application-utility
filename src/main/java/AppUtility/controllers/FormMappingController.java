@@ -1,6 +1,6 @@
 package AppUtility.controllers;
 
-import AppUtility.DataModel;
+import AppUtility.AppProperties;
 import AppUtility.config.Dependencies;
 import AppUtility.client.newformpage.NewFormController;
 import AppUtility.client.ui.controls.AddCarrierDialog;
@@ -53,7 +53,7 @@ public class FormMappingController {
             btnEditForm.setDisable(false);
             btnEditMapping.setDisable(false);
             btnDelete.setDisable(false);
-            DataModel.setSelectedForm(formsListView.getSelectedForm());
+//            AppProperties.setSelectedForm(formsListView.getSelectedForm());
         }
     };
 
@@ -61,9 +61,9 @@ public class FormMappingController {
         formsListView.clearList();
         Carrier selectedCarrier = carriersListView.getSelectedCarrier();
         if (selectedCarrier != null) {
-            Collection<Form> allFormsCollection = DataModel.getForms();
-            DataModel.refreshForms(selectedCarrier);
-            formsListView.addAllFromCollection(allFormsCollection);
+//            Collection<Form> allFormsCollection = AppProperties.getForms();
+//            AppProperties.refreshForms(selectedCarrier);
+//            formsListView.addAllFromCollection(allFormsCollection);
             btnNew.setDisable(false);
         } else {
             btnNew.setDisable(true);
@@ -74,15 +74,15 @@ public class FormMappingController {
         if (carriersListView.hasSelectedItem()) {
             btnEditCarrier.setDisable(false);
             btnDeleteCarrier.setDisable(false);
-            DataModel.setSelectedCarrier(carriersListView.getSelectedCarrier());
+//            AppProperties.setSelectedCarrier(carriersListView.getSelectedCarrier());
         }
     };
 
     @FXML
     public void initialize() {
-        DataModel.refreshCarriers();
+//        AppProperties.refreshCarriers();
         carriersListView.clearList();
-        carriersListView.addAllFromCollection(DataModel.getCarriers());
+//        carriersListView.addAllFromCollection(AppProperties.getCarriers());
 
         disableAllButtons();
 
@@ -115,7 +115,7 @@ public class FormMappingController {
                     e.printStackTrace();
                 }
                 carriersListView.add(carrier);
-                DataModel.refreshCarriers();
+//                AppProperties.refreshCarriers();
             }
         });
     }
@@ -139,7 +139,7 @@ public class FormMappingController {
 //                    e.printStackTrace();
 //                }
                 carriersListView.refresh();
-                DataModel.refreshCarriers();
+//                AppProperties.refreshCarriers();
             }
         });
     }
@@ -200,9 +200,9 @@ public class FormMappingController {
 
         stage.showAndWait();
 
-        DataModel.refreshCarriers();
+//        AppProperties.refreshCarriers();
         carriersListView.refresh();
-        DataModel.refreshForms(carriersListView.getSelectedCarrier());
+//        AppProperties.refreshForms(carriersListView.getSelectedCarrier());
         formsListView.refresh();
     }
 
@@ -221,7 +221,7 @@ public class FormMappingController {
 
     @FXML
     public void handleBtnDeleteFormClick(ActionEvent e) {
-        Form form = DataModel.getSelectedForm();
+//        Form form = AppProperties.getSelectedForm();
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Are you sure?");
         alert.setHeaderText("Delete Form");

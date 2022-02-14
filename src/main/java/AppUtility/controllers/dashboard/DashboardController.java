@@ -15,18 +15,19 @@ import java.io.IOException;
 
 public class DashboardController {
 
-    @FXML private MenuButton btnMapping;
-    @FXML private MenuButton btnGenerating;
-    @FXML private Pane mainWindow;
+    @FXML
+    private MenuButton btnMapping;
+    @FXML
+    private MenuButton btnGenerating;
+    @FXML
+    private Pane mainWindow;
 
     @FXML
     public void initialize() {
-//        btnMapping.setText(Config.MAPPING_MENU_BUTTON_TEXT);
-//        btnGenerating.setText(Config.GENERATION_MENU_BUTTON_TEXT);
     }
 
     public void handleBtnClickAction(ActionEvent event) throws NotSupportedException {
-        Button selected = (Button)event.getSource();
+        Button selected = (Button) event.getSource();
         btnMapping.setStyle(Styles.ButtonDeselected);
         btnGenerating.setStyle(Styles.ButtonDeselected);
 
@@ -47,7 +48,7 @@ public class DashboardController {
     private Node getNode(String name) {
         try {
             return getLoader(name).load();
-        } catch (IOException|IllegalStateException e) {
+        } catch (IOException | IllegalStateException e) {
             Snackbar.show(mainWindow, "Error: Could not load node " + name);
             e.printStackTrace();
         }

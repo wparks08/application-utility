@@ -61,9 +61,9 @@ public class EditFormController {
         addValidatorToRequiredFields(validator);
         addNumberOfChildrenComboBox();
 
-        Form selectedForm = DataModel.getSelectedForm();
+//        Form selectedForm = AppProperties.getSelectedForm();
 
-        txtFormName.setText(selectedForm.getName());
+//        txtFormName.setText(selectedForm.getName());
 //        HashMap<String, String> formPropertiesMap = selectedForm.getFormPropertiesAsMap();
 //        dteEffectiveBegin.setValue(LocalDate.parse(formPropertiesMap.get(FormProperties.EFFECTIVE_BEGIN.toString()), DateTimeFormatter.ofPattern("MM-dd-yyyy")));
 //        dteEffectiveEnd.setValue(LocalDate.parse(formPropertiesMap.get(FormProperties.EFFECTIVE_END.toString()), DateTimeFormatter.ofPattern("MM-dd-yyyy")));
@@ -91,9 +91,9 @@ public class EditFormController {
     }
 
     public void initModel() {
-        Form selectedForm = DataModel.getSelectedForm();
+//        Form selectedForm = AppProperties.getSelectedForm();
 
-        txtFormName.setText(selectedForm.getName());
+//        txtFormName.setText(selectedForm.getName());
 //        HashMap<String, String> formPropertiesMap = selectedForm.getFormPropertiesAsMap();
 //        dteEffectiveBegin.setValue(LocalDate.parse(formPropertiesMap.get(FormProperties.EFFECTIVE_BEGIN.toString()), DateTimeFormatter.ofPattern("MM-dd-yyyy")));
 //        dteEffectiveEnd.setValue(LocalDate.parse(formPropertiesMap.get(FormProperties.EFFECTIVE_END.toString()), DateTimeFormatter.ofPattern("MM-dd-yyyy")));
@@ -111,7 +111,7 @@ public class EditFormController {
         if(form != null) {
             application = new Application(form);
             chkImportForm.setSelected(true);
-            DataModel.setLastAccessedFilePath(form.getParent());
+            AppProperties.getInstance().setLastAccessedFilePath(form.getParent());
             txtFilePath.setText(form.getName());
         }
     }
@@ -139,7 +139,7 @@ public class EditFormController {
 
         if (censusFile != null) {
             census = new Census(censusFile);
-            DataModel.setLastAccessedFilePath(censusFile.getParent());
+            AppProperties.getInstance().setLastAccessedFilePath(censusFile.getParent());
             txtCensusName.setText(censusFile.getName());
         }
     }
@@ -150,7 +150,7 @@ public class EditFormController {
         }
 
         //Get all census headers that already exist
-        Form selectedForm = DataModel.getSelectedForm();
+//        Form selectedForm = AppProperties.getSelectedForm();
 //        List<CensusHeader> currentHeaders = selectedForm.getCensusHeaders();
 
         //Remove all from existing list that don't exist in new file
@@ -193,7 +193,7 @@ public class EditFormController {
 
     private File showFileChooser(FileExtension... fileExtensions) {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialDirectory(new File(DataModel.getLastAccessedFilePath()));
+        fileChooser.setInitialDirectory(new File(AppProperties.getInstance().getLastAccessedFilePath()));
 
         for (FileExtension extension : fileExtensions) {
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(extension.getDescription(), extension.getFileSystemExtension()));
@@ -205,9 +205,9 @@ public class EditFormController {
     @FXML
     public void saveForm(ActionEvent e) {
         if (validate()) {
-            Form selectedForm = DataModel.getSelectedForm();
-            updateForm(selectedForm);
-            updateEffectiveDateProperties(selectedForm);
+//            Form selectedForm = AppProperties.getSelectedForm();
+//            updateForm(selectedForm);
+//            updateEffectiveDateProperties(selectedForm);
 //            updateDependentProperties(selectedForm);
             updateCensusHeaders();
 

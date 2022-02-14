@@ -5,9 +5,10 @@ import AppUtility.client.ui.controls.CensusFileChooser;
 import AppUtility.db.Form;
 import AppUtility.db.FormField;
 import AppUtility.db.FormProperty;
-import AppUtility.client.ui.Snackbar;
 import AppUtility.client.ui.controls.ChildrenComboBox;
-import AppUtility.usecases.imports.CensusImportHandler;
+import AppUtility.domains.pdf.PdfFile;
+import AppUtility.usecases.imports.ImportStatus;
+import AppUtility.usecases.imports.PdfFileImportHandler;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextField;
@@ -61,9 +62,12 @@ public class NewFormController {
     private JFXCheckBox chbChildren;
     @FXML
     private ComboBox<Integer> numberOfChildren;
+    @FXML
+    ChildrenComboBox childrenComboBox;
 
     private Application application;
     private final NewFormService newFormService = new NewFormService();
+    private String formPath;
 
     @FXML
     public void initialize() {
@@ -78,7 +82,7 @@ public class NewFormController {
     }
 
     private void addChildrenComboBox() {
-        ChildrenComboBox childrenComboBox = new ChildrenComboBox();
+        childrenComboBox = new ChildrenComboBox();
         childrenComboBox.bindCheckboxToDisableProperty(chbChildren);
         childrenWrapper.getChildren().add(childrenComboBox);
     }
@@ -100,21 +104,25 @@ public class NewFormController {
         if (form != null) {
             application = new Application(form);
             chkImportForm.setSelected(true);
-            DataModel.setLastAccessedFilePath(form.getParent());
+            AppProperties.getInstance().setLastAccessedFilePath(form.getParent());
             txtFilePath.setText(form.getName());
+            formPath = form.getPath();
         }
     }
 
     @FXML
     public void importCensusAction() {
-        File censusFile = new CensusFileChooser(new File(DataModel.getLastAccessedFilePath())).showOpenDialog();
-        newFormService.importCensus(censusFile.toPath());
-        DataModel.setLastAccessedFilePath(censusFile.getParent());
+        File censusFile = new CensusFileChooser(new File(AppProperties.getInstance().getLastAccessedFilePath())).showOpenDialog();
+
+        if (censusFile != null) {
+            newFormService.importCensus(censusFile.toPath());
+            AppProperties.getInstance().setLastAccessedFilePath(censusFile.getParent());
+        }
     }
 
     private File showFileChooser(FileExtension... fileExtensions) {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialDirectory(new File(DataModel.getLastAccessedFilePath()));
+        fileChooser.setInitialDirectory(new File(AppProperties.getInstance().getLastAccessedFilePath()));
 
         for (FileExtension extension : fileExtensions) {
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(extension.getDescription(), extension.getFileSystemExtension()));
@@ -125,18 +133,27 @@ public class NewFormController {
 
     @FXML
     public void saveForm(ActionEvent e) {
-        if (validate()) {
-            Form form = createForm();
-            form.save(); //Needs an ID before we continue
-            createPDFields(form);
-            createCensusHeaders(form);
-            createEffectiveDateProperties(form);
-            createDependentProperties(form);
+        PdfFileImportHandler pdfFileImportHandler = new PdfFileImportHandler(formPath);
+        pdfFileImportHandler.doImport();
 
-            Snackbar.show(wrapper, "New Form Saved");
-        } else {
-            Snackbar.show(wrapper, "Please fill in the required fields.");
-        }
+        pdfFileImportHandler.getStatus().addListener((observable, oldValue, newValue) -> {
+            if (newValue == ImportStatus.DONE) {
+                PdfFile pdfFile = pdfFileImportHandler.getPdfFile();
+                System.out.println(pdfFile);
+            }
+        });
+//        if (validate()) {
+//            Form form = createForm();
+//            form.save(); //Needs an ID before we continue
+//            createPDFields(form);
+//            createCensusHeaders(form);
+//            createEffectiveDateProperties(form);
+//            createDependentProperties(form);
+//
+//            Snackbar.show(wrapper, "New Form Saved");
+//        } else {
+//            Snackbar.show(wrapper, "Please fill in the required fields.");
+//        }
     }
 
     private void createDependentProperties(Form form) {
@@ -152,7 +169,7 @@ public class NewFormController {
 
         FormProperty childCount = new FormProperty();
         childCount.setProperty(FormProperties.CHILDREN_COUNT.toString());
-        childCount.setValue(numberOfChildren.getSelectionModel().getSelectedItem().toString());
+        childCount.setValue(childrenComboBox.getSelectionModel().getSelectedItem().toString());
         form.addFormProperty(childCount);
     }
 

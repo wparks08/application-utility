@@ -157,12 +157,12 @@ public class FormGenerationController {
 
     private File showDirectoryChooser() {
         DirectoryChooser dc = new DirectoryChooser();
-        dc.setInitialDirectory(new File(DataModel.getLastAccessedFilePath()));
+        dc.setInitialDirectory(new File(AppProperties.getInstance().getLastAccessedFilePath()));
 
         File directory = dc.showDialog(null);
 
         if (directory != null) {
-            DataModel.setLastAccessedFilePath(directory.getParent());
+            AppProperties.getInstance().setLastAccessedFilePath(directory.getParent());
         }
 
         return directory;
@@ -170,7 +170,7 @@ public class FormGenerationController {
 
     private File showFileChooser(FileExtension... fileExtensions) {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialDirectory(new File(DataModel.getLastAccessedFilePath()));
+        fileChooser.setInitialDirectory(new File(AppProperties.getInstance().getLastAccessedFilePath()));
 
         for (FileExtension extension : fileExtensions) {
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(extension.getDescription(), extension.getFileSystemExtension()));
@@ -178,7 +178,7 @@ public class FormGenerationController {
 
         File file = fileChooser.showOpenDialog(null);
         if (file != null) {
-            DataModel.setLastAccessedFilePath(file.getParent());
+            AppProperties.getInstance().setLastAccessedFilePath(file.getParent());
         }
 
         return file;

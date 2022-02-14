@@ -6,19 +6,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
-import java.net.URL;
-
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-
         FXMLLoader docLoader = new FXMLLoader(getClass().getResource("/dashboard.fxml"));
         Parent root = docLoader.load();
-//        DashboardController docController = docLoader.getController();
+
+        AppProperties appProperties = AppProperties.getInstance();
 
         Scene scene = new Scene(root);
 

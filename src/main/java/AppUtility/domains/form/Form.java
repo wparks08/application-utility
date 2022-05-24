@@ -10,6 +10,7 @@ import java.nio.file.Path;
 
 public class Form {
     private final Id id;
+    private final Id carrierId;
     private final String name;
     private final Collection<Field> fieldCollection;
     private final Collection<DataKey> dataKeyCollection;
@@ -18,6 +19,7 @@ public class Form {
 
     private Form(FormBuilder builder) {
         this.id = builder.id;
+        this.carrierId = builder.carrierId;
         this.name = builder.name;
         this.fieldCollection = builder.fieldCollection;
         this.dataKeyCollection = builder.dataKeyCollection;
@@ -27,6 +29,10 @@ public class Form {
 
     public Id getId() {
         return this.id;
+    }
+
+    public Id getCarrierId() {
+        return this.carrierId;
     }
 
     public String getName() {
@@ -48,6 +54,7 @@ public class Form {
     public static class FormBuilder {
         private final String name;
         private Id id;
+        private Id carrierId;
         private Collection<Field> fieldCollection;
         private Collection<DataKey> dataKeyCollection;
         private Collection<Property> propertyCollection;
@@ -59,6 +66,11 @@ public class Form {
 
         public FormBuilder id(Id id) {
             this.id = id;
+            return this;
+        }
+
+        public FormBuilder carrierId(Id carrierId) {
+            this.carrierId = carrierId;
             return this;
         }
 

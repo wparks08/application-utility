@@ -1,15 +1,16 @@
 package AppUtility.databases;
 
-import AppUtility.domains.id.IdFactory;
+import AppUtility.domains.id.Id;
 import AppUtility.exception.NotFoundException;
 import AppUtility.domains.Carrier;
 import AppUtility.interfaces.CarrierDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 class InMemoryCarrierDatabase implements CarrierDatabase {
-    private static final List<Carrier> carrierList = new ArrayList<Carrier>();
+    private static final List<Carrier> carrierList = new ArrayList<>();
     private static final InMemoryCarrierDatabase instance = new InMemoryCarrierDatabase();
 
     private InMemoryCarrierDatabase() {}
@@ -18,21 +19,19 @@ class InMemoryCarrierDatabase implements CarrierDatabase {
         return instance;
     }
 
-    public Carrier addCarrier(Carrier carrier) throws Exception {
-        carrierList.add(carrier);
-        int carrierId = carrierList.indexOf(carrier);
-        String carrierIdString = String.valueOf(carrierId);
-
-        if (carrierId == -1) {
-            throw new Exception("Carrier could not be added :: " + carrier.toString());
+    public Carrier addCarrier(Carrier carrier) {
+        if (carrier.getId() == null) {
+            carrier.setId(new Id());
         }
 
-        return new Carrier(IdFactory.getIdObject(carrierIdString), carrier.getName());
+        carrierList.add(carrier);
+
+        return new Carrier(carrier);
     }
 
-    public Carrier getCarrierById(int id) throws NotFoundException {
+    public Carrier getCarrierById(Id id) throws NotFoundException {
         for (Carrier carrier : carrierList) {
-            if (carrier.getId().toString().equals(String.valueOf(id))) {
+            if (carrier.getId().equals(id)) {
                 return carrier;
             }
         }
@@ -44,32 +43,35 @@ class InMemoryCarrierDatabase implements CarrierDatabase {
     }
 
     @Override
-    public Carrier updateCarrier(int id, Carrier carrier) throws Exception {
+    public Carrier updateCarrier(Id id, Carrier carrier) throws Exception {
         Carrier carrierToUpdate = this.getCarrierById(id);
         carrierToUpdate.setName(carrier.getName());
         return carrierToUpdate;
     }
 
-    @Override
-    public Carrier deleteCarrier(int id) throws Exception {
+    public Carrier deleteCarrier(Id id) throws Exception {
         if (!exists(id)) {
             throw notFound(id);
         }
-        return carrierList.remove(id);
+        Optional<Carrier> carrierOptional = carrierList.stream().filter(carrier -> carrier.getId().equals(id)).findFirst();
+        if (carrierOptional.isPresent()) {
+            Carrier carrier = carrierOptional.get();
+            carrierList.remove(carrier);
+            return carrier;
+        }
+        throw notFound(id);
     }
 
-    @Override
-    public Boolean exists(int id) {
+    public Boolean exists(Id id) {
         try {
-            //noinspection ResultOfMethodCallIgnored
-            carrierList.get(id);
+            this.getCarrierById(id);
             return true;
-        } catch (IndexOutOfBoundsException indexOutOfBoundsException) {
+        } catch (NotFoundException e) {
             return false;
         }
     }
 
-    private NotFoundException notFound(int id) {
-        return new NotFoundException("Carrier with ID " + id + " not found.");
+    private NotFoundException notFound(Id id) {
+        return new NotFoundException("Carrier with ID " + id.toString() + " not found.");
     }
 }

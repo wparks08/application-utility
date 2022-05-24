@@ -1,13 +1,13 @@
 package AppUtility.databases;
 
 import AppUtility.domains.id.Id;
-import AppUtility.domains.id.IdFactory;
 import AppUtility.exception.NotFoundException;
 import AppUtility.domains.form.Form;
 import AppUtility.interfaces.FormDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class InMemoryFormDatabase implements FormDatabase {
@@ -30,30 +30,26 @@ public class InMemoryFormDatabase implements FormDatabase {
         }
 
         return new Form.FormBuilder(form.getName())
-                .id(IdFactory.getIdObject(String.valueOf(formId)))
+                .id(form.getId())
                 .dataKeyCollection(form.getDataKeyCollection())
                 .propertyCollection((form.getPropertyCollection()))
                 .fieldCollection(form.getFieldCollection())
                 .build();
     }
 
-    @Override
-    public Form getFormById(int id) throws NotFoundException {
-        Form form;
-
-        try {
-            form = formList.get(id);
-        } catch (IndexOutOfBoundsException indexOutOfBoundsException) {
-            throw notFound(id);
+    public Form getFormById(Id id) throws NotFoundException {
+        for (Form form : formList) {
+            if (form.getId().equals(id)) {
+                return form;
+            }
         }
 
-        return form;
+        throw notFound(id);
     }
 
-    @Override
-    public List<Form> getFormsByCarrierId(int carrierId) {
+    public List<Form> getFormsByCarrierId(Id carrierId) {
         return formList.stream()
-//                .filter(form -> form.getCarrierId() == carrierId)
+                .filter(form -> form.getCarrierId().equals(carrierId))
                 .collect(Collectors.toList());
     }
 
@@ -63,42 +59,41 @@ public class InMemoryFormDatabase implements FormDatabase {
     }
 
     @Override
-    public Form updateForm(Form form) throws NotFoundException{
-        int idInteger = Integer.parseInt(form.getId().toString());
-        if (!exists(idInteger)) {
-            throw notFound(idInteger);
+    public Form updateForm(Form form) throws NotFoundException {
+        for (int i = 0; i < formList.size(); i++) {
+            Form currentForm = formList.get(i);
+            if (currentForm.getId().equals(form.getId())) {
+                formList.set(i, form);
+                return form;
+            }
         }
 
-        formList.set(idInteger, form);
-
-        return form;
+        throw notFound(form.getId());
     }
 
     @Override
     public Form deleteForm(Id id) throws NotFoundException {
-        int idInteger = Integer.parseInt(id.toString());
-        if (!exists(idInteger)) {
-            throw notFound(idInteger);
+        Optional<Form> formOptional = formList.stream().filter(form1 -> form1.getId().equals(id)).findFirst();
+
+        if (formOptional.isPresent()) {
+            Form form = formOptional.get();
+            formList.remove(form);
+            return form;
         }
 
-        Form formToDelete = formList.get(idInteger);
-        formList.set(idInteger, null);
-
-        return formToDelete;
+        throw notFound(id);
     }
 
-    @Override
-    public Boolean exists(int id) {
+    public Boolean exists(Id id) {
         try {
-            //noinspection ResultOfMethodCallIgnored
-            formList.get(id);
+            this.getFormById(id);
             return true;
-        } catch (IndexOutOfBoundsException e) {
+        } catch (NotFoundException e) {
             return false;
         }
     }
 
-    private NotFoundException notFound(int id) {
+    private NotFoundException notFound(Id id) {
         return new NotFoundException("Form with ID " + id + " not found.");
     }
 }

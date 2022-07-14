@@ -1,3 +1,6 @@
+# ***Disclaimer***
+***This repository has become a sandbox, and should not be used in a production sense. From time to time, the program may not build or be usable. There are a lot of examples of bad practices in this repository. Branches beginning with or containing the word `refactor` will be used to experiment with different ways of restructuring the program, and are being used by me as practice for restructuring bad/old/legacy code into something more maintainable - but is still usually experimental.***
+
 # Application Utility
 
 The Application Utility is a tool mean for filling out Insurance (benefits) applications programmatically.
